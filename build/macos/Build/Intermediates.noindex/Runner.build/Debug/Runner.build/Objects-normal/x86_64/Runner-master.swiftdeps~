@@ -1,7 +1,0 @@
-version: "Apple Swift version 5.1.2 (swiftlang-1100.0.278 clang-1100.0.33.9)"
-options: "49445c80c916b4fd9617406a8802d443"
-build_time: [1601548918, 753493000]
-inputs:
-  "/Users/probus/Documents/projects/flutter/presto_qr/macos/Runner/MainFlutterWindow.swift": [1575632621, 955274174]
-  "/Users/probus/Documents/projects/flutter/presto_qr/macos/Runner/AppDelegate.swift": [1575632621, 952308920]
-  "/Users/probus/Documents/projects/flutter/presto_qr/macos/Flutter/GeneratedPluginRegistrant.swift": [1601548847, 552228881]
