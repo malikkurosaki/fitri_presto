@@ -31,6 +31,8 @@ dependencies:
   regex_router: ^1.0.3
   cached_network_image: ^2.3.2+1
   paging: ^0.1.0
+  validators: ^2.0.1
+  intl: ^0.16.1
 
 
 

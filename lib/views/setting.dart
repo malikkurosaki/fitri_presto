@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
-import 'package:paging/paging.dart';
-import 'package:presto_qr/controller/kunci.dart';
-import 'package:presto_qr/controller/malik_dynamic.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -11,28 +7,30 @@ class MySetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _berubah = Berubah(context);
-    var apa = "ini";
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Setting'),
-      ),
       body: SafeArea(
-        child: ValueListenableBuilder(
-          valueListenable: _berubah,
-          builder: (context, value, child) => 
-          ListView(
-            children: [
-              Text(apa),
-              FlatButton(
-                onPressed: (){
-                  apa = "hahahahah";
-                  print(apa);
-                }, 
-                child: Text('rubah')
-              )
-              
-            ],
-          ),
+        child: ListView(
+          children: [
+            Text('SETTING',
+              style: TextStyle(
+                fontSize: 42,
+                color: Colors.grey
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                FlatButton(
+                  onPressed: ()async{
+                    SharedPreferences prf = await SharedPreferences.getInstance();
+                    prf.clear();
+                    Phoenix.rebirth(context);
+                  }, 
+                  child: Text('keluar')
+                )
+              ],
+            )
+          ],
         ),
       ),
     );
