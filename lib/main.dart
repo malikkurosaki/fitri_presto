@@ -22,14 +22,26 @@ void main() {
   });
 
   runApp(
-    Phoenix(
-      child: MaterialApp(
-        title: 'presto qr | probus system',
-        debugShowCheckedModeBanner: false,
-        onGenerateRoute: router.generateRoute,
-        initialRoute: "/",
-        theme: ThemeData(
-          primarySwatch: Colors.blueGrey,
+    Center(
+      child: Card(
+        child: Container(
+          color: Colors.grey,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: 500
+            ),
+            child: MaterialApp(
+              
+              title: 'presto qr | probus system',
+              debugShowCheckedModeBanner: false,
+              onGenerateRoute: router.generateRoute,
+              initialRoute: "/",
+              theme: ThemeData(
+                primarySwatch: Colors.cyan,
+                accentColor: Colors.green,
+              ),
+            ),
+          ),
         ),
       ),
     )

@@ -24,7 +24,7 @@ class MySetting extends StatelessWidget {
                   onPressed: ()async{
                     SharedPreferences prf = await SharedPreferences.getInstance();
                     prf.clear();
-                    Phoenix.rebirth(context);
+                    Navigator.of(context).pushReplacementNamed('/');
                   }, 
                   child: Text('keluar')
                 )

@@ -38,9 +38,14 @@ class _OpenTableState extends State<OpenTable> {
           host = prf.getString('host');
           user = jsonDecode(prf.getString('user'));
 
-          // print(user);
 
           _menu = prf.getString("menu") == null? mn.data: jsonDecode(prf.getString("menu"));
+          List coba = _menu;
+
+          // coba = coba.map((e) => e['subgroupp']).toList().toSet().toList();
+
+          // print(coba);
+
           _menu.forEach((e){
             e['note'] = "";
             e['lihatTambah'] = true;
@@ -77,279 +82,253 @@ class _OpenTableState extends State<OpenTable> {
   Widget build(BuildContext context) {
     print('open table');
     return _menu == null ? Center(child: CircularProgressIndicator(),):
-    Center(
-      child: Card(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: 500
-          ),
-          child: GestureDetector(
-            onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
-            child: WillPopScope(
-              onWillPop: ()async => false,
-              child: Scaffold(
-                extendBodyBehindAppBar: true,
-                key: _kunciState,
-                appBar: AppBar(
-                  backgroundColor: Colors.white,
-                  automaticallyImplyLeading: false,
-                  toolbarHeight: 100,
-                  elevation: 0,
-                  title: Column(
+    GestureDetector(
+      onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
+      child: WillPopScope(
+        onWillPop: ()async => false,
+        child: Scaffold(
+          extendBodyBehindAppBar: true,
+          key: _kunciState,
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            automaticallyImplyLeading: false,
+            toolbarHeight: 100,
+            elevation: 0,
+            title: Column(
+              children: [
+                Container(
+                  width: double.infinity,
+                  child: Wrap(
+                    alignment: WrapAlignment.spaceBetween,
+                    crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
-                      Container(
-                        width: double.infinity,
-                        child: Wrap(
-                          alignment: WrapAlignment.spaceBetween,
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: [
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                InkWell(
-                                  child: CircleAvatar(
-                                    backgroundColor: Colors.green,
-                                    child: Icon(Icons.account_circle,
-                                      size: 40,
-                                    ),
-                                  ),
-                                  onTap: (){
-                                    showModalBottomSheet(
-                                      isDismissible: true,
-                                      isScrollControlled: true,
-                                      context: context, 
-                                      builder: (context) => Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Container(
-                                            alignment: Alignment.center,
-                                            color: Colors.grey[200],
-                                            width: double.infinity,
-                                            child: Text("==="),
-                                          ),
-                                          UserProfile(user: user,)
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                ),
-                                Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 8),
-                                  child: Text(user['name'],
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.normal,
-                                      color: Colors.black
-                                    ),
-                                  ),
-                                ),
-                              ],
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          InkWell(
+                            child: CircleAvatar(
+                              backgroundColor: Colors.green,
+                              child: Icon(Icons.account_circle,
+                                size: 40,
+                              ),
                             ),
-                            Container(
-                              padding: EdgeInsets.all(8),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text("Table ",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.normal,
-                                      color: Colors.black
-                                    ),
-                                  ),
-                                  Card(
-                                    color: Colors.cyan,
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-                                    child: Container(
-                                      width: 40,
-                                      height: 40,
-                                      child: Center(
-                                        child: Text(meja,
-                                          style: TextStyle(
-                                            color: Colors.cyan[100],
-                                            fontSize: 24
-                                          ),
-                                        )
-                                      )
-                                    ),
-                                  )
-                                ],
-                              )
-                            )
-                          ],
-                        ),
+                            onTap: (){
+                              showModalBottomSheet(
+                                isDismissible: true,
+                                isScrollControlled: true,
+                                context: context, 
+                                builder: (context) => UserProfile(user: user,),
+                              );
+                            },
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 8),
+                            child: Text(user['name'],
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.normal,
+                                color: Colors.black
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      /* TextField(
-                        controller: _searchController,
-                        decoration: InputDecoration(
-                          fillColor: Colors.grey[200],
-                          contentPadding: EdgeInsets.symmetric(vertical: 16),
-                          hintText: 'search',
-                          filled: true,
-                          isDense: true,
-                          enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                          prefixIcon: Icon(Icons.search),
-                          suffixIcon: IconButton(
-                            icon: Icon(Icons.edit_off,
+                      Container(
+                        padding: EdgeInsets.all(8),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text("Table "+ meja,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                color: Colors.deepOrange,
+                                fontSize: 34,
+                                shadows: [
+                                  Shadow(
+                                    blurRadius: 2,
+                                    color: Colors.grey,
+                                    offset: Offset(0,2)
+                                  )
+                                ]
+                              ),
                             ),
-                            onPressed: (){
-                              FocusScope.of(context).requestFocus(new FocusNode());
-                              _searchController.clear();
-                              setState(() {
-                                _menu.forEach((el) {
-                                  if(el['groupp'].toString().trim() == "FOOD"){
-                                    el['terlihat'] = true;
-                                  }else{
-                                    el['terlihat'] = false;
-                                  }
-                                });
-                              });
+                          ],
+                        )
+                      )
+                    ],
+                  ),
+                ),
+                /* TextField(
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                    fillColor: Colors.grey[200],
+                    contentPadding: EdgeInsets.symmetric(vertical: 16),
+                    hintText: 'search',
+                    filled: true,
+                    isDense: true,
+                    enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+                    prefixIcon: Icon(Icons.search),
+                    suffixIcon: IconButton(
+                      icon: Icon(Icons.edit_off,
+                      ),
+                      onPressed: (){
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                        _searchController.clear();
+                        setState(() {
+                          _menu.forEach((el) {
+                            if(el['groupp'].toString().trim() == "FOOD"){
+                              el['terlihat'] = true;
+                            }else{
+                              el['terlihat'] = false;
                             }
-                          )
+                          });
+                        });
+                      }
+                    )
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      _menu.forEach((el) {
+                        if(el['nama_pro'].toString().trim().toLowerCase().contains(value.toString())){
+                          el['terlihat'] = true;
+                        }else{
+                          el['terlihat'] = false;
+                        }
+                      });
+                      if(value == ""){
+                        _menu.forEach((el) {
+                          if(el['groupp'].toString().trim() == "FOOD"){
+                            el['terlihat'] = true;
+                          }else{
+                            el['terlihat'] = false;
+                          }
+                        });
+                      }
+                    });
+                  },
+                ), */
+
+                /* sub menu */
+                Container(
+                  color: Colors.white,
+                  child: Row(
+                    children: [
+                      for(var i = 0; i < _listSub.length;i++)
+                      InkWell(
+                        child: Card(
+                          color: _listSub[i]['ditekan']? Colors.cyan[700]:Colors.cyan,
+                          child: Container(
+                            padding: EdgeInsets.all(4),
+                            child: Text(_listSub[i]['judul'],
+                              style: TextStyle(
+                                color: _listSub[i]['ditekan']? Colors.white:Colors.cyan[100],
+                              ),
+                            ),
+                          ),
                         ),
-                        onChanged: (value) {
+                        onTap: () {
                           setState(() {
                             _menu.forEach((el) {
-                              if(el['nama_pro'].toString().trim().toLowerCase().contains(value.toString())){
+                              if(el['groupp'].toString().trim() == _listSub[i]['judul']){
                                 el['terlihat'] = true;
                               }else{
                                 el['terlihat'] = false;
                               }
                             });
-                            if(value == ""){
-                              _menu.forEach((el) {
-                                if(el['groupp'].toString().trim() == "FOOD"){
-                                  el['terlihat'] = true;
-                                }else{
-                                  el['terlihat'] = false;
-                                }
-                              });
-                            }
+
+                            _listSub.forEach((element) {
+                              if(element['judul'].toString().trim() == _listSub[i]['judul']){
+                                element['ditekan'] = true;
+                              }else{
+                                element['ditekan'] = false;
+                              }
+                            });
+
                           });
                         },
-                      ), */
-                      Container(
-                        color: Colors.white,
-                        child: Row(
-                          children: [
-                            for(var i = 0; i < _listSub.length;i++)
-                            InkWell(
-                              child: Card(
-                                color: _listSub[i]['ditekan']? Colors.cyan[700]:Colors.cyan,
-                                child: Container(
-                                  padding: EdgeInsets.all(4),
-                                  child: Text(_listSub[i]['judul'],
-                                    style: TextStyle(
-                                      color: _listSub[i]['ditekan']? Colors.white:Colors.cyan[100],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              onTap: () {
-                                setState(() {
-                                  _menu.forEach((el) {
-                                    if(el['groupp'].toString().trim() == _listSub[i]['judul']){
-                                      el['terlihat'] = true;
-                                    }else{
-                                      el['terlihat'] = false;
-                                    }
-                                  });
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+          body: Column(
+            children: [
+              Flexible(
+                flex: 1,
+                child: ListItemMenu(
+                  listMenu: _menu,
+                  host: host,
+                  meja: meja,
+                  user: user,
+                  searchController: _searchController,
+                  onDitambah: (List val) {
+                    /* update list meu */
+                    setState((){
+                      // SharedPreferences.getInstance().then((value){
+                      //   value.setString('menu', jsonEncode(val).toString());
+                      //   _menu = jsonDecode(value.getString('menu'));
 
-                                  _listSub.forEach((element) {
-                                    if(element['judul'].toString().trim() == _listSub[i]['judul']){
-                                      element['ditekan'] = true;
-                                    }else{
-                                      element['ditekan'] = false;
-                                    }
-                                  });
+                      //   try {
+                      //     var ttlQty = val.where((element) => element['qty'] != 0).map((e) => e['qty']).reduce((value, element) => value + element);
+                      //     var ttlVal = val.where((element) => element['qty'] != 0).map((e) => int.parse(e['harga_pro'].toString()) * int.parse(e['qty'].toString())).reduce((value, element) => int.parse(value.toString()) + int.parse(element.toString()));
+                      //     totalQty = ttlQty;
+                      //     totalValue = ttlVal;
+                      //     totalan = true;
+                      //   } catch (e) {
+                      //     totalan = false;
+                      //   }
+                      // });
 
-                                });
-                              },
-                            )
-                          ],
+                        _menu = val;
+                        try {
+                          var ttlQty = val.where((element) => element['qty'] != 0).map((e) => e['qty']).reduce((value, element) => value + element);
+                          var ttlVal = val.where((element) => element['qty'] != 0).map((e) => int.parse(e['harga_pro'].toString()) * int.parse(e['qty'].toString())).reduce((value, element) => int.parse(value.toString()) + int.parse(element.toString()));
+                          totalQty = ttlQty;
+                          totalValue = ttlVal;
+                          totalan = true;
+                        } catch (e) {
+                          totalan = false;
+                        }
+                    
+                    });
+
+                    print('update');
+          
+                  },
+                  onTambah: () {
+                    print("ditambah kok");
+                  },
+                )
+              ),
+              !totalan?SizedBox.shrink():
+              Card(
+                elevation: 10,
+                color: Colors.green,
+                margin: EdgeInsets.all(8),
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  width: double.infinity,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Total QTY "+totalQty.toString() +" | Rp."+ totalValue.toString() +" (Est)",
+                        style: TextStyle(
+                          color: Colors.white
                         ),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.shopping_basket,
+                          color: Colors.white,
+                        ), 
+                        onPressed: () => lihatRincianOrder(context, _menu,totalQty.toString(), totalValue.toString())
                       )
                     ],
                   ),
                 ),
-                body: Column(
-                  children: [
-                    Flexible(
-                      flex: 1,
-                      child: ListItemMenu(
-                        listMenu: _menu,
-                        host: host,
-                        meja: meja,
-                        user: user,
-                        searchController: _searchController,
-                        onDitambah: (List val) {
-                          /* update list meu */
-                          setState((){
-                            // SharedPreferences.getInstance().then((value){
-                            //   value.setString('menu', jsonEncode(val).toString());
-                            //   _menu = jsonDecode(value.getString('menu'));
-
-                            //   try {
-                            //     var ttlQty = val.where((element) => element['qty'] != 0).map((e) => e['qty']).reduce((value, element) => value + element);
-                            //     var ttlVal = val.where((element) => element['qty'] != 0).map((e) => int.parse(e['harga_pro'].toString()) * int.parse(e['qty'].toString())).reduce((value, element) => int.parse(value.toString()) + int.parse(element.toString()));
-                            //     totalQty = ttlQty;
-                            //     totalValue = ttlVal;
-                            //     totalan = true;
-                            //   } catch (e) {
-                            //     totalan = false;
-                            //   }
-                            // });
-
-                              _menu = val;
-                              try {
-                                var ttlQty = val.where((element) => element['qty'] != 0).map((e) => e['qty']).reduce((value, element) => value + element);
-                                var ttlVal = val.where((element) => element['qty'] != 0).map((e) => int.parse(e['harga_pro'].toString()) * int.parse(e['qty'].toString())).reduce((value, element) => int.parse(value.toString()) + int.parse(element.toString()));
-                                totalQty = ttlQty;
-                                totalValue = ttlVal;
-                                totalan = true;
-                              } catch (e) {
-                                totalan = false;
-                              }
-                          
-                          });
-
-                          print('update');
-                
-                        },
-                        onTambah: () {
-                          print("ditambah kok");
-                        },
-                      )
-                    ),
-                    !totalan?SizedBox.shrink():
-                    Card(
-                      elevation: 10,
-                      color: Colors.green,
-                      margin: EdgeInsets.all(8),
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8),
-                        width: double.infinity,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("Total QTY "+totalQty.toString() +" | Rp."+ totalValue.toString() +" (Est)",
-                              style: TextStyle(
-                                color: Colors.white
-                              ),
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.shopping_basket,
-                                color: Colors.white,
-                              ), 
-                              onPressed: () => lihatRincianOrder(context, _menu,totalQty.toString(), totalValue.toString())
-                            )
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
+              )
+            ],
           ),
         ),
       ),
@@ -588,15 +567,6 @@ class ListItemMenu extends StatelessWidget{
     
     return ListView(
       children: [
-        /* app bar diatas list menunya */
-        // myAppBar(
-        //   context, 
-        //   listMenu, 
-        //   onSubMenu: (val) => onDitambah(val),
-        //   host: host,
-        //   meja: meja,
-        //   user: user
-        // ),
 
         TextField(
           controller: searchController,
@@ -842,10 +812,6 @@ class ListItemMenu extends StatelessWidget{
     );
   }
 
-  // void lihatDetailMenu(BuildContext context, listMenu){
-    
-  // }
-
 
   void hapusPilihan(BuildContext context,{VoidCallback okHapus}){
     showModalBottomSheet(
@@ -868,271 +834,6 @@ class ListItemMenu extends StatelessWidget{
                 textColor: Colors.white,
                 onPressed: () => okHapus(), 
                 child: Text('delete')
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  /* App bar yang ada gambarnya bumbu itu */
-  // Widget myAppBar (
-  //   BuildContext context,
-  //   List menu,
-  //   {
-  //     Function(List) onSubMenu,
-  //     String host,
-  //     String meja,
-  //     Map user, 
-  //   }
-  // )
-  // {
-  //   final _sub = ["FOOD","BEVERAGE","OTHERS"];
-  //   return Stack(
-  //     alignment: Alignment.bottomCenter,
-  //     children: [
-  //       Column(
-  //         children: [
-  //           Container(
-  //             height: 200,
-  //             color: Colors.grey,
-  //             child: Stack(
-  //               fit: StackFit.expand,
-  //               alignment: Alignment.topRight,
-  //               children: [
-  //                 Image.asset('assets/images/bg2.jpg',
-  //                   width: double.infinity,
-  //                   height: double.infinity,
-  //                   fit: BoxFit.cover,
-  //                 ),
-  //                 Container(
-  //                   padding: EdgeInsets.all(8),
-  //                   alignment: Alignment.topLeft,
-  //                   child: Row(
-  //                     children: [
-  //                       CircleAvatar(
-  //                         radius: 20,
-  //                         child: IconButton(
-  //                           icon: Icon(Icons.person), 
-  //                           onPressed: () => munculkanProfile(context,user: user,meja: meja,host: host)
-  //                         ),
-  //                       ),
-  //                       Container(
-  //                         padding: EdgeInsets.all(8),
-  //                         child: Text(user['name'],
-  //                           style: TextStyle(
-  //                             fontSize: 24,
-  //                             color: Colors.white,
-  //                             shadows: [
-  //                               Shadow(
-  //                                 blurRadius: 2,
-  //                                 color: Colors.black,
-  //                                 offset: Offset(0,2)
-  //                               )
-  //                             ]
-  //                           ),
-  //                         )
-  //                       )
-  //                     ],
-  //                   ),
-  //                 )
-  //               ],
-  //             ),
-  //           ),
-  //           Container(
-  //             height: 70,
-  //           )
-  //         ],
-  //       ),
-  //       Card(
-  //         margin: EdgeInsets.all(25),
-  //         child: Container(
-  //           width: double.infinity,
-  //           padding: EdgeInsets.all(8),
-  //           child: Column(
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: [
-  //               Container(
-  //                 alignment: Alignment.topRight,
-  //                 child: TextField(
-  //                   decoration: InputDecoration(
-  //                     hintText: 'search',
-  //                     isDense: true,
-  //                     border: InputBorder.none,
-  //                     prefixIcon : Icon(Icons.search),
-  //                     filled: true,
-  //                     contentPadding: EdgeInsets.symmetric(vertical: 16),
-  //                     fillColor: Colors.grey[300],
-  //                     alignLabelWithHint: true
-  //                   ),
-  //                   onChanged: (value) {
-  //                     menu.forEach((el) {
-  //                       if(el['nama_pro'].toString().trim().toLowerCase().contains(value.toString())){
-  //                         el['terlihat'] = true;
-  //                       }else{
-  //                         el['terlihat'] = false;
-  //                       }
-  //                     });
-  //                     if(value == ""){
-  //                       menu.forEach((el) {
-  //                         if(el['groupp'].toString().trim() == "FOOD"){
-  //                           el['terlihat'] = true;
-  //                         }else{
-  //                           el['terlihat'] = false;
-  //                         }
-  //                       });
-  //                       onSubMenu(menu);
-  //                     }
-  //                     onSubMenu(menu);
-  //                   },
-  //                 )
-  //               ),
-  //               Wrap(
-  //                 alignment: WrapAlignment.spaceAround,
-  //                 children: [
-  //                   for(var i = 0; i < _sub.length; i++)
-  //                   InkWell(
-  //                     onTap: (){
-  //                       menu.forEach((el) {
-  //                         if(el['groupp'].toString().trim() == _sub[i]){
-  //                           el['terlihat'] = true;
-  //                         }else{
-  //                           el['terlihat'] = false;
-  //                         }
-  //                       });
-  //                       onSubMenu(menu);
-  //                     }, 
-  //                     child: Container(
-  //                       padding: EdgeInsets.symmetric(horizontal: 4),
-  //                       child: Chip(
-  //                         label : Text(_sub[i],
-  //                           style: TextStyle(
-  //                             fontWeight: FontWeight.bold,
-  //                             color: Colors.teal
-  //                           ),
-  //                         ),
-  //                       ),
-  //                     )
-  //                   )
-  //                 ],
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       )
-  //     ],
-  //   );
-  // }
-
-
-  /* muncul profile */
-  munculkanProfile(BuildContext context,{
-    String meja,
-    String host,
-    Map user
-  }){
-    
-    // final _lsUser = [user['name'],user['email'],user['phone']];
-
-    showModalBottomSheet(
-      context: context, 
-      isScrollControlled: true,
-      builder: (context) => 
-      Container(
-        height: MediaQuery.of(context).size.height/1.1,
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: double.infinity,
-              alignment: Alignment.center,
-              color: Colors.grey,
-              child: Text("==="),
-            ),
-            Flexible(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(16),
-                    child: CircleAvatar(
-                      radius: 40,
-                      child: Icon(
-                        Icons.people_rounded,
-                        size: 40,
-                      ),
-                    ),
-                  ),
-                  Flexible(
-                    child: Card(
-                      child: Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.all(8),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Row(
-                              children: [
-                                Icon(Icons.account_circle,
-                                  color: Colors.grey,
-                                ),
-                                Text(user["name"].toString()??"---",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Icon(Icons.email,
-                                  color: Colors.grey,
-                                ),
-                                Text(user["email"].toString()??"---",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Icon(Icons.phone,
-                                  color: Colors.grey,
-                                ),
-                                Text(user["phone"].toString()??"---",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold
-                                  ),
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.all(8),
-              alignment: Alignment.centerRight,
-              child: FlatButton(
-                color: Colors.green,
-                textColor: Colors.white,
-                onPressed: ()async{
-                  final _prf = await SharedPreferences.getInstance();
-                  _prf.clear();
-                  Navigator.of(context).pushReplacementNamed('/');
-                }, 
-                child: Text("LOG OUT")
               ),
             )
           ],

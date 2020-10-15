@@ -37,213 +37,216 @@ class _LoginState extends State<Login> {
 
     return Scaffold(
       body: SafeArea(
-        child: Center(
-          child: Card(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: 500
-              ),
-              child: ListView(
-                children: [
-                  Stack(
-                    alignment: Alignment.bottomCenter,
-                    children: [
-                      Column(
+        child: ListView(
+          children: [
+            Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
+                Column(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      height: 150,
+                      child: Stack(
                         children: [
-                          Container(
-                            width: double.infinity,
-                            height: 150,
-                            color: Colors.grey,
-                            child: Stack(
-                              children: [
-                                Image.asset('assets/images/gb1.jpeg',
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                  fit: BoxFit.cover,
-                                ),
-                                Text("Table #"+ meja,
-                                  style: TextStyle(
-                                    fontSize: 42,
-                                    color: Colors.orange,
-                                    shadows: [
-                                      Shadow(
-                                        color: Colors.grey,
-                                        blurRadius: 5,
-                                        offset: Offset(0,4)
-                                      )
-                                    ]
-                                  ),
-                                ),
-                              ],
+                          Card(
+                            child: Image.asset('assets/images/gb1.jpeg',
+                              width: double.infinity,
+                              height: double.infinity,
+                              fit: BoxFit.cover,
                             ),
                           ),
                           Container(
-                            height: 70,
-                          )
-                        ],
-                      ),
-                      FutureBuilder(
-                        future: getCompany(host),
-                        builder: (context, snapshot){
-                          if(snapshot.connectionState != ConnectionState.done) return Center(child: CircularProgressIndicator(),);
-                          Map dat = snapshot.data;
-                          return Column(
-                            children: [
-                              CachedNetworkImage(
-                                imageUrl: dat['logo'],
-                                placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
-                                errorWidget: (context, url, error) => Text("error"),
-                                imageBuilder: (context, imageProvider) => CircleAvatar(
-                                  radius: 50,
-                                  backgroundImage: imageProvider,
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(8),
-                                child: Text(dat['name'])
-                              )
-                            ],
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 50),
-                    child: Form(
-                      key: _kunci,
-                      child: Column(
-                        children: [
-                          for(var a = 0; a < _judul.length;a++)
-                          Container(
-                            padding: EdgeInsets.all(8),
-                            child: TextFormField(
-                              textInputAction: TextInputAction.next,
-                              controller: _lsCon[a],
-                              validator: (val){
-                                return val.isEmpty ?"no empty allowed":null;
-                              },
-                              decoration: InputDecoration(
-                                labelText: _judul[a],
-                                isDense: true,
-                                fillColor: Colors.grey[200],
-                                filled: true,
-                                border: InputBorder.none,
-                                prefixIcon: Icon(_iconInput[a])
+                            padding: EdgeInsets.all(16),
+                            child: Text("Table #"+ meja,
+                              style: TextStyle(
+                                fontSize: 42,
+                                color: Colors.orange,
+                                shadows: [
+                                  Shadow(
+                                    color: Colors.grey,
+                                    blurRadius: 5,
+                                    offset: Offset(0,4)
+                                  )
+                                ]
                               ),
                             ),
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                margin: EdgeInsets.only(top: 50),
-                                padding: EdgeInsets.all(8),
-                                width: double.infinity,
-                                child: FlatButton(
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                                  color: Colors.blue[300],
-                                  textColor: Colors.white,
-                                  padding: EdgeInsets.all(16),
-                                  onPressed: ()async{
-                                    if(_kunci.currentState.validate()){
-
-                                      if(!isEmail(_lsCon[1].text)){
-                                        showMessage(context, "info", "insert email");
-                                        return;
-                                      }
-
-                                      if(_lsCon[2].text.toString().length < 9 || !isNumeric(_lsCon[2].text.replaceAll("0", "1"))){
-                                        showMessage(context, "info", "insert your phone number ");
-                                        return;
-                                      }
-
-                                     
-                                      Map paket = Map();
-                                      try {
-                                        paket['name'] = _lsCon[0].text.toString();
-                                        paket['phone'] = _lsCon[2].text.toString();
-                                        paket['email'] = _lsCon[1].text.toString();
-                                      } catch (e) {
-                                        print(e);
-                                      }
-                                      
-                                      print(paket);
-
-                                      // var aman = scure?"https://":"http://";
-                                      // var hostJadi = "$aman$host/prestoqr/public";
-
-                                      print(host);
-
-                                      try {
-
-                                        final coba = await Dio().post("$host/api/setUserTable/$meja",data: jsonEncode(paket).toString());
-                                        if(coba.data['status']){
-                                          SharedPreferences prf = await SharedPreferences.getInstance();
-                                          prf.setString('meja', meja);
-                                          prf.setString('host', host);
-                                          prf.setString('user', jsonEncode(coba.data['user']).toString());
-
-                                          print(prf.getString('host'));
-                                          //Navigator.of(context).pushReplacementNamed('/open-table');
-
-                                        }else{
-                                          showMessage(context, "info", coba.data['note']);
-                                        }
-                                      } catch (e) {
-                                        showMessage(context, "error", "cannot connect to server \n '$host/api/setUserTable/$meja' \n "+ e.toString());
-                                      }
-
-
-                                    }
-                                  }, 
-                                  child: Text('Login')
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(8),
-                                alignment: Alignment.centerRight,
-                                child: Wrap(
-                                  alignment: WrapAlignment.end,
-                                  crossAxisAlignment: WrapCrossAlignment.center,
-                                  children: [
-                                    Text('or just show me the'),
-                                    FlatButton(
-                                      textColor: Colors.green,
-                                      onPressed: ()async{
-                                        showDialog(context: context,
-                                          child: AlertDialog(
-                                            contentPadding: EdgeInsets.all(8),
-                                            scrollable: true,
-                                            content: Center(child: CircularProgressIndicator(),),
-                                          )
-                                        );
-                        
-                                        final res = await new Dio().get('$host/api/getMenu?product=&group=&subgroup=');
-                                        // print(res.data);
-                                        Navigator.of(context,rootNavigator: true).pop('dialog');
-                                        showModalBottomSheet(context: context, 
-                                          isDismissible: true,
-                                          isScrollControlled: true,
-                                          builder: (context) => BookMenu(menu: res.data,),
-                                        );
-                                      }, 
-                                      // onLongPress: () => Navigator.of(context).push(""),
-                                      child: Text('MENU')
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
                           ),
                         ],
                       ),
                     ),
-                  )
-                ],
-              ),
+                    Container(
+                      height: 100,
+                    )
+                  ],
+                ),
+                FutureBuilder(
+                  future: getCompany(host),
+                  builder: (context, snapshot){
+                    if(snapshot.connectionState != ConnectionState.done) return Center(child: CircularProgressIndicator(),);
+                    Map dat = snapshot.data;
+                    return Column(
+                      children: [
+                        CachedNetworkImage(
+                          imageUrl: dat['logo']??"",
+                          placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
+                          errorWidget: (context, url, error) => Text("error"),
+                          imageBuilder: (context, imageProvider) => 
+                          Card(
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(70)),
+                            child: Container(
+                              padding: EdgeInsets.all(4),
+                              child: CircleAvatar(
+                                radius: 50,
+                                backgroundImage: imageProvider,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Chip(
+                          backgroundColor: Colors.white,
+                          label: Text(dat['name'])
+                        )
+                      ],
+                    );
+                  },
+                ),
+              ],
             ),
-          ),
+            Container(
+              margin: EdgeInsets.only(top: 50),
+              child: Form(
+                key: _kunci,
+                child: Column(
+                  children: [
+                    for(var a = 0; a < _judul.length;a++)
+                    Container(
+                      padding: EdgeInsets.all(8),
+                      child: Card(
+                        child: TextFormField(
+                          textInputAction: TextInputAction.next,
+                          controller: _lsCon[a],
+                          validator: (val){
+                            return val.isEmpty ?"no empty allowed":null;
+                          },
+                          decoration: InputDecoration(
+                            labelText: _judul[a],
+                            isDense: true,
+                            fillColor: Colors.grey[200],
+                            filled: true,
+                            border: InputBorder.none,
+                            prefixIcon: Icon(_iconInput[a])
+                          ),
+                        ),
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(top: 50),
+                          padding: EdgeInsets.all(8),
+                          width: double.infinity,
+                          child: Card(
+                            child: FlatButton(
+                              color: Colors.blue[300],
+                              textColor: Colors.white,
+                              padding: EdgeInsets.all(16),
+                              onPressed: ()async{
+                                if(_kunci.currentState.validate()){
+
+                                  if(!isEmail(_lsCon[1].text)){
+                                    showMessage(context, "info", "insert email");
+                                    return;
+                                  }
+
+                                  if(_lsCon[2].text.toString().length < 9 || !isNumeric(_lsCon[2].text.replaceAll("0", "1"))){
+                                    showMessage(context, "info", "insert your phone number ");
+                                    return;
+                                  }
+
+                                 
+                                  Map paket = Map();
+                                  try {
+                                    paket['name'] = _lsCon[0].text.toString();
+                                    paket['phone'] = _lsCon[2].text.toString();
+                                    paket['email'] = _lsCon[1].text.toString();
+                                  } catch (e) {
+                                    print(e);
+                                  }
+                                  
+                                  print(paket);
+
+
+                                  print(host);
+
+                                  try {
+
+                                    final coba = await Dio().post("$host/api/setUserTable/$meja",data: jsonEncode(paket).toString());
+                                    if(coba.data['status']){
+                                      SharedPreferences prf = await SharedPreferences.getInstance();
+                                      prf.setString('meja', meja);
+                                      prf.setString('host', host);
+                                      prf.setString('user', jsonEncode(coba.data['user']).toString());
+
+                                      print(prf.getString('host'));
+                                      Navigator.of(context).pushReplacementNamed('/open-table');
+
+                                    }else{
+                                      showMessage(context, "info", coba.data['note']);
+                                    }
+                                  } catch (e) {
+                                    showMessage(context, "error", "cannot connect to server \n '$host/api/setUserTable/$meja' \n "+ e.toString());
+                                  }
+
+
+                                }
+                              }, 
+                              child: Text('Login')
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(8),
+                          alignment: Alignment.centerRight,
+                          child: Wrap(
+                            alignment: WrapAlignment.end,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              Text('or just show me the'),
+                              FlatButton(
+                                textColor: Colors.green,
+                                onPressed: ()async{
+                                  showDialog(context: context,
+                                    child: AlertDialog(
+                                      contentPadding: EdgeInsets.all(8),
+                                      scrollable: true,
+                                      content: Center(child: CircularProgressIndicator(),),
+                                    )
+                                  );
+                  
+                                  final res = await new Dio().get('$host/api/getMenu?product=&group=&subgroup=');
+                                  // print(res.data);
+                                  Navigator.of(context,rootNavigator: true).pop('dialog');
+                                  showModalBottomSheet(context: context, 
+                                    isDismissible: true,
+                                    isScrollControlled: true,
+                                    builder: (context) => BookMenu(menu: res.data,),
+                                  );
+                                }, 
+                                // onLongPress: () => Navigator.of(context).push(""),
+                                child: Text('MENU')
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
         ),
       )
     );

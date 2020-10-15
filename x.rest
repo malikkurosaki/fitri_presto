@@ -90,7 +90,7 @@ Content-Type: application/json
 GET http://192.168.192.152/prestoqr/public/api/getCustomerTable HTTP/1.1
 
 ### bersihkan meja
-POST http://192.168.192.152/prestoqr/public/api/clearTable/7 HTTP/1.1
+POST http://192.168.192.152/prestoqr/public/api/clearTable/3 HTTP/1.1
 
 
 ###
