@@ -3,29 +3,29 @@ https://prestoqrcode.docs.apiary.io/#
 
 
 ### lihat group
-GET http://192.168.192.152/prestoqr/public/api/getGroup?group=&subgroup= HTTP/1.1
+GET https://prestoqr.probussystem.com/api/getGroup?group=&subgroup= HTTP/1.1
 
 ### lihat menu
-GET http://192.168.192.152/prestoqr/public/api/getMenu?product=&group=&subgroup= HTTP/1.1
+GET https://prestoqr.probussystem.com/api/getMenu?product=&group=&subgroup= HTTP/1.1
 
 ### compeny profile
-GET http://192.168.192.152/prestoqr/public/api/getCompanyProfile HTTP/1.1
+GET https://prestoqr.probussystem.com/api/getCompanyProfile HTTP/1.1
 
 ### lihat data shift
 # gak jadi
-GET http://192.168.192.152/prestoqr/public/api/getShift HTTP/1.1
+GET https://prestoqr.probussystem.com/api/getShift HTTP/1.1
 
 
 
 ### set customer id
 # table sesuai nomer meja
-POST http://192.168.192.152/prestoqr/public/api/setUserTable/7 HTTP/1,1
+POST https://prestoqr.probussystem.com/api/setUserTable/2 HTTP/1,1
 Content-Type: application/json
 
 {
-    "name": "malik",
-    "phone": "1111111111",
-    "email": "malik@gmail.com"
+    "name": "ayu",
+    "phone": "74748449494949494",
+    "email": "maliki@gmail.com"
 }
 
 # responsenya
@@ -47,7 +47,7 @@ Content-Type: application/json
 
 ### save customer order
 # table sesuai meja
-POST http://192.168.192.152/prestoqr/public/api/saveOrder/bc1 HTTP/1.1
+POST https://prestoqr.probussystem.com/api/saveOrder/bc1 HTTP/1.1
 Content-Type: application/json
 
 {
@@ -72,10 +72,10 @@ Content-Type: application/json
 }
 
 ### get data order temporary
-GET http://192.168.192.152/prestoqr/public/api/listOrderTemporary HTTP/1.1
+GET https://prestoqr.probussystem.com/api/listOrderTemporary HTTP/1.1
 
 ### approve temporary order
-POST http://192.168.192.152/prestoqr/public/api/aproveOrderTemporary/orderTemporary
+POST https://prestoqr.probussystem.com/api/aproveOrderTemporary/orderTemporary
 Content-Type: application/json
 
 {
@@ -87,10 +87,14 @@ Content-Type: application/json
 
 
 ### lihat meja
-GET http://192.168.192.152/prestoqr/public/api/getCustomerTable HTTP/1.1
+GET https://prestoqr.probussystem.com/api/getCustomerTable HTTP/1.1
 
 ### bersihkan meja
-POST http://192.168.192.152/prestoqr/public/api/clearTable/3 HTTP/1.1
+POST https://prestoqr.probussystem.com/api/clearTable/2 HTTP/1.1
+
+
+### setting
+GET https://malikkurosaki.github.io/cdnjs/setting/presto_qr.json HTTP/1.1
 
 
 ###

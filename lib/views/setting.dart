@@ -1,9 +1,13 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:presto_qr/controller/list_menu_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:get/get.dart';
 
 class MySetting extends StatelessWidget {
+  final _box = GetStorage();
+  final _theMenu = Get.find<ListMenuNya>();
   @override
   Widget build(BuildContext context) {
     final _berubah = Berubah(context);
@@ -22,11 +26,64 @@ class MySetting extends StatelessWidget {
               children: [
                 FlatButton(
                   onPressed: ()async{
-                    SharedPreferences prf = await SharedPreferences.getInstance();
-                    prf.clear();
-                    Navigator.of(context).pushReplacementNamed('/');
+                   _theMenu.keluar();
                   }, 
                   child: Text('keluar')
+                ),
+                FlatButton(
+                  onPressed: ()async{
+                    print(_box.read('host')+'/api/clearTable/'+_box.read('meja'));
+                    final hps = await new Dio().post(_box.read('host')+'/api/clearTable/'+_box.read('meja'));
+                    Get.showSnackbar(
+                      GetBar(
+                        title: 'info',
+                        message: hps.data.toString(),
+                        isDismissible: true,
+                      ),
+                    );
+
+                    // showModalBottomSheet(
+                    //   context: context, 
+                    //   builder: (context) => Column(
+                    //     children: [
+                    //       Row(
+                    //         children: [
+                    //           Flexible(
+                    //             child: Container(
+                    //               padding: EdgeInsets.all(8),
+                    //               child: Card(
+                    //                 child: TextField(
+                    //                   decoration: InputDecoration(
+                    //                     prefix: Text(' meja : '),
+                    //                     border: InputBorder.none,
+                    //                     isDense: true,
+                    //                     hintText: 'masukkan nomer meja yang akan dihapus'
+                    //                   ),
+                    //                 ),
+                    //               ),
+                    //             ),
+                    //           ),
+                    //           Card(
+                    //             child: FlatButton(
+                    //               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    //               color: Colors.grey[200],
+                    //               onPressed: ()async{
+                    //                 final stng = await new Dio().get('https://malikkurosaki.github.io/cdnjs/setting/presto_qr.json');
+                    //                 final hps = await new Dio().post(str.read('host')+'/prestoqr/public/api/clearTable/'+str.read('meja'));
+
+                    //                 print(hps.data);
+                                    
+                    //               }, 
+                    //               child: Text('hapus')
+                    //             ),
+                    //           )
+                    //         ],
+                    //       )
+                    //     ],
+                    //   ),
+                    // );
+                  }, 
+                  child: Text('hapus meja ')
                 )
               ],
             )

@@ -1,145 +1,115 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:presto_qr/controller/splash_controller.dart';
 import 'package:presto_qr/views/login.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:validators/sanitizers.dart';
+import 'package:presto_qr/views/my_home.dart';
+import 'package:presto_qr/component/garis_putus.dart';
 
 
-class Splash extends StatefulWidget{
-  final meja, host, scure;
-  const Splash({Key key, this.meja, this.host, this.scure}) : super(key: key);
-
-  @override
-  _SplashState createState() => _SplashState(meja, host, scure);
-}
-
-class _SplashState extends State<Splash> {
-  final meja, host, scure;
-  var load = false;
-
-  _SplashState(this.meja, this.host, this.scure);
-  @override
-  void initState() {
-    if(!load){
-      Future.delayed(Duration(seconds: 4),()async{
-        SharedPreferences prf = await SharedPreferences.getInstance();
-        if(prf.getString('user') != null){
-          Navigator.of(context).pushReplacementNamed('/open-table');
-        }else{
-          if(meja == null || host == null){
-            Navigator.of(context).pushReplacementNamed('/home');
-          }else{
-            var aman = toBoolean(scure)?"https://":"http://";
-            var hostNya = "$aman$host/prestoqr/public";
-            print(hostNya);
-            Navigator.of(context).pushReplacement(MaterialPageRoute(builder:(context) => Login(meja: meja,host: hostNya,),));
-          }
-        } 
-      });
-      load = true;
-    }
-    super.initState();
-  }
-
+class RootView extends StatelessWidget {
+  final spl = Get.find<SplashController>();
   @override
   Widget build(BuildContext context) {
-    print('splash');
-    return Scaffold(
-      body: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Text('Presto',
-              style: TextStyle(
-                fontSize: 42,
-                color: Colors.grey
+    Future.delayed(Duration(seconds: 2),(){
+      spl.pindah.value = true;
+      print("pindah lah");
+    });
+    return Obx(()=>spl.pindah.value?Login():Splash());
+  }
+}
+
+class Splash extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+
+    return Container(
+      child: Scaffold(
+        body: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('presto',
+                style: TextStyle(
+                  fontSize: 36,
+                  color: Color(0.satu()),
+                  fontStyle: FontStyle.normal
+                ),
               ),
-            ),
-            Text('QR',
-              style: TextStyle(
-                fontSize: 52,
-                fontWeight: FontWeight.bold,
-                color: Colors.deepOrange
-              ),
-            )
-          ],
+              Text('QR',
+                style: TextStyle(
+                  fontSize: 42,
+                  color: Color(0.empat()),
+                ),
+              )
+            ],
+          ),
         ),
-      ),
+      ),      
     );
   }
 }
 
-// class Splash extends StatelessWidget{
-//   final meja,host;
-  
-//   Splash({Key key, this.meja, this.host}) : super(key: key);
-  
-//   final _load = Map();
+// import 'package:flutter/cupertino.dart';
+// import 'package:flutter/material.dart';
+// import 'package:presto_qr/views/login.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:validators/sanitizers.dart';
 
-//   void _memuat(BuildContext context, MalikDynamic _malik)async{
-//     if(_load['udah'] == null){
-//         if(_malik != null){
-//           _malik.prf.setString('meja', meja.toString());
-//           _malik.prf.setString('host', host.toString());
-          
-//           await _malik.loadMalik();
-//           _malik.update();
-//           _load['udah'] = true;
-//           await Future.delayed(Duration(seconds: 1));
-//           Navigator.of(context).pushReplacementNamed('/masuk');
+
+// class Splash extends StatefulWidget{
+//   final meja, host, scure;
+//   const Splash({Key key, this.meja, this.host, this.scure}) : super(key: key);
+
+//   @override
+//   _SplashState createState() => _SplashState(meja, host, scure);
+// }
+
+// class _SplashState extends State<Splash> {
+//   final meja, host, scure;
+
+//   _SplashState(this.meja, this.host, this.scure);
+//   @override
+//   void initState() {
+//     Future.delayed(Duration(seconds: 1),()async{
+//       SharedPreferences prf = await SharedPreferences.getInstance();
+//       if(prf.getString('user') != null){
+//         Navigator.of(context).pushReplacementNamed('/open-table');
+//       }else{
+//         if(meja == null || host == null){
+//           Navigator.of(context).pushReplacementNamed('/home');
+//         }else{
+//           var aman = toBoolean(scure)?"https://":"http://";
+//           var hostNya = "$aman$host/prestoqr/public";
+//           print(hostNya);
+//           Navigator.of(context).pushReplacement(MaterialPageRoute(builder:(context) => Login(meja: meja,host: hostNya,),));
 //         }
-//       }
+//       } 
+//     });
+//     super.initState();
 //   }
 
 //   @override
 //   Widget build(BuildContext context) {
-//     print("iam in spalsh screen");
-//     final _malik = Provider.of<MalikDynamic>(context);
-
-//     _memuat(context,_malik);
-
-//     // Future.delayed(Duration(seconds: 4),()async{
-
-//     //   if(_malik.meja == null){
-//     //     print('menuju ke login');
-//     //     _malik.prf.setString('meja', meja.toString());
-//     //     _malik.prf.setString('host', host.toString());
-        
-//     //     await _malik.loadMalik();
-//     //     Navigator.of(context).pushReplacementNamed('/masuk');
-//     //   }else{
-//     //     _malik.meja = null;
-//     //   }
-//     // });
-    
+//     print('splash');
 //     return Scaffold(
 //       body: Center(
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.center,
-//           mainAxisSize: MainAxisSize.max,
+//         child: Row(
 //           mainAxisAlignment: MainAxisAlignment.center,
+//           mainAxisSize: MainAxisSize.max,
 //           children: [
-//             Row(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               children: [
-//                 Text('Presto',
-//                   style: TextStyle(
-//                     fontSize: 42,
-//                     color: Colors.grey
-//                   ),   
-//                 ),
-//                 Text('QR',
-//                   style: TextStyle(
-//                     fontSize: 52,
-//                     color: Colors.deepOrange
-//                   ),
-//                 )
-//               ],
-//             ),
-//             Text('PROBUS SYSTEM',
+//             Text('Presto',
 //               style: TextStyle(
-//                 color: Colors.blue[300]
+//                 fontSize: 42,
+//                 color: Colors.grey
+//               ),
+//             ),
+//             Text('QR',
+//               style: TextStyle(
+//                 fontSize: 52,
+//                 fontWeight: FontWeight.bold,
+//                 color: Colors.deepOrange
 //               ),
 //             )
 //           ],
@@ -148,29 +118,3 @@ class _SplashState extends State<Splash> {
 //     );
 //   }
 // }
-// // class Splash extends StatefulWidget{
-// //   @override
-// //   _SplashState createState() => _SplashState();
-// // }
-
-// // class _SplashState extends State<Splash> {
-
-// //   @override
-// //   void initState() {
-// //     super.initState();
-
-// //     Future.delayed(Duration(seconds: 2),()async{
-// //       SharedPreferences prf = await SharedPreferences.getInstance();
-// //       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => prf.getString('auth') == null?Login():OpenOrder()),);
-// //     });
-// //   }
-// //   @override
-// //   Widget build(BuildContext context) {
-    
-// //     return Scaffold(
-// //       body: Center(
-// //         child: Text('Presto QR'),
-// //       ),
-// //     );
-// //   }
-// // }
