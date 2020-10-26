@@ -56,7 +56,7 @@ import 'controller/open_order_controller.dart';
 // }
 
 
-main(List<String> args) async{
+main() async{
   await GetStorage.init();
   Get.put<SplashController>(SplashController());
   Get.put<CompanyProfileController>(CompanyProfileController());
