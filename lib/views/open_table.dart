@@ -198,7 +198,7 @@ class AppBarAtas extends StatelessWidget {
         Image.asset('assets/images/bahan.jpg',
           height: 200,
           colorBlendMode: BlendMode.multiply,
-          color: Colors.green[200],
+          color: Colors.green[600],
           width: double.infinity,
           fit: BoxFit.cover,
         ),

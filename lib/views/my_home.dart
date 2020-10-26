@@ -191,18 +191,20 @@ class MyHomeGakAdaPesanan extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Color(0.enam()),
       padding: EdgeInsets.all(16),
       child: Column(
         children: [
           Flexible(
-            child: Column(
+            child: ListView(
               children: [
                 Container(
                   padding: EdgeInsets.symmetric(vertical: 16),
                   child: Text(
                     "PrestQR Features, Support Social Distancing",
                     style: TextStyle(
-                      fontSize: 24
+                      fontSize: 42,
+                      color: Colors.white
                     ),
                   ),
                 ),
@@ -214,11 +216,17 @@ class MyHomeGakAdaPesanan extends StatelessWidget {
                       The PrestoQR feature strongly supports the current social distancing policies to reduce the spread of Covid-19. Passive experiences for isolated communities will change to become more active and social.  can use PrestoQr to do contactless. This latest feature will meet the needs of customers to be able to order menus without having to contact directly.
                     """,
                     textAlign: TextAlign.start,
+                    style: TextStyle(
+                      color: Color(0.lima())
+                    ),
                   ),
                 ),
                 Container(
                   child: Center(
-                    child: Image.asset('assets/images/qr_scanner1.png'),
+                    child: Image.asset(
+                      'assets/images/qr_scanner1.png',
+                      width: 400,
+                    ),
                   ),
                 ),
                 GestureDetector(
@@ -229,7 +237,12 @@ class MyHomeGakAdaPesanan extends StatelessWidget {
                     );
                     Get.offAllNamed('/login?meja=3&host=https://prestoqr.probussystem.com');
                   },
-                  child: Text('powered by PROBUSSYSTEM')
+                  child: Text('powered by PROBUSSYSTEM',
+                    style: TextStyle(
+                      color: Color(0.satu())
+                    ),
+                    textAlign: TextAlign.center,
+                  )
                 )
               ],
             )
