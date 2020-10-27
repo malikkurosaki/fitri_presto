@@ -57,7 +57,7 @@ class OpenTable extends StatelessWidget {
               // disini : appbar
               Obx(()=>
                 Container(
-                  color: Color(0.tiga()),
+                  color: Color(0.enam()),
                   child: AnimatedCrossFade(
                     firstChild: Column(
                       children: [
@@ -91,7 +91,7 @@ class DetailBawah extends StatelessWidget {
       child: Obx(()=> 
         !_theMenu.totalanBawah.value & _theMenu.adaOrderan.value?
         Card(
-          color: Color(0.tiga()),
+          color: Color(0.enam()),
           child: Container(
               width: double.infinity,
               padding: EdgeInsets.all(8),
@@ -169,14 +169,14 @@ class CariListMenu extends StatelessWidget {
                   border: InputBorder.none,
                   isDense: true,
                   filled: true,
-                  fillColor: Color(0.satu())
+                  fillColor: Colors.white
                 ),
               ),
             ),
           ),
           IconButton(
             icon: Icon(Icons.search,
-              color: Color(0.satu()),
+              color: Colors.white,
             ),
             onPressed: (){
               _theMenu.cariListMenu();
@@ -193,7 +193,10 @@ class AppBarAtas extends StatelessWidget {
   final _box = GetStorage();
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    
+    return 
+   !GetStorage().hasData('company')?Text("loading ..."):
+    Stack(
       children: [
         // Image.asset('assets/images/bahan.jpg',
         //   height: 200,
@@ -209,7 +212,7 @@ class AppBarAtas extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(GetStorage().read('company')['name'],
+                  Text(GetStorage().read('company')['name']??"load ...",
                     style: TextStyle(
                       fontSize: 24,
                       color: Color(0.duaa()),
@@ -234,7 +237,7 @@ class AppBarAtas extends StatelessWidget {
                     maxRadius: 25,
                     child: Icon(Icons.account_circle,
                       size: 50,
-                      color: Color(0.tiga()),
+                      color: Color(0.enam()),
                     ),
                   ),
                   Text(_box.read('auth')['name'],
@@ -261,7 +264,7 @@ class PanelBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(()=>
       Container(
-        color: Color(0.tiga()),
+        color: Color(0.enam()),
         child: Column(
           children: [
             CariListMenu(),
@@ -299,7 +302,7 @@ class PanelBar extends StatelessWidget {
                           alignment: Alignment.center,
                           margin: EdgeInsets.only(bottom: 3),
                           padding: EdgeInsets.all(8),
-                          color: Color(0.tiga()),
+                          color: Color(0.enam()),
                           child: Text(_theMenu.subMenu[i]['nama'],
                             style: TextStyle(
                               color: Colors.white
@@ -393,14 +396,13 @@ class ListMenuView extends StatelessWidget {
                                   Text(_theMenu.listMenu[i].ket,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                      color: Color(0.satu()),
+                                      color: Colors.white,
                                       fontStyle: FontStyle.italic
                                     ),
                                   ),
                                   Container(
                                     child: !_theMenu.listMenu[i].lihatEditTambah?
                                     Container(
-                                      padding: EdgeInsets.symmetric(vertical: 8),
                                       child: Text(_theMenu.listMenu[i].note??"",
                                         style: TextStyle(
                                           backgroundColor: Colors.green[50],
@@ -433,7 +435,7 @@ class ListMenuView extends StatelessWidget {
                                     children: [
                                       _theMenu.listMenu[i].qty == 0?
                                       Card(
-                                        color: Color(0.tiga()),
+                                        color: Color(0.enam()),
                                         child: InkWell(
                                           child: Container(
                                             padding: EdgeInsets.all(8),
@@ -492,7 +494,7 @@ class ListMenuView extends StatelessWidget {
                                                     _theMenu.listMenu[i].qty.toString(),
                                                     style: TextStyle(
                                                       fontSize: 18,
-                                                      color: Color(0.tiga()),
+                                                      color: Color(0.enam()),
                                                       fontWeight: FontWeight.bold
                                                     ),
                                                   ),
@@ -646,7 +648,7 @@ class ListMenuView extends StatelessWidget {
 //                             children: [
 //                               InkWell(
 //                                 child: CircleAvatar(
-//                                   backgroundColor: Color(0.tiga()),
+//                                   backgroundColor: Color(0.enam()),
 //                                   child: Icon(Icons.account_circle,
 //                                     size: 40,
 //                                   ),
@@ -782,7 +784,7 @@ class ListMenuView extends StatelessWidget {
 //                   !totalan?SizedBox.shrink():
 //                   Card(
 //                     elevation: 10,
-//                     color: Color(0.tiga()),
+//                     color: Color(0.enam()),
 //                     margin: EdgeInsets.all(8),
 //                     child: Container(
 //                       padding: EdgeInsets.symmetric(horizontal: 8),
@@ -950,7 +952,7 @@ class ListMenuView extends StatelessWidget {
 //                 children: [
 //                   FlatButton(
 //                     minWidth: double.infinity,
-//                     color: Color(0.tiga()),
+//                     color: Color(0.enam()),
 //                     textColor: Colors.white,
 //                     onPressed: ()async{
 //                       SharedPreferences prf = await SharedPreferences.getInstance();
@@ -1296,7 +1298,7 @@ void pembersihanLogOut(BuildContext context, List menu)async{
 //                                   onDitambah(listMenu);
 //                                 }, 
 //                                 child: Card(
-//                                   color: Color(0.tiga()),
+//                                   color: Color(0.enam()),
 //                                   child: Container(
 //                                     padding: EdgeInsets.only(top: 4,bottom: 4, left: 8, right: 8),
 //                                     child: Text('add +',
@@ -1394,7 +1396,7 @@ void pembersihanLogOut(BuildContext context, List menu)async{
 //                   Container(
 //                     width: double.infinity,
 //                     child: FlatButton(
-//                       color: Color(0.tiga()),
+//                       color: Color(0.enam()),
 //                       onPressed: () => onEditNote(), 
 //                       child: Text('SAVE',
 //                         style: TextStyle(

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:presto_qr/component/garis_putus.dart';
 import 'package:presto_qr/controller/list_menu_controller.dart';
-import 'package:presto_qr/component/garis_putus.dart';
 
 class DetailOrderan extends StatelessWidget {
   final _theMenu = Get.find<ListMenuNya>();
@@ -19,10 +18,15 @@ class DetailOrderan extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              alignment: Alignment.center,
-              width: double.infinity,
-              child: Icon(Icons.arrow_drop_down),
+            InkWell(
+              child: Container(
+                alignment: Alignment.center,
+                width: double.infinity,
+                child: Icon(Icons.arrow_drop_down),
+              ),
+              onTap: (){
+                Get.back();
+              },
             ),
             Flexible(
               child: Container(
@@ -157,7 +161,7 @@ class DetailOrderan extends StatelessWidget {
                                 width: double.infinity,
                                 child: FlatButton(
                                   textColor: Colors.white,
-                                  color: Color(0.tiga()),
+                                  color: Color(0.enam()),
                                   onPressed: (){
                                     _theMenu.prossesOrderan(context);
                                   }, 

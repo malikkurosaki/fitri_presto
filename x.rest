@@ -13,7 +13,7 @@ GET https://prestoqr.probussystem.com/api/getCompanyProfile HTTP/1.1
 
 ### lihat data shift
 # gak jadi
-GET https://prestoqr.probussystem.com/api/getShift HTTP/1.1
+GET https://prestoqr.probussystem.net/presto/public/api/getShift HTTP/1.1
 
 
 

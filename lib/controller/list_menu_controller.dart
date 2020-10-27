@@ -123,7 +123,7 @@ class ListMenuNya extends GetxController{
     });
 
     this.noteController.value = List.generate(listMenu.length, (index) => TextEditingController());
-    this.listMenu.update((value) {});
+    this.listMenu.update((value) {print('abis ambil list menu');});
   }
 
   // meghitung total
@@ -209,7 +209,7 @@ class ListMenuNya extends GetxController{
       billDetail: listBill
     );
     final apaBerhasil = await ApiController.kirimPaket(paket);
-    Get.back();
+    //Get.back();
     if(apaBerhasil){
       kosongkanData();
       Get.offAllNamed('/');
@@ -229,6 +229,7 @@ class ListMenuNya extends GetxController{
       }
     }
     this.listMenu.update((value) { });
+    update();
   }
 
 

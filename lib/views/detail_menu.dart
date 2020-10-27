@@ -24,10 +24,15 @@ class DetailMenu extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.max,
         children: [
-          Container(
-            width: double.infinity,
-            alignment: Alignment.center,
-            child: Icon(Icons.arrow_drop_down),
+          InkWell(
+            child: Container(
+              width: double.infinity,
+              alignment: Alignment.center,
+              child: Icon(Icons.arrow_drop_down),
+            ),
+            onTap: (){
+              Get.back();
+            },
           ),
           Flexible(
             child: Column(
@@ -50,6 +55,7 @@ class DetailMenu extends StatelessWidget {
                 ),
                 Flexible(
                   child: Container(
+                    width: double.infinity,
                     padding: EdgeInsets.all(16),
                     child: Column(
                       children: [
@@ -69,7 +75,7 @@ class DetailMenu extends StatelessWidget {
                         Align(
                           alignment: Alignment.centerRight,
                           child: FlatButton(
-                            color: Color(0.tiga()),
+                            color: Color(0.enam()),
                             textColor: Colors.white,
                             child: Text('add +'),
                             onPressed: (){

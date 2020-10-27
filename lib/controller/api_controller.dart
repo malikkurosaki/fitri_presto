@@ -9,9 +9,12 @@ class ApiController {
   static kirimPaket(PaketOrderan paketOrderan)async{
     final box = GetStorage();
     final meja = box.read('meja');
-    final res = await new Dio().post("${box.read('host')}/api/saveOrder/"+meja,data: paketOrderan);
+    final host = box.read('host');
+    final res = await new Dio().post("$host/api/saveOrder/"+meja,data: paketOrderan);
     hapusMeja(meja);
     box.erase();
+    await box.write('host', host);
+    print(host);
     await box.write('pesanan', res.data['listbill']);
     return res.data['status'];
   }
