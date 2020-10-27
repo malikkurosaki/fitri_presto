@@ -105,7 +105,7 @@ class ListMenuNya extends GetxController{
     });
 
     this.noteController.value = List.generate(listMenu.length, (index) => TextEditingController());
-    update();
+    this.listMenu.update((value) {});
   }
 
   // meghitung total
