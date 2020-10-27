@@ -10,7 +10,7 @@ class RootView extends StatelessWidget {
   final spl = Get.find<SplashController>();
   @override
   Widget build(BuildContext context) {
-    Future.delayed(Duration(seconds: 2),(){
+    Future.delayed(Duration(seconds: 1),(){
       spl.pindah.value = true;
       print("pindah lah");
     });

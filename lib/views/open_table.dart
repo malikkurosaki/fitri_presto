@@ -396,7 +396,7 @@ class ListMenuView extends StatelessWidget {
                                   Text(_theMenu.listMenu[i].ket,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                      color: Colors.white,
+                                      color: Colors.grey,
                                       fontStyle: FontStyle.italic
                                     ),
                                   ),

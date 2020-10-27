@@ -6,7 +6,7 @@ https://prestoqrcode.docs.apiary.io/#
 GET https://prestoqr.probussystem.com/api/getGroup?group=&subgroup= HTTP/1.1
 
 ### lihat menu
-GET https://prestoqr.probussystem.net/presto/public/api/getMenu?product=&group=&subgroup= HTTP/1.1
+GET http://prestoqr.probussystem.net/presto/public/api/getMenu?product=&group=&subgroup= HTTP/1.1
 
 ### compeny profile
 GET https://prestoqr.probussystem.com/api/getCompanyProfile HTTP/1.1
