@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:presto_qr/controller/splash_controller.dart';
+import 'package:presto_qr/model/login_model.dart';
 import 'package:presto_qr/views/book_menu.dart';
 import 'package:validators/validators.dart';
 import 'package:get/get_rx/src/rx_iterables/rx_map.dart';
@@ -156,6 +157,7 @@ class Login extends StatelessWidget {
                               textColor: Colors.white,
                               padding: EdgeInsets.all(16),
                               onPressed: ()async{
+                                Get.dialog(Center(child: CircularProgressIndicator(),));
                                 if(_kunci.currentState.validate()){
 
                                   if(!isEmail(_lsCon[1].text)){
@@ -164,44 +166,28 @@ class Login extends StatelessWidget {
                                   }
 
                                   if(_lsCon[2].text.toString().length < 9 || !isNumeric(_lsCon[2].text.replaceAll("0", "1"))){
-                                    showMessage(context, "info", "insert your phone number ");
+                                    showMessage(context, "info", "wrong phone number");
                                     return;
                                   }
 
-                                 
-                                  Map paket = Map();
-                                  try {
-                                    paket['name'] = _lsCon[0].text.toString();
-                                    paket['phone'] = _lsCon[2].text.toString();
-                                    paket['email'] = _lsCon[1].text.toString();
-                                  } catch (e) {
-                                    print(e);
-                                  }
-                                  
-                                  print(paket);
-
-
-                                  print(str.read('host'));
+                                  final loginPaket = LoginModel(
+                                    name: _lsCon[0].text.toString(),
+                                    email: _lsCon[1].text.toString(),
+                                    phone: _lsCon[2].text.toString()
+                                  );
 
                                   try {
-
-                                    final coba = await Dio().post("${str.read('host')}/api/setUserTable/${str.read('meja')}",data: jsonEncode(paket).toString());
+                                    final coba = await Dio().post("${str.read('host')}/api/setUserTable/${str.read('meja')}",data: loginPaket);
+                                    Get.back();
                                     if(coba.data['status']){
-                                      // SharedPreferences prf = await SharedPreferences.getInstance();
-                                      // prf.setString('meja', meja);
-                                      // prf.setString('host', host);
-                                      // prf.setString('user', jsonEncode(coba.data['user']).toString());
                                       await str.write('auth', coba.data['user']);
                                       Get.offNamed('/open-table');
-                                      //Navigator.of(context).pushReplacementNamed('/open-table');
-
                                     }else{
                                       showMessage(context, "info", coba.data['note']);
                                     }
                                   } catch (e) {
                                     showMessage(context, "error", "cannot connect to server \n '${str.read('host')}/api/setUserTable/${str.read('meja')}' \n "+ e.toString());
                                   }
-
 
                                 }
                               }, 

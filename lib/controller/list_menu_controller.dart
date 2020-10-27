@@ -46,16 +46,15 @@ class ListMenuNya extends GetxController{
 
   scrollListener(){
     scrollController.value.addListener(() {
-      
       if(this.scrollController.value.position.userScrollDirection == ScrollDirection.forward){
         this.keatas.value ++;
-        if(this.keatas.value > 30){
+        if(this.keatas.value > 20){
           this.totalanBawah.value = false;
           this.keatas.value = 0;
         }
       }else{
         this.kebawah.value ++;
-        if(this.kebawah.value > 30){
+        if(this.kebawah.value > 20){
           this.totalanBawah.value = true;
           this.kebawah.value = 0;
         }
