@@ -11,44 +11,6 @@ import 'package:presto_qr/views/setting.dart';
 import 'package:presto_qr/views/splash.dart';
 
 import 'controller/list_menu_controller.dart';
-
-// void main() async{
-
-// //  final router = RegexRouter.create({
-// //     "/": (context, args) => Splash(),
-// //     "/:meja/:host/:scure": (context, args) => Splash(meja: args['meja'], host: args['host'], scure: args['scure'],),
-// //     "/home": (context,_) => MyHome(),
-// //     "/setting": (context,_) => MySetting(),
-// //     "/login": (context,_) => Login(),
-// //     "/open-table": (context,_) => OpenTable()
-// //   });
-
-//   runApp(
-//     Center(
-//       child: Card(
-//         child: Container(
-//           color: Colors.grey,
-//           child: ConstrainedBox(
-//             constraints: BoxConstraints(
-//               maxWidth: 500
-//             ),
-//             child: GetMaterialApp(
-//               title: 'presto qr | probus system',
-//               debugShowCheckedModeBanner: false,
-//               // onGenerateRoute: router.generateRoute,
-//               initialRoute: "/",
-//               getPages: [
-//                 GetPage(name: '/', page: ()=> Coba()),
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     )
-//   );
-// }
-
-
 main() async{
   await GetStorage.init();
   Get.put<SplashController>(SplashController());

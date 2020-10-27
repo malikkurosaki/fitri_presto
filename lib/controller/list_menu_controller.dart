@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:get_storage/get_storage.dart';
@@ -9,6 +10,7 @@ import 'package:presto_qr/model/menu_model.dart';
 import 'package:presto_qr/model/model_response_listbill.dart';
 import 'package:presto_qr/model/paket_orderan_model.dart';
 import 'package:presto_qr/model/user_model.dart';
+import 'package:get/get.dart';
 
 
 
@@ -19,9 +21,9 @@ class ListMenuNya extends GetxController{
   final mn = MenuModel().obs;
   final listMenu = List<MenuModel>().obs;
   final noteController = <TextEditingController>[].obs;
-  //final banyakScroll = 0.obs;
-  final keatas = 0.obs;
-  final kebawah = 0.obs;
+  final banyakScroll = 0.obs;
+  // final keatas = 0.obs;
+  // final kebawah = 0.obs;
 
   /* tambahan */
   final host = "".obs;
@@ -38,28 +40,45 @@ class ListMenuNya extends GetxController{
   final scrollController = ScrollController().obs;
   final pesananNya = ResponseListBill().obs;
 
+  kosongkanData(){
+    listMenu.value = [];
+    noteController.value = [];
+    banyakScroll.value = 0;
+    host.value = "";
+    user.value = {};
+    meja.value = "";
+    totalan.value = false;
+    totalQty.value = 0;
+    totalValue.value = 0;
+    totalOrder.value = 0;
+    totalanBawah.value = false;
+    adaOrderan.value = false;
+    totalListOrderan.value = [];
+    cariController.value = TextEditingController();
+    scrollController.value = ScrollController();
+    pesananNya.value = ResponseListBill();
+  }
+
   kosongkanMeja(String meja,String host)async{
     await new Dio().post(host+'/api/clearTable/'+meja);
     Get.snackbar("judul", "meja dihapus");
   }
-
-
   scrollListener(){
     scrollController.value.addListener(() {
       if(this.scrollController.value.position.userScrollDirection == ScrollDirection.forward){
-        this.keatas.value ++;
-        if(this.keatas.value > 20){
+        this.banyakScroll.value ++;
+        if(this.banyakScroll.value > 20){
           this.totalanBawah.value = false;
-          this.keatas.value = 0;
+          this.banyakScroll.value = 0;
         }
       }else{
-        this.kebawah.value ++;
-        if(this.kebawah.value > 20){
+        this.banyakScroll.value ++;
+        if(this.banyakScroll.value > 20){
           this.totalanBawah.value = true;
-          this.kebawah.value = 0;
+          this.banyakScroll.value = 0;
         }
       }
-      print(this.kebawah.value);
+      print(this.banyakScroll.value);
     });
   }
 
@@ -171,6 +190,7 @@ class ListMenuNya extends GetxController{
 
   // prosses orderan
   prossesOrderan(BuildContext context)async{
+    Get.dialog(Center(child: CircularProgressIndicator(),));
     final box = GetStorage();
     final user = UserModel.fromJson(box.read('auth'));
 
@@ -188,15 +208,13 @@ class ListMenuNya extends GetxController{
       phone: user.phone,
       billDetail: listBill
     );
-
     final apaBerhasil = await ApiController.kirimPaket(paket);
+    Get.back();
     if(apaBerhasil){
-      print('berhasil kirim paketan');
-      await box.remove('auth');
-      await box.remove('meja');
-      await box.remove('host');
+      kosongkanData();
       Get.offAllNamed('/');
     }else{
+      Get.dialog(Center(child: Card(child: Text("failed"),),));
       print('gagal kirim paketan');
     }
   }

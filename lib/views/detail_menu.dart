@@ -25,10 +25,9 @@ class DetailMenu extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         children: [
           Container(
-            color: Colors.green,
             width: double.infinity,
             alignment: Alignment.center,
-            child: Text("==="),
+            child: Icon(Icons.arrow_drop_down),
           ),
           Flexible(
             child: Column(

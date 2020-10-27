@@ -11,6 +11,7 @@ class ApiController {
     final meja = box.read('meja');
     final res = await new Dio().post("${box.read('host')}/api/saveOrder/"+meja,data: paketOrderan);
     hapusMeja(meja);
+    box.erase();
     await box.write('pesanan', res.data['listbill']);
     return res.data['status'];
   }

@@ -20,10 +20,9 @@ class DetailOrderan extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              color: Color(0.satu()),
               alignment: Alignment.center,
               width: double.infinity,
-              child: Text("==="),
+              child: Icon(Icons.arrow_drop_down),
             ),
             Flexible(
               child: Container(

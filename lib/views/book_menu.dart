@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:presto_qr/controller/list_menu_controller.dart';
 import 'package:presto_qr/views/detail_menu.dart';
 import 'package:get/get.dart';
+import 'package:presto_qr/component/garis_putus.dart';
 
 class BookMenu  extends StatelessWidget {
   @override
@@ -27,8 +28,7 @@ class BookMenu  extends StatelessWidget {
               Container(
                 width: double.infinity,
                 alignment: Alignment.center,
-                color: Colors.green,
-                child: Text("==="),
+                child: Icon(Icons.arrow_drop_down),
               ),
               Flexible(
                 child: Container(
