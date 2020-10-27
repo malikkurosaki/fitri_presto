@@ -195,13 +195,13 @@ class AppBarAtas extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Image.asset('assets/images/bahan.jpg',
-          height: 200,
-          colorBlendMode: BlendMode.multiply,
-          color: Colors.green[600],
-          width: double.infinity,
-          fit: BoxFit.cover,
-        ),
+        // Image.asset('assets/images/bahan.jpg',
+        //   height: 200,
+        //   colorBlendMode: BlendMode.multiply,
+        //   color: Colors.green[600],
+        //   width: double.infinity,
+        //   fit: BoxFit.cover,
+        // ),
         Column(
           children: [
             Align(

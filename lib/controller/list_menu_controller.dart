@@ -1,18 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:presto_qr/component/garis_putus.dart';
 import 'package:presto_qr/controller/api_controller.dart';
-import 'package:presto_qr/controller/splash_controller.dart';
 import 'package:presto_qr/model/menu_model.dart';
-import 'package:get/get.dart';
 import 'package:presto_qr/model/model_response_listbill.dart';
 import 'package:presto_qr/model/paket_orderan_model.dart';
 import 'package:presto_qr/model/user_model.dart';
-import 'package:presto_qr/views/user_profile.dart';
 
 
 
@@ -23,6 +19,9 @@ class ListMenuNya extends GetxController{
   final mn = MenuModel().obs;
   final listMenu = List<MenuModel>().obs;
   final noteController = <TextEditingController>[].obs;
+  //final banyakScroll = 0.obs;
+  final keatas = 0.obs;
+  final kebawah = 0.obs;
 
   /* tambahan */
   final host = "".obs;
@@ -47,11 +46,21 @@ class ListMenuNya extends GetxController{
 
   scrollListener(){
     scrollController.value.addListener(() {
+      
       if(this.scrollController.value.position.userScrollDirection == ScrollDirection.forward){
-        this.totalanBawah.value = false;
+        this.keatas.value ++;
+        if(this.keatas.value > 30){
+          this.totalanBawah.value = false;
+          this.keatas.value = 0;
+        }
       }else{
-        this.totalanBawah.value = true;
+        this.kebawah.value ++;
+        if(this.kebawah.value > 30){
+          this.totalanBawah.value = true;
+          this.kebawah.value = 0;
+        }
       }
+      print(this.kebawah.value);
     });
   }
 

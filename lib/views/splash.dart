@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
+import 'package:presto_qr/component/garis_putus.dart';
 import 'package:presto_qr/controller/splash_controller.dart';
 import 'package:presto_qr/views/login.dart';
-import 'package:presto_qr/views/my_home.dart';
-import 'package:presto_qr/component/garis_putus.dart';
 
 
 class RootView extends StatelessWidget {

@@ -231,11 +231,14 @@ class MyHomeGakAdaPesanan extends StatelessWidget {
                 ),
                 GestureDetector(
                   onLongPress: ()async{
+
+                    //http://prestoqr.probussystem.net/qr/#/login?meja=1&host=http://prestoqr.probussystem.net/presto/public
                     await _theMenu.kosongkanMeja(
                       "3",
-                      "https://prestoqr.probussystem.com"
+                      "/login?meja=1&host=http://prestoqr.probussystem.net/presto/public"
                     );
-                    Get.offAllNamed('/login?meja=3&host=https://prestoqr.probussystem.com');
+
+                    Get.offAllNamed('/login?meja=1&host=http://prestoqr.probussystem.net/presto/public');
                   },
                   child: Text('powered by PROBUSSYSTEM',
                     style: TextStyle(

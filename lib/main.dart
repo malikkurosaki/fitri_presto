@@ -1,10 +1,6 @@
-import 'dart:convert';
-import 'dart:js';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get/route_manager.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:presto_qr/controller/splash_controller.dart';
@@ -13,11 +9,8 @@ import 'package:presto_qr/views/my_home.dart';
 import 'package:presto_qr/views/open_table.dart';
 import 'package:presto_qr/views/setting.dart';
 import 'package:presto_qr/views/splash.dart';
-import 'package:provider/provider.dart';
-import 'package:regex_router/regex_router.dart';
 
 import 'controller/list_menu_controller.dart';
-import 'controller/open_order_controller.dart';
 
 // void main() async{
 
