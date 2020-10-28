@@ -243,13 +243,22 @@ class AppBarAtas extends StatelessWidget {
               alignment: Alignment.center,
               child: Column(
                 children: [
-                  CircleAvatar(
-                    backgroundColor: Colors.white,
-                    maxRadius: 25,
-                    child: Icon(Icons.account_circle,
-                      size: 50,
-                      color: Color(0.enam()),
+                  InkWell(
+                    child: CircleAvatar(
+                      backgroundColor: Colors.white,
+                      maxRadius: 25,
+                      child: Icon(Icons.account_circle,
+                        size: 50,
+                        color: Color(0.enam()),
+                      ),
                     ),
+                    onTap: (){
+                      showModalBottomSheet(
+                        context: context, 
+                        isScrollControlled: true,
+                        builder: (context) => UserProfile(),
+                      );
+                    },
                   ),
                   Text(_box.read('auth')['name'],
                     style: TextStyle(
@@ -372,9 +381,14 @@ class ListMenuView extends StatelessWidget {
                                 width: 70,
                                 height: 70,
                                 fit: BoxFit.cover,
-                                imageUrl: _theMenu.listMenu[i].foto,
+                                imageUrl: _theMenu.listMenu[i].foto??"",
                                 placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
-                                errorWidget: (context, url, error) => Center(child: Text('error_url'),),
+                                errorWidget: (context, url, error) => 
+                                Center(
+                                  child: Image.asset('assets/images/noimage.png',
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
                               ),
                             ),
                             onTap: (){

@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProfile extends StatelessWidget {
-  final Map user;
-  final meja, host;
+  // final Map user;
+  // final meja, host;
 
-  const UserProfile({Key key, this.user, this.meja, this.host}) : super(key: key);
+  //const UserProfile({Key key, this.user, this.meja, this.host}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -67,7 +67,7 @@ class UserProfile extends StatelessWidget {
               ],
             ),
           ),
-          for(var x = 0;x < user.entries.map((e) => e.value).toList().length;x++)
+          /* for(var x = 0;x < user.entries.map((e) => e.value).toList().length;x++)
           ListTile(
             title: Text(user.entries.map((e) => e.value).toList()[x].toString(),
               style: TextStyle(
@@ -77,7 +77,7 @@ class UserProfile extends StatelessWidget {
             ),
             dense: true,
             leading: Icon(Icons.donut_small),
-          )
+          ) */
           // Container(
           //   padding: EdgeInsets.all(8),
           //   child: Text(user.toString()),

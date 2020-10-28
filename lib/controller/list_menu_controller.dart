@@ -99,18 +99,33 @@ class ListMenuNya extends GetxController{
   ].obs;
 
   getListMenu()async{
-    final str = GetStorage();
-    if(str.hasData("listmenu")){
-      listMenu.value =  (str.read("listmenu") as List).map((e) => MenuModel.fromJson(e)).toList();
-      print('load dari storage');
-    }else{
-      final Response res = await Dio().get("${str.read('host')}/api/getMenu?product=&group=&subgroup=");
-      listMenu.value = (res.data as List).map((e) => MenuModel.fromJson(e)).toList();
-      await str.write("listmenu", res.data);
-      print('load list menu dari serverx');
-    }
+    //final str = GetStorage();
+    final Response res = await Dio().get("${box.read('host')}/api/getMenu?product=&group=&subgroup=");
+    listMenu.value = (res.data as List).map((e) => MenuModel.fromJson(e)).toList();
+    await box.write("listmenu", res.data);
+    print('load list menu dari serverx');
+    // if(str.hasData("listmenu")){
+    //   listMenu.value =  (str.read("listmenu") as List).map((e) => MenuModel.fromJson(e)).toList();
+    //   print('load dari storage');
+    // }else{
+    //   final Response res = await Dio().get("${str.read('host')}/api/getMenu?product=&group=&subgroup=");
+    //   listMenu.value = (res.data as List).map((e) => MenuModel.fromJson(e)).toList();
+    //   await str.write("listmenu", res.data);
+    //   print('load list menu dari serverx');
+    // }
 
-    listMenu.forEach((e){
+    for(var i = 0; i < this.listMenu.length;i++){
+      this.listMenu[i].note = "";
+      this.listMenu[i].lihatTambah = false;
+      this.listMenu[i].lihatEditTambah = false;
+      this.listMenu[i].qty = 0;
+      if(this.listMenu[i].groupp.toString().trim() == "FOOD"){
+        this.listMenu[i].terlihat = true;
+      }else{
+        this.listMenu[i].terlihat = false;
+      }
+    }
+    /* listMenu.forEach((e){
         e.note = "";
         e.lihatTambah = false;
         e.lihatEditTambah = false;
@@ -120,7 +135,7 @@ class ListMenuNya extends GetxController{
         }else{
           e.terlihat = false;
         }
-    });
+    }); */
 
     this.noteController.value = List.generate(listMenu.length, (index) => TextEditingController());
     this.listMenu.update((value) {print('abis ambil list menu');});

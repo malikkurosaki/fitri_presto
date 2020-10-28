@@ -89,7 +89,7 @@ class Login extends StatelessWidget {
                       CachedNetworkImage(
                         imageUrl: controller.cp['logo']??"",
                         placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
-                        errorWidget: (context, url, error) => Center(child: CircleAvatar(radius: 60,backgroundColor: Colors.grey,)),
+                        errorWidget: (context, url, error) => Center(child: Text("url error")),
                         imageBuilder: (context, imageProvider) => 
                         Card(
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(70)),
