@@ -45,6 +45,7 @@ class DetailOrderan extends StatelessWidget {
                                     Container(
                                       padding: EdgeInsets.all(8),
                                       child: Row(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
                                           Card(
                                             child: CachedNetworkImage(
@@ -60,7 +61,11 @@ class DetailOrderan extends StatelessWidget {
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text(_theMenu.listMenu[i].namaPro),
-                                                Text(_theMenu.listMenu[i].hargaPro.rupiah()),
+                                                Text(_theMenu.listMenu[i].hargaPro.rupiah(),
+                                                  style: TextStyle(
+                                                    color: Colors.orange
+                                                  ),
+                                                ),
                                                 Text(_theMenu.listMenu[i].note??"",
                                                   style: TextStyle(
                                                     color: Colors.green,
@@ -85,7 +90,7 @@ class DetailOrderan extends StatelessWidget {
                                                         children: [
                                                           InkWell(
                                                             child: Container(
-                                                              padding: EdgeInsets.symmetric(horizontal: 16),
+                                                              padding: EdgeInsets.all(8),
                                                               child: Text("-"),
                                                             ),
                                                             onTap: (){
@@ -97,10 +102,13 @@ class DetailOrderan extends StatelessWidget {
                                                               
                                                             },
                                                           ),
-                                                          Text(_theMenu.listMenu[i].qty.toString()),
+                                                          Container(
+                                                            padding: EdgeInsets.all(8),
+                                                            child: Text(_theMenu.listMenu[i].qty.toString())
+                                                          ),
                                                           InkWell(
                                                             child: Container(
-                                                              padding: EdgeInsets.symmetric(horizontal: 16),
+                                                              padding: EdgeInsets.all(8),
                                                               child: Text("+"),
                                                             ),
                                                             onTap: (){

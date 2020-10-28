@@ -488,7 +488,7 @@ class ListMenuView extends StatelessWidget {
                                                 children: [
                                                   InkWell(
                                                     child: Container(
-                                                      padding: EdgeInsets.symmetric(horizontal: 16),
+                                                      padding: EdgeInsets.all(8),
                                                       child: Text("-")
                                                     ),
                                                     onTap: (){
@@ -497,17 +497,20 @@ class ListMenuView extends StatelessWidget {
 
                                                     },
                                                   ),
-                                                  Text(
-                                                    _theMenu.listMenu[i].qty.toString(),
-                                                    style: TextStyle(
-                                                      fontSize: 18,
-                                                      color: Color(0.enam()),
-                                                      fontWeight: FontWeight.bold
+                                                  Container(
+                                                    padding: EdgeInsets.all(8),
+                                                    child: Text(
+                                                      _theMenu.listMenu[i].qty.toString(),
+                                                      style: TextStyle(
+                                                        fontSize: 18,
+                                                        color: Color(0.enam()),
+                                                        fontWeight: FontWeight.bold
+                                                      ),
                                                     ),
                                                   ),
                                                   InkWell(
                                                     child: Container(
-                                                      padding: EdgeInsets.symmetric(horizontal: 16),
+                                                      padding: EdgeInsets.all(8),
                                                       child: Text("+")
                                                     ),
                                                     onTap: (){

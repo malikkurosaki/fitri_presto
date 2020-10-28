@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:presto_qr/component/garis_putus.dart';
 import 'package:presto_qr/controller/splash_controller.dart';
 import 'package:presto_qr/views/login.dart';
+import 'package:presto_qr/views/open_table.dart';
 
 
 class RootView extends StatelessWidget {
@@ -14,7 +16,7 @@ class RootView extends StatelessWidget {
       spl.pindah.value = true;
       print("pindah lah");
     });
-    return Obx(()=>spl.pindah.value?Login():Splash());
+    return Obx(()=>spl.pindah.value?GetStorage().hasData('auth')?OpenTable():Login():Splash());
   }
 }
 
