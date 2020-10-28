@@ -224,12 +224,17 @@ class AppBarAtas extends StatelessWidget {
                       color: Colors.white
                     ),
                   ),
-                  Text("table "+ _box.read('meja'),
-                    style: TextStyle(
-                      color: Color(0.empat()),
-                      fontSize: 42,
-                      fontWeight: FontWeight.w800,
+                  GestureDetector(
+                    child: Text("table "+ _box.read('meja'),
+                      style: TextStyle(
+                        color: Color(0.empat()),
+                        fontSize: 42,
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
+                    onLongPress: (){
+                      Get.toNamed('/setting');
+                    },
                   )
                 ],
               ),
