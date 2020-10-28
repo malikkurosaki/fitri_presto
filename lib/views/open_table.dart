@@ -1,43 +1,20 @@
 import 'dart:convert';
 import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:intl/intl.dart';
+import 'package:presto_qr/component/garis_putus.dart';
 import 'package:presto_qr/controller/list_menu_controller.dart';
-import 'package:presto_qr/controller/open_order_controller.dart';
-import 'package:presto_qr/controller/splash_controller.dart';
-import 'package:presto_qr/model/menu_model.dart';
 import 'package:presto_qr/views/detail_menu.dart';
 import 'package:presto_qr/views/detail_orderan.dart';
 import 'package:presto_qr/views/user_profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:get/get.dart';
-import 'package:presto_qr/component/garis_putus.dart';
-
-// extension on Text{
-//   besar(){
-//     return Text(this.data,
-//       style: TextStyle(
-//         color: Colors.red
-//       )
-//     );
-//   }
-// }
-
-
-// extension on Text{
-//   rupiah(){
-//     return Text("Rp "+NumberFormat("#,###","IDR").format(this.data));
-//   }
-// }
 
 class OpenTable extends StatelessWidget {
   final _theMenu = Get.find<ListMenuNya>();
-  final _box = GetStorage();
-
   @override
   Widget build(BuildContext context) {
 
@@ -45,50 +22,38 @@ class OpenTable extends StatelessWidget {
       _theMenu.getListMenu();
     }
 
-    return Container(
-      child: Scaffold(
-        // disini : bottom sheet
-        drawer: Drawer(),
-        bottomSheet: DetailBawah(),
-        body: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // disini : appbar
-              Obx(()=>
-                /* Container(
-                  color: Color(0.enam()),
-                  child: AnimatedCrossFade(
-                    firstChild: Column(
-                      children: [
-                        AppBarAtas(),
-                        PanelBar()
-                      ],
-                    ), 
-                    secondChild: PanelBar(), 
-                    crossFadeState: _theMenu.totalanBawah.value?CrossFadeState.showSecond:CrossFadeState.showFirst, 
-                    duration: Duration(milliseconds: 500),
-                    alignment: Alignment.centerLeft,
-                  ),
-                ) */
-                Container(
-                  color: Color(0.enam()),
-                  child: Visibility(
-                    visible: !_theMenu.totalanBawah.value,
-                    child: Column(
-                      children: [
-                        AppBarAtas(),
-                        
-                      ],
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
+      child: Container(
+        child: Scaffold(
+          // disini : bottom sheet
+          drawer: Drawer(),
+          bottomSheet: DetailBawah(),
+          body: SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // disini : appbar
+                Obx(()=>
+                  Container(
+                    color: Color(0.enam()),
+                    child: Visibility(
+                      visible: !_theMenu.totalanBawah.value,
+                      child: Column(
+                        children: [
+                          AppBarAtas(),
+                          
+                        ],
+                      ),
                     ),
-                  ),
+                  )
+                ),
+                PanelBar(),
+                Flexible(
+                  child: ListMenuView()
                 )
-              ),
-              PanelBar(),
-              Flexible(
-                child: ListMenuView()
-              )
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -351,213 +316,210 @@ class ListMenuView extends StatelessWidget {
   Widget build(BuildContext context) {
     _theMenu.scrollListener();
 
-    return GestureDetector(
-      onTap: (){
-        FocusScope.of(context).requestFocus(new FocusNode());
-      },
-      child: Container(
-        child: Obx(
-          (){
-            return _theMenu.listMenu.isEmpty?Center(child: CircularProgressIndicator(),):
-            ListView.builder(
-              addAutomaticKeepAlives: true,
-              controller: _theMenu.scrollController.value,
-              itemCount: _theMenu.listMenu.length,
-              itemBuilder: (context, i) => 
-              Visibility(
-                visible: _theMenu.listMenu[i].terlihat??false,
-                child: Container(
-                  padding: EdgeInsets.all(8),
-                  color: Colors.white,
-                  margin: EdgeInsets.only(bottom: 7),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          InkWell(
-                            child: Card(
-                              child: CachedNetworkImage(
-                                width: 70,
-                                height: 70,
-                                fit: BoxFit.cover,
-                                imageUrl: _theMenu.listMenu[i].foto??"",
-                                placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
-                                errorWidget: (context, url, error) => 
-                                Center(
-                                  child: Image.asset('assets/images/noimage.png',
-                                    fit: BoxFit.fill,
-                                  ),
+    return Container(
+      child: Obx(
+        (){
+          return _theMenu.listMenu.isEmpty?Center(child: CircularProgressIndicator(),):
+          ListView.builder(
+            addAutomaticKeepAlives: true,
+            controller: _theMenu.scrollController.value,
+            itemCount: _theMenu.listMenu.length,
+            itemBuilder: (context, i) => 
+            Visibility(
+              visible: _theMenu.listMenu[i].terlihat??false,
+              child: Container(
+                padding: EdgeInsets.all(8),
+                color: Colors.white,
+                margin: EdgeInsets.only(bottom: 7),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        InkWell(
+                          child: Card(
+                            child: CachedNetworkImage(
+                              width: 70,
+                              height: 70,
+                              fit: BoxFit.cover,
+                              imageUrl: _theMenu.listMenu[i].foto??"",
+                              placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
+                              errorWidget: (context, url, error) => 
+                              Center(
+                                child: Image.asset('assets/images/noimage.png',
+                                  fit: BoxFit.fill,
                                 ),
                               ),
                             ),
-                            onTap: (){
-                              showModalBottomSheet(
-                                context: context, 
-                                isScrollControlled: true,
-                                builder: (context) => 
-                                DetailMenu(listMenu: _theMenu.listMenu[i],i: i,tambah: true,),
-                              );
-                            }
                           ),
-                          Expanded(
-                            child: Container(
-                              padding: EdgeInsets.only(left: 16),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(_theMenu.listMenu[i].namaPro,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0.lima())
-                                    ),
-                                  ).paddingOnly(bottom: 8),
-                                  Text(_theMenu.listMenu[i].hargaPro.toString().rupiah(),
-                                    style: TextStyle(
-                                      color: Color(0.empat()),
-                                      fontSize: 18,
-                                    ),
-                                  ).paddingOnly(bottom: 8),
-                                  Text(_theMenu.listMenu[i].ket,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                      fontStyle: FontStyle.italic
-                                    ),
+                          onTap: (){
+                            showModalBottomSheet(
+                              context: context, 
+                              isScrollControlled: true,
+                              builder: (context) => 
+                              DetailMenu(listMenu: _theMenu.listMenu[i],i: i,tambah: true,),
+                            );
+                          }
+                        ),
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsets.only(left: 16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(_theMenu.listMenu[i].namaPro,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0.lima())
                                   ),
-                                  Container(
-                                    child: !_theMenu.listMenu[i].lihatEditTambah?
-                                    Container(
+                                ).paddingOnly(bottom: 8),
+                                Text(_theMenu.listMenu[i].hargaPro.toString().rupiah(),
+                                  style: TextStyle(
+                                    color: Color(0.empat()),
+                                    fontSize: 18,
+                                  ),
+                                ).paddingOnly(bottom: 8),
+                                Text(_theMenu.listMenu[i].ket,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontStyle: FontStyle.italic
+                                  ),
+                                ),
+                                /* disini : keterangan note */
+                                Container(
+                                  padding: EdgeInsets.symmetric(vertical: 8),
+                                  child: !_theMenu.listMenu[i].lihatEditTambah?
+                                  Visibility(
+                                    visible: _theMenu.listMenu[i].note == ""?false:true,
+                                    child: Container(
                                       child: Text(_theMenu.listMenu[i].note??"",
                                         style: TextStyle(
                                           backgroundColor: Colors.green[50],
                                           color: Colors.green
                                         ),
                                       )
-                                    ):
-                                    // disini : input note
-                                    Container(
-                                      padding: EdgeInsets.symmetric(vertical: 8),
-                                      child: Card(
-                                        child: TextField(
-                                          decoration: InputDecoration(
-                                            fillColor: Colors.grey[100],
-                                            isDense: true,
-                                            filled: true,
-                                            hintText: "eg : more salt",
-                                            contentPadding: EdgeInsets.all(8),
-                                            border: InputBorder.none
+                                    ),
+                                  ):
+                                  // disini : input note
+                                  Container(
+                                    padding: EdgeInsets.symmetric(vertical: 8),
+                                    child: Card(
+                                      child: TextField(
+                                        decoration: InputDecoration(
+                                          fillColor: Colors.grey[100],
+                                          isDense: true,
+                                          filled: true,
+                                          hintText: "eg : more salt",
+                                          contentPadding: EdgeInsets.all(8),
+                                          border: InputBorder.none
+                                        ),
+                                        maxLength: 100,
+                                        controller: _theMenu.noteController[i]
+                                      ),
+                                    ),
+                                  )
+                                ),
+                                _theMenu.listMenu[i].qty == 0?
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Card(
+                                    color: Color(0.enam()),
+                                    child: InkWell(
+                                      child: Container(
+                                        padding: EdgeInsets.all(8),
+                                        child: Text("add +",
+                                          style: TextStyle(
+                                            color: Colors.white
                                           ),
-                                          maxLength: 100,
-                                          controller: _theMenu.noteController[i]
                                         ),
                                       ),
-                                    )
+                                      onTap: (){
+                                        _theMenu.listMenu[i].qty = 1;
+                                        _theMenu.adaOrderan.value = true;
+                                        _theMenu.hitungTotal();
+                                        _theMenu.listMenu.update((value) { print('tamabah item');});
+                                      },
+                                    ),
                                   ),
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.end,
+                                ):
+                                Container(
+                                  child: Row(
                                     children: [
-                                      _theMenu.listMenu[i].qty == 0?
-                                      Card(
-                                        color: Color(0.enam()),
+                                      // tambah note
+                                      Container(
+                                        padding: EdgeInsets.symmetric(horizontal: 8),
                                         child: InkWell(
-                                          child: Container(
-                                            padding: EdgeInsets.all(8),
-                                            child: Text("add +",
-                                              style: TextStyle(
-                                                color: Colors.white
-                                              ),
+                                          // disini : tombol note
+                                          child: Card(
+                                            child:Icon(_theMenu.listMenu[i].lihatEditTambah?Icons.done:Icons.edit,
+                                              color: _theMenu.listMenu[i].lihatEditTambah?Colors.green:Colors.orange,
                                             ),
                                           ),
                                           onTap: (){
-                                            _theMenu.listMenu[i].qty = 1;
-                                            _theMenu.adaOrderan.value = true;
-                                            _theMenu.hitungTotal();
-                                            _theMenu.listMenu.update((value) { print('tamabah item');});
+                                            print("note");
+                                            if(_theMenu.noteController[i].text != "") _theMenu.listMenu[i].note = _theMenu.noteController[i].text;
+                                            _theMenu.listMenu[i].lihatEditTambah = !_theMenu.listMenu[i].lihatEditTambah;
+                                            _theMenu.listMenu.update((value) { 
+                                              print('act : tombol edit note');
+                                            });
                                           },
                                         ),
-                                      ):
-                                      Container(
+                                      ),
+                                      Card(
                                         child: Row(
                                           children: [
-                                            // tambah note
-                                            Container(
-                                              padding: EdgeInsets.symmetric(horizontal: 8),
-                                              child: InkWell(
-                                                // disini : tombol note
-                                                child: Card(
-                                                  child:Icon(_theMenu.listMenu[i].lihatEditTambah?Icons.done:Icons.edit,
-                                                    color: _theMenu.listMenu[i].lihatEditTambah?Colors.green:Colors.orange,
-                                                  ),
-                                                ),
-                                                onTap: (){
-                                                  print("note");
-                                                  if(_theMenu.noteController[i].text != "") _theMenu.listMenu[i].note = _theMenu.noteController[i].text;
-                                                  _theMenu.listMenu[i].lihatEditTambah = !_theMenu.listMenu[i].lihatEditTambah;
-                                                  _theMenu.listMenu.update((value) { 
-                                                    print('act : tombol edit note');
-                                                  });
-                                                },
+                                            InkWell(
+                                              child: Container(
+                                                padding: EdgeInsets.all(8),
+                                                child: Text("-")
                                               ),
-                                            ),
-                                            Card(
-                                              child: Row(
-                                                children: [
-                                                  InkWell(
-                                                    child: Container(
-                                                      padding: EdgeInsets.all(8),
-                                                      child: Text("-")
-                                                    ),
-                                                    onTap: (){
-                                                      _theMenu.kurangiQty(i);
-                                                      //_theMenu.listMenu.update((value) { print("kurangi orderan");});
+                                              onTap: (){
+                                                _theMenu.kurangiQty(i);
+                                                //_theMenu.listMenu.update((value) { print("kurangi orderan");});
 
-                                                    },
-                                                  ),
-                                                  Container(
-                                                    padding: EdgeInsets.all(8),
-                                                    child: Text(
-                                                      _theMenu.listMenu[i].qty.toString(),
-                                                      style: TextStyle(
-                                                        fontSize: 18,
-                                                        color: Color(0.enam()),
-                                                        fontWeight: FontWeight.bold
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  InkWell(
-                                                    child: Container(
-                                                      padding: EdgeInsets.all(8),
-                                                      child: Text("+")
-                                                    ),
-                                                    onTap: (){
-                                                      _theMenu.tambahQty(i);
-                                                    },
-                                                  )
-                                                ],
+                                              },
+                                            ),
+                                            Container(
+                                              padding: EdgeInsets.all(8),
+                                              child: Text(
+                                                _theMenu.listMenu[i].qty.toString(),
+                                                style: TextStyle(
+                                                  fontSize: 18,
+                                                  color: Color(0.enam()),
+                                                  fontWeight: FontWeight.bold
+                                                ),
                                               ),
                                             ),
+                                            InkWell(
+                                              child: Container(
+                                                padding: EdgeInsets.all(8),
+                                                child: Text("+")
+                                              ),
+                                              onTap: (){
+                                                _theMenu.tambahQty(i);
+                                              },
+                                            )
                                           ],
                                         ),
-                                      )
+                                      ),
                                     ],
-                                  )
-                                ],
-                              )
-                            ),
+                                  ),
+                                )
+                              ],
+                            )
                           ),
-                        ],
-                      )
-                    ],
-                  ),
-                )
-              ),
-            );
-          }
-        ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              )
+            ),
+          );
+        }
       ),
     );
   }

@@ -2,8 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_navigation/src/dialog/dialog_route.dart';
 import 'package:presto_qr/component/garis_putus.dart';
 import 'package:presto_qr/controller/list_menu_controller.dart';
+import 'package:get/get.dart';
 
 class DetailOrderan extends StatelessWidget {
   final _theMenu = Get.find<ListMenuNya>();
@@ -81,7 +83,33 @@ class DetailOrderan extends StatelessWidget {
                                                           color: Color(0.empat()),
                                                         ),
                                                         onTap: (){
-                                                          _theMenu.hapusOrderan(i);
+                                                          Get.bottomSheet(
+                                                            Card(
+                                                              child: Container(
+                                                                padding: EdgeInsets.all(16),
+                                                                child: Row(
+                                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                    children: [
+                                                                      Text("Delete This Item ? "),
+                                                                      FlatButton(
+                                                                        child: Text("OK",
+                                                                          style: TextStyle(
+                                                                            color: Color(0.enam())
+                                                                          ),
+                                                                        ),
+                                                                        onPressed: (){
+                                                                           _theMenu.hapusOrderan(i);
+                                                                          _theMenu.listMenu[i].lihatEditTambah = false;
+                                                                          Get.back();
+                                                                        },
+                                                                      )
+                                                                    ],
+                                                                  ),
+                                                              ),
+                                                            ),
+                                                          );
+                                                        
                                                         },
                                                       ),
                                                     ),
