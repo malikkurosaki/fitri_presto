@@ -24,21 +24,41 @@ class Splash extends StatelessWidget {
 
     return Container(
       child: Scaffold(
-        body: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+        body: Container(
+          height: double.infinity,
+          child: Stack(
             children: [
-              Text('presto',
-                style: TextStyle(
-                  fontSize: 36,
-                  color: Color(0.satu()),
-                  fontStyle: FontStyle.normal
+              Align(
+                alignment: Alignment.center,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('presto',
+                      style: TextStyle(
+                        fontSize: 36,
+                        color: Color(0.satu()),
+                        fontStyle: FontStyle.normal
+                      ),
+                    ),
+                    Text('QR',
+                      style: TextStyle(
+                        fontSize: 42,
+                        color: Color(0.empat()),
+                      ),
+                    )
+                  ],
                 ),
               ),
-              Text('QR',
-                style: TextStyle(
-                  fontSize: 42,
-                  color: Color(0.empat()),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  height: 100,
+                  padding: EdgeInsets.all(8),
+                  child: Text('powered by Probus System',
+                    style: TextStyle(
+                      color: Color(0.enam())
+                    ),
+                  )
                 ),
               )
             ],
@@ -48,71 +68,3 @@ class Splash extends StatelessWidget {
     );
   }
 }
-
-// import 'package:flutter/cupertino.dart';
-// import 'package:flutter/material.dart';
-// import 'package:presto_qr/views/login.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:validators/sanitizers.dart';
-
-
-// class Splash extends StatefulWidget{
-//   final meja, host, scure;
-//   const Splash({Key key, this.meja, this.host, this.scure}) : super(key: key);
-
-//   @override
-//   _SplashState createState() => _SplashState(meja, host, scure);
-// }
-
-// class _SplashState extends State<Splash> {
-//   final meja, host, scure;
-
-//   _SplashState(this.meja, this.host, this.scure);
-//   @override
-//   void initState() {
-//     Future.delayed(Duration(seconds: 1),()async{
-//       SharedPreferences prf = await SharedPreferences.getInstance();
-//       if(prf.getString('user') != null){
-//         Navigator.of(context).pushReplacementNamed('/open-table');
-//       }else{
-//         if(meja == null || host == null){
-//           Navigator.of(context).pushReplacementNamed('/home');
-//         }else{
-//           var aman = toBoolean(scure)?"https://":"http://";
-//           var hostNya = "$aman$host/prestoqr/public";
-//           print(hostNya);
-//           Navigator.of(context).pushReplacement(MaterialPageRoute(builder:(context) => Login(meja: meja,host: hostNya,),));
-//         }
-//       } 
-//     });
-//     super.initState();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     print('splash');
-//     return Scaffold(
-//       body: Center(
-//         child: Row(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           mainAxisSize: MainAxisSize.max,
-//           children: [
-//             Text('Presto',
-//               style: TextStyle(
-//                 fontSize: 42,
-//                 color: Colors.grey
-//               ),
-//             ),
-//             Text('QR',
-//               style: TextStyle(
-//                 fontSize: 52,
-//                 fontWeight: FontWeight.bold,
-//                 color: Colors.deepOrange
-//               ),
-//             )
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }

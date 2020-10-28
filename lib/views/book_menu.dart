@@ -61,11 +61,19 @@ class BookMenu  extends StatelessWidget {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(val.listMenu[i].namaPro).paddingOnly(bottom: 8),
+                                    Text(val.listMenu[i].namaPro,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold
+                                      ),
+                                    ).paddingOnly(bottom: 8),
                                     Text(val.listMenu[i].hargaPro).paddingOnly(bottom: 8),
                                     Text(val.listMenu[i].ket,
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 2,
+                                      style: TextStyle(
+                                        fontStyle: FontStyle.italic,
+                                        color: Colors.grey
+                                      ),
                                     ).paddingOnly(bottom: 8),
                                   ],
                                 ),

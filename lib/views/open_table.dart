@@ -56,7 +56,7 @@ class OpenTable extends StatelessWidget {
             children: [
               // disini : appbar
               Obx(()=>
-                Container(
+                /* Container(
                   color: Color(0.enam()),
                   child: AnimatedCrossFade(
                     firstChild: Column(
@@ -70,8 +70,21 @@ class OpenTable extends StatelessWidget {
                     duration: Duration(milliseconds: 500),
                     alignment: Alignment.centerLeft,
                   ),
+                ) */
+                Container(
+                  color: Color(0.enam()),
+                  child: Visibility(
+                    visible: !_theMenu.totalanBawah.value,
+                    child: Column(
+                      children: [
+                        AppBarAtas(),
+                        
+                      ],
+                    ),
+                  ),
                 )
               ),
+              PanelBar(),
               Flexible(
                 child: ListMenuView()
               )
@@ -198,13 +211,6 @@ class AppBarAtas extends StatelessWidget {
    !GetStorage().hasData('company')?Text("loading ..."):
     Stack(
       children: [
-        // Image.asset('assets/images/bahan.jpg',
-        //   height: 200,
-        //   colorBlendMode: BlendMode.multiply,
-        //   color: Colors.green[600],
-        //   width: double.infinity,
-        //   fit: BoxFit.cover,
-        // ),
         Column(
           children: [
             Align(
@@ -215,7 +221,7 @@ class AppBarAtas extends StatelessWidget {
                   Text(GetStorage().read('company')['name']??"load ...",
                     style: TextStyle(
                       fontSize: 24,
-                      color: Color(0.duaa()),
+                      color: Colors.white
                     ),
                   ),
                   Text("table "+ _box.read('meja'),
@@ -346,6 +352,7 @@ class ListMenuView extends StatelessWidget {
               Visibility(
                 visible: _theMenu.listMenu[i].terlihat??false,
                 child: Container(
+                  padding: EdgeInsets.all(8),
                   color: Colors.white,
                   margin: EdgeInsets.only(bottom: 7),
                   child: Column(

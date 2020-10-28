@@ -204,7 +204,7 @@ class Login extends StatelessWidget {
                             children: [
                               Text('or just show me the'),
                               FlatButton(
-                                textColor: Colors.green,
+                                textColor: Color(0.enam()),
                                 onPressed: ()async{
                                   showDialog(context: context,
                                     child: AlertDialog(

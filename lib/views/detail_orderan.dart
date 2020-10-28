@@ -40,11 +40,10 @@ class DetailOrderan extends StatelessWidget {
                             Visibility(
                               visible: _theMenu.listMenu[i].qty != 0?true:false,
                               child: Container(
-                                padding: EdgeInsets.all(8),
                                 child: Column(
                                   children: [
                                     Container(
-                                      padding: EdgeInsets.all(16),
+                                      padding: EdgeInsets.all(8),
                                       child: Row(
                                         children: [
                                           Card(
