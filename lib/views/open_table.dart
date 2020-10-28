@@ -168,36 +168,37 @@ class CariListMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.white
+        )
+      ),
       child: Row(
         children: [
           Expanded(
-            child: Card(
-              child: TextField(
-                onChanged: (val){
-                  _theMenu.cariListMenu();
-                },
-                controller: _theMenu.cariController.value,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  isDense: true,
-                  filled: true,
-                  fillColor: Colors.white
-                ),
+            child: TextField(
+              onChanged: (val){
+                _theMenu.cariListMenu();
+              },
+              controller: _theMenu.cariController.value,
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                isDense: true,
+                filled: true,
+                fillColor: Colors.white
               ),
             ),
           ),
-          IconButton(
-            icon: Icon(Icons.search,
-              color: Colors.white,
-            ),
-            onPressed: (){
-              _theMenu.cariListMenu();
-            },
+          InkWell(
+            child: Icon(
+              Icons.search,size: 24,
+              color: Colors.white
+            ).paddingSymmetric(horizontal: 8),
+            onTap: () => _theMenu.cariListMenu(),
           )
         ],
       )
-    );
+    ).marginAll(8);
   }
 }
 
