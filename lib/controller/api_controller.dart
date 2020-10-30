@@ -24,5 +24,9 @@ class ApiController {
     final res = await new Dio().post("${box.read('host')}/api/clearTable/"+meja);
     return res.data['status'];
   }
+
+  
 }
+
+
 

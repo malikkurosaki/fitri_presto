@@ -217,12 +217,14 @@ class ListMenuNya extends GetxController{
     )).toList();
 
     final paket = PaketOrderan(
-      customerId: user.phone,
-      email: user.email,
-      name: user.name,
-      phone: user.phone,
+      customerId: user.user.phone,
+      email: user.user.email,
+      name: user.user.email,
+      phone: user.user.phone,
       billDetail: listBill
     );
+
+    print(paket.toJson().toString());
     final apaBerhasil = await ApiController.kirimPaket(paket);
     //Get.back();
     if(apaBerhasil){

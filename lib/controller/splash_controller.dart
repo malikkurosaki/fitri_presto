@@ -10,13 +10,5 @@ class SplashController extends GetxController {
   final pindah = false.obs;
 }
 
-class CompanyProfileController extends GetxController {
-  final cp = {}.obs;
-  getCompanyProfile()async{
-    final str = GetStorage();
-    final res = await new Dio().get("${str.read('host')}/api/getCompanyProfile");
-    await GetStorage().write('company', res.data['data']);
-    cp.value = res.data['data'];
-  }
-}
+
 

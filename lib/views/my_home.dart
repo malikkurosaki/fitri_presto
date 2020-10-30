@@ -210,177 +210,13 @@ class MyHomeAdaPesanan extends StatelessWidget {
   }
 }
 
-/* class MyHomeAdaPesanan extends StatelessWidget {
-  final _theMenu = Get.find<ListMenuNya>();
-  final _box = GetStorage();
-
-  @override
-  Widget build(BuildContext context) {
-    print("iam in home");
-    Future.microtask((){
-      _theMenu.lihatPesanan();
-    });
-
-    return Container(
-      child: Column(
-        children: [
-          Obx(()=>
-          _theMenu.pesananNya.value.phone.isNull?Text("loading"):
-            Flexible(
-              child: Container(
-                padding: EdgeInsets.all(16),
-                child: ListView(
-                  children: [
-                    for(var i = 0; i < _theMenu.pesananNya.value.detailBills.length ;i++)
-                    Container(
-                      margin: EdgeInsets.only(bottom: 20),
-                      width: double.infinity,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Card(
-                              elevation: 5,
-                              child: CachedNetworkImage(
-                                imageUrl: _theMenu.pesananNya.value.detailBills[i].foto??"",
-                                placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
-                                errorWidget: (context, url, error) => Image.asset('assets/images/bahan.jpg',
-                                  width: double.infinity,
-                                  fit: BoxFit.cover,
-                                ),
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: 200,
-                            padding: EdgeInsets.symmetric(horizontal: 16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(_theMenu.pesananNya.value.detailBills[i].qty.toString()+" X ",
-                                  style: TextStyle(
-                                    fontSize: 32,
-                                    fontWeight: FontWeight.w800,
-                                    color: Color(0.enam()),
-                                    shadows: [
-                                      Shadow(
-                                        blurRadius: 5,
-                                        color: Colors.grey,
-                                        offset: Offset(0,5)
-                                      )
-                                    ]
-                                  ),
-                                ),
-                                Text(_theMenu.pesananNya.value.detailBills[i].namaPro,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 2,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                Text(_theMenu.pesananNya.value.detailBills[i].hargaPro.toString().rupiah(),
-                                  style: TextStyle(
-                                    color: Color(0.empat()),
-                                    fontWeight: FontWeight.w900
-                                  ),
-                                ),
-                                Text(_theMenu.pesananNya.value.detailBills[i].note??"",
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    backgroundColor: Colors.green,
-                                    color: Colors.white
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              )
-            )
-          ),
-          Card(
-            color: Color(0.duaa()),
-            child: Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(8),
-              child: Column(
-                children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 16),
-                    child: Text('Please feel free to wait, dont worry we are working on a magic for your order, something special for a memorable time',
-                      style: TextStyle(
-                        color: Color(0.lima())
-                      ),
-                    )
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          children: [
-                            //Text("order has been delivered"),
-                            FlatButton(
-                              textColor: Colors.white,
-                              color: Color(0.enam()),
-                              minWidth: double.infinity,
-                              child: Text("my order has been delivered"),
-                              onPressed: (){
-                                ListMenuNya.to.keluar();
-                              },
-                            ).marginAll(4)
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          children: [
-                            // Text("who knows if you want to order again",
-                            //   overflow: TextOverflow.ellipsis,
-                            // ),
-                            FlatButton(
-                              textColor: Colors.white,
-                              color: Color(0.enam()),
-                              minWidth: double.infinity,
-                              child: Text("show the menu list"),
-                              onPressed: (){
-                                showModalBottomSheet(
-                                  isScrollControlled: true,
-                                  context: context, 
-                                  builder: (context) => BookMenu(),
-                                );
-                              },
-                            ).marginAll(4)
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-} */
-
 class MyHomeGakAdaPesanan extends StatelessWidget {
   final _theMenu = Get.find<ListMenuNya>();
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Color(0.enam()),
-      padding: EdgeInsets.all(16),
+      padding: EdgeInsets.all(32),
       child: Column(
         children: [
           Flexible(
@@ -391,12 +227,11 @@ class MyHomeGakAdaPesanan extends StatelessWidget {
                   child: Text(
                     "PrestQR Features, Support Social Distancing",
                     style: TextStyle(
-                      fontSize: 42,
+                      fontSize: 24,
                       color: Colors.white
                     ),
                   ),
                 ),
-                AspectRatio(aspectRatio: 12/1),
                 Container(
                   padding: EdgeInsets.only(bottom: 16),
                   child: Text(
@@ -405,7 +240,7 @@ class MyHomeGakAdaPesanan extends StatelessWidget {
                     """,
                     textAlign: TextAlign.start,
                     style: TextStyle(
-                      color: Color(0.lima())
+                      color: Colors.blue[100]
                     ),
                   ),
                 ),
@@ -413,31 +248,30 @@ class MyHomeGakAdaPesanan extends StatelessWidget {
                   child: Center(
                     child: Image.asset(
                       'assets/images/qr_scanner1.png',
-                      width: 400,
+                      width: 200,
                     ),
                   ),
                 ),
-                GestureDetector(
-                  onLongPress: ()async{
-                    //http://prestoqr.probussystem.net/qr/#/login?meja=1&host=http://prestoqr.probussystem.net/presto/public
-                    await _theMenu.kosongkanMeja(
-                      "3",
-                      "http://prestoqr.probussystem.net/presto/public"
-                    );
-                    print("hapus meja");
-                    Get.offAllNamed('/login?meja=3&host=http://prestoqr.probussystem.net/presto/public');
-                    print("menuju login");
-                  },
-                  child: Text('powered by PROBUSSYSTEM',
-                    style: TextStyle(
-                      color: Color(0.satu())
-                    ),
-                    textAlign: TextAlign.center,
-                  )
-                )
               ],
-            )
+            ),
           ),
+          InkWell(
+            onLongPress: ()async{
+              //http://prestoqr.probussystem.net/qr/#/login?meja=1&host=http://prestoqr.probussystem.net/presto/public
+              final urlNya = "http://prestoqr.probussystem.net/presto/public";
+              await _theMenu.kosongkanMeja("3",urlNya);
+              print("hapus meja");
+              Get.offAllNamed('/login?meja=3&host='+ Uri.encodeFull(urlNya));
+              //print(Uri.decodeFull("http%3A%2F%2Fprestoqr.probussystem.net%2Fpresto%2Fpublic"));
+              print("menuju login");
+            },
+            child: Text('powered by PROBUSSYSTEM',
+              style: TextStyle(
+                color: Color(0.satu())
+              ),
+              textAlign: TextAlign.center,
+            )
+          )
         ],
       ),
     );

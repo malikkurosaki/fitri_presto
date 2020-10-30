@@ -7,56 +7,71 @@ import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:presto_qr/component/garis_putus.dart';
+import 'package:presto_qr/controller/company_controller.dart';
 import 'package:presto_qr/controller/list_menu_controller.dart';
+import 'package:presto_qr/controller/user_controller.dart';
 import 'package:presto_qr/views/detail_menu.dart';
 import 'package:presto_qr/views/detail_orderan.dart';
 import 'package:presto_qr/views/user_profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OpenTable extends StatelessWidget {
-  final _theMenu = Get.find<ListMenuNya>();
   @override
   Widget build(BuildContext context) {
-
-    if(_theMenu.listMenu.isEmpty){
-      _theMenu.getListMenu();
-    }
-
     return GestureDetector(
-      onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
-      child: Container(
-        child: Scaffold(
-          // disini : bottom sheet
-          drawer: Drawer(),
-          bottomSheet: DetailBawah(),
-          body: SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // disini : appbar
-                Obx(()=>
+      onTap: (){
+        FocusScope.of(context).requestFocus(new FocusNode());
+        for(var i = 0; i < ListMenuNya.to.listMenu.length;i++){
+          ListMenuNya.to.listMenu[i].lihatEditTambah = false;
+        }
+        ListMenuNya.to.listMenu.update((value) {print('update list ');});
+      },
+      child: GetX<ListMenuNya>(
+        initState: (state) => ListMenuNya.to.getListMenu(),
+        builder: (controller) => 
+          Container(
+            child: Scaffold(
+            // disini : bottom sheet
+            // bottomSheet: DetailBawah(),
+            floatingActionButton: !controller.adaOrderan.value?null:
+            FloatingActionButton.extended(
+              onPressed: (){
+                showModalBottomSheet(
+                  context: context, 
+                  isScrollControlled: true,
+                  builder: (context) => 
+                  DetailOrderan(),
+                );
+              },
+              label: Text(controller.totalQty.toString()+" item of "+controller.totalOrder.toString()+" order"),
+              icon: Icon(Icons.shopping_cart),
+            ),
+            body: ListMenuNya.to.listMenu.isEmpty?Center(child: CircularProgressIndicator(),):
+            SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // disini : appbar
                   Container(
-                    color: Color(0.enam()),
                     child: Visibility(
-                      visible: !_theMenu.totalanBawah.value,
+                      visible: !ListMenuNya.to.totalanBawah.value,
                       child: Column(
                         children: [
                           AppBarAtas(),
-                          
                         ],
                       ),
                     ),
+                  ),
+                  PanelBar(),
+                  Flexible(
+                    child: ListMenuView()
                   )
-                ),
-                PanelBar(),
-                Flexible(
-                  child: ListMenuView()
-                )
-              ],
+                ],
+              ),
             ),
           ),
         ),
-      ),
+      )
     );
   }
 }
@@ -169,76 +184,57 @@ class CariListMenu extends StatelessWidget {
 
 // appa bar atas
 class AppBarAtas extends StatelessWidget {
-  final _box = GetStorage();
+  // final _box = GetStorage();
   @override
   Widget build(BuildContext context) {
     
-    return 
-   !GetStorage().hasData('company')?Text("loading ..."):
-    Stack(
-      children: [
-        Column(
-          children: [
-            Align(
-              alignment: Alignment.topRight,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(GetStorage().read('company')['name']??"load ...",
-                    style: TextStyle(
-                      fontSize: 24,
-                      color: Colors.white
-                    ),
+  return 
+  GetX<CompanyProfileController>(
+    initState: (state){
+      CompanyProfileController.to.init();
+      UserController.to.init();
+    },
+    builder: (controller) => 
+    controller.cp.value.data.isNull?Text("loading"):
+    Container(
+      color: Color(0.enam()),
+      padding: EdgeInsets.all(8),
+      child: Row(
+        children: [
+          Expanded(
+            child: Row(
+              children: [
+                InkWell(
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white,
+                    child: Icon(Icons.account_circle_sharp),
                   ),
-                  GestureDetector(
-                    child: Text("table "+ _box.read('meja'),
-                      style: TextStyle(
-                        color: Color(0.empat()),
-                        fontSize: 42,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                    onLongPress: (){
-                      Get.toNamed('/setting');
-                    },
+                  onTap: () => showModalBottomSheet(
+                    context: context, 
+                    isScrollControlled: true,
+                    builder: (context) => 
+                      UserProfile(),
                   )
-                ],
-              ),
+                ),
+                UserController.to.user.value.user.isNull?Text("name"):
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  child: Text(UserController.to.user.value.user.name)
+                )
+              ],
             ),
-            Align(
-              alignment: Alignment.center,
-              child: Column(
-                children: [
-                  InkWell(
-                    child: CircleAvatar(
-                      backgroundColor: Colors.white,
-                      maxRadius: 25,
-                      child: Icon(Icons.account_circle,
-                        size: 50,
-                        color: Color(0.enam()),
-                      ),
-                    ),
-                    onTap: (){
-                      showModalBottomSheet(
-                        context: context, 
-                        isScrollControlled: true,
-                        builder: (context) => UserProfile(),
-                      );
-                    },
-                  ),
-                  Text(_box.read('auth')['name'],
-                    style: TextStyle(
-                      fontSize: 24,
-                      color: Colors.white
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(CompanyProfileController.to.cp.value.data.name),
+              Text("Table "+UserController.to.user.value.table),
+            ],
+          )
+        ],
+      ),
+    ),
+  );
   }
 }
 
@@ -322,7 +318,7 @@ class ListMenuView extends StatelessWidget {
           return _theMenu.listMenu.isEmpty?Center(child: CircularProgressIndicator(),):
           ListView.builder(
             addAutomaticKeepAlives: true,
-            controller: _theMenu.scrollController.value,
+            //controller: _theMenu.scrollController.value,
             itemCount: _theMenu.listMenu.length,
             itemBuilder: (context, i) => 
             Visibility(
@@ -417,7 +413,10 @@ class ListMenuView extends StatelessWidget {
                                           border: InputBorder.none
                                         ),
                                         maxLength: 100,
-                                        controller: _theMenu.noteController[i]
+                                        controller: _theMenu.noteController[i],
+                                        onChanged: (nilai){
+                                          _theMenu.listMenu[i].note = nilai;
+                                        },
                                       ),
                                     ),
                                   )
@@ -505,6 +504,19 @@ class ListMenuView extends StatelessWidget {
                                           ],
                                         ),
                                       ),
+                                      Expanded(
+                                        child: Align(
+                                          alignment: Alignment.centerRight,
+                                          child: InkWell(
+                                            child: Card(
+                                              child: Icon(Icons.remove,
+                                                color: Colors.red,
+                                              )
+                                            ),
+                                            onTap: () => ListMenuNya.to.hapusOrderan(i),
+                                          ),
+                                        ),
+                                      )
                                     ],
                                   ),
                                 )
@@ -996,33 +1008,33 @@ class ListMenuView extends StatelessWidget {
 
 
 /* finaising info terakhir */
-void infoTerakhir(BuildContext context, List menu)async{
+// void infoTerakhir(BuildContext context, List menu)async{
   
-  await showDialog(
-    context: context,
-    child: AlertDialog(
-      title: Text('info'),
-      content: Text('Thank For Your Order'),
-      actions: [
-        FlatButton(
-          onPressed: (){
-            pembersihanLogOut(context, menu);
-          }, 
-          child: Text('OK')
-        )
-      ],
-    )
-  );
-  pembersihanLogOut(context, menu);
-}
+//   await showDialog(
+//     context: context,
+//     child: AlertDialog(
+//       title: Text('info'),
+//       content: Text('Thank For Your Order'),
+//       actions: [
+//         FlatButton(
+//           onPressed: (){
+//             pembersihanLogOut(context, menu);
+//           }, 
+//           child: Text('OK')
+//         )
+//       ],
+//     )
+//   );
+//   pembersihanLogOut(context, menu);
+// }
 
-/* untuk logout */
-void pembersihanLogOut(BuildContext context, List menu)async{
-  final _prf = await SharedPreferences.getInstance();
-  _prf.clear();
-  _prf.setString("pesanan", jsonEncode(menu).toString());
-  Navigator.of(context).pushReplacementNamed('/');
-}
+// /* untuk logout */
+// void pembersihanLogOut(BuildContext context, List menu)async{
+//   final _prf = await SharedPreferences.getInstance();
+//   _prf.clear();
+//   _prf.setString("pesanan", jsonEncode(menu).toString());
+//   Navigator.of(context).pushReplacementNamed('/');
+// }
 
 
 /* list menu utama */

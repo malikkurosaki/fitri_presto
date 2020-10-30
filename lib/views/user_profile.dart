@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:presto_qr/controller/list_menu_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart';
 
 class UserProfile extends StatelessWidget {
   // final Map user;
@@ -15,11 +17,14 @@ class UserProfile extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            color: Colors.grey,
-            width: double.infinity,
-            alignment: Alignment.center,
-            child: Text("==="),
+          InkWell(
+            child: Container(
+              padding: EdgeInsets.all(8),
+              width: double.infinity,
+              alignment: Alignment.center,
+              child: Icon(Icons.arrow_drop_down),
+            ),
+            onTap: () => Get.back(),
           ),
           Container(
             height: 250,
@@ -51,9 +56,7 @@ class UserProfile extends StatelessWidget {
                         color: Colors.deepOrange,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                         onPressed: ()async{
-                          final prf = await SharedPreferences.getInstance();
-                          prf.clear();
-                          Navigator.of(context).pushReplacementNamed('/');
+                          ListMenuNya.to.keluar();
                         },
                         child: Text('LOGOUT',
                           style: TextStyle(
