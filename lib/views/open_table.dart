@@ -1,11 +1,9 @@
-import 'dart:convert';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:presto_qr/component/garis_putus.dart';
 import 'package:presto_qr/controller/company_controller.dart';
 import 'package:presto_qr/controller/list_menu_controller.dart';
@@ -13,7 +11,6 @@ import 'package:presto_qr/controller/user_controller.dart';
 import 'package:presto_qr/views/detail_menu.dart';
 import 'package:presto_qr/views/detail_orderan.dart';
 import 'package:presto_qr/views/user_profile.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class OpenTable extends StatelessWidget {
   @override
