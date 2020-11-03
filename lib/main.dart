@@ -32,7 +32,7 @@ main() async{
             initialRoute: "/",
             unknownRoute: GetPage(name: '/404', page: () => Scaffold(body: Center(child: Text('404'),),)),
             getPages: [
-              GetPage(name: '/', page: ()=>MyHome()),
+              GetPage(name: '/', page: ()=>MyHome(),),
               GetPage(name: '/login', page: (){
                   final at = GetStorage();
                   if(Get.parameters['meja'] != null && Get.parameters['host'] != null){

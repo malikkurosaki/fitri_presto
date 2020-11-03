@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:presto_qr/controller/api_controller.dart';
+import 'package:presto_qr/controller/user_controller.dart';
 import 'package:presto_qr/model/menu_model.dart';
 import 'package:presto_qr/model/model_response_listbill.dart';
 import 'package:presto_qr/model/paket_orderan_model.dart';
@@ -180,6 +181,23 @@ class ListMenuNya extends GetxController{
     this.listMenu.update((value) {print('tambah qty order');});
   }
 
+  tambahOrderan(int i){
+    this.listMenu[i].qty = 1;
+    this.adaOrderan.value = true;
+    this.hitungTotal();
+    this.listMenu.update((value) { print('tamabah item');});
+  }
+
+  /* tambah note */
+  tambahNote(int i){
+    print("note");
+    if(this.noteController[i].text != "") this.listMenu[i].note = this.noteController[i].text;
+    this.listMenu[i].lihatEditTambah = !this.listMenu[i].lihatEditTambah;
+    this.listMenu.update((value) { 
+      print('act : tombol edit note');
+    });
+  }
+
   // lihat total orderannya
   lihatListOrderannya(){
     this.totalListOrderan.value = this.listMenu.where((e) => e.qty != 0 ).toList();
@@ -199,15 +217,25 @@ class ListMenuNya extends GetxController{
       Get.back();
     }
     this.noteController[i].text = "";
+    this.listMenu[i].lihatEditTambah = false;
     this.listMenu.update((value) {print('hapus orderan');});
+    Get.snackbar('success', 'one item remove success',
+      snackPosition: SnackPosition.BOTTOM
+    );
+  }
 
+
+  sortSubMenu(int i){
+    this.subMenu.forEach((el) { el['nama'] == this.subMenu[i]['nama']?el['dipilih'] = true:el['dipilih'] = false;});
+    this.listMenu.forEach((el) { el.groupp == this.subMenu[i]['nama']?el.terlihat = true:el.terlihat = false;});
+    this.listMenu.update((value) { });
   }
 
   // prosses orderan
   prossesOrderan(BuildContext context)async{
     Get.dialog(Center(child: CircularProgressIndicator(),));
     final box = GetStorage();
-    final user = UserModel.fromJson(box.read('auth'));
+    final user = UserController.to.user.value;
 
     final listBill = this.listMenu.where((e) => e.qty != 0).map((e) => BillDetail(
       note: e.note,
@@ -219,7 +247,7 @@ class ListMenuNya extends GetxController{
     final paket = PaketOrderan(
       customerId: user.user.phone,
       email: user.user.email,
-      name: user.user.email,
+      name: user.user.name,
       phone: user.user.phone,
       billDetail: listBill
     );

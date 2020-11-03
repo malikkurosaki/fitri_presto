@@ -1,3 +1,4 @@
+import 'package:ansicolor/ansicolor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -37,6 +38,41 @@ extension Tulisan on String{
   rupiah(){
     return "Rp "+NumberFormat("#,###","IDR").format(int.parse(this.contains(".")?this.split('.')[0].toString():this));
   }
+
+  biru(){
+    AnsiPen pen = new AnsiPen()..white()..rgb(r: 0, g: 1, b: 1);
+    return pen(this);
+  }
+
+  ungu(){
+    AnsiPen pen = new AnsiPen()..white()..rgb(r: 1, g: 0, b: 1);
+    return pen(this);
+  }
+
+  kuning(){
+    AnsiPen pen = new AnsiPen()..white()..rgb(r: 1, g: 1, b: 0);
+    return pen(this);
+  }
+
+  merah(){
+    AnsiPen pen = new AnsiPen()..white()..rgb(r: 1.5, g: 0, b: 0);
+    return pen(this);
+  }
+
+  hijau(){
+    AnsiPen pen = new AnsiPen()..white()..rgb(r: 0, g: 0.5, b: 0);
+    return pen(this);
+  }
+
+  abu(){
+    AnsiPen pen = new AnsiPen()..white()..rgb(r: 0.5, g: 0.5, b: 0.5);
+    return pen(this);
+  }
+
+  orange(){
+    AnsiPen pen = new AnsiPen()..white()..rgb(r: 1, g: 0.5, b: 0.5);
+    return pen(this);
+  }
 }
 
 extension TextNya on Text{
@@ -57,6 +93,26 @@ extension TextNya on Text{
       ),
     );
   }
+
+  judul(){
+    return Container(
+      padding: EdgeInsets.all(8),
+      child: Text(this.data,
+        style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold
+        ), 
+      ),
+    );
+  }
+
+  get judulPutih => Text(this.data,
+    style: TextStyle(
+      color: Colors.white,
+      fontSize: 18
+    ),
+  );
+
 }
 
 

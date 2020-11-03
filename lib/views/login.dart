@@ -1,4 +1,4 @@
-import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -6,14 +6,12 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:presto_qr/component/garis_putus.dart';
 import 'package:presto_qr/controller/company_controller.dart';
 import 'package:presto_qr/controller/login_controller.dart';
-import 'package:presto_qr/controller/splash_controller.dart';
 import 'package:presto_qr/model/login_model.dart';
 import 'package:presto_qr/views/book_menu.dart';
 import 'package:validators/validators.dart';
-import 'package:get/get_rx/src/rx_iterables/rx_map.dart';
-import 'package:presto_qr/component/garis_putus.dart';
 
 
 class Login extends StatelessWidget {
@@ -34,16 +32,10 @@ class Login extends StatelessWidget {
       body: SafeArea(
         child: Container(
           height: double.infinity,
-          child: Column(
+          child: ListView(
             children: [
               LoginBarAtas(),
-              Flexible(
-                child: ListView(
-                  children: [
-                    FormLogin()
-                  ],
-                )
-              )
+              FormLogin()
             ],
           ),
         ),
@@ -65,7 +57,7 @@ class LoginBarAtas extends StatelessWidget {
             children: [
               Container(
                 width: double.infinity,
-                height: 100,
+                height: 150,
                 child: Stack(
                   children: [
                     Card(
@@ -195,41 +187,7 @@ class FormLogin extends StatelessWidget {
                       color: Color(0.enam()),
                       textColor: Colors.white,
                       padding: EdgeInsets.all(16),
-                      onPressed: ()async{
-                        Get.dialog(Center(child: CircularProgressIndicator(),));
-                        if(LoginController.to.kunciState.currentState.validate()){
-                          
-                          if(!isEmail(LoginController.to.lsController[1].text)){
-                            Get.dialog(Center(child: Text("insert right email format"),));
-                            return;
-                          }
-
-                          if(LoginController.to.lsController[2].text.toString().length < 9 || !isNumeric(LoginController.to.lsController[2].text.replaceAll("0", "1"))){
-                            Get.dialog(Center(child: Card(child: Text("wrong phone number"),),));
-                            return;
-                          }
-
-                          final loginPaket = LoginModel(
-                            name: LoginController.to.lsController[0].text.toString(),
-                            email: LoginController.to.lsController[1].text.toString(),
-                            phone: LoginController.to.lsController[2].text.toString()
-                          );
-
-                          try {
-                            final coba = await Dio().post("${GetStorage().read('host')}/api/setUserTable/${GetStorage().read('meja')}",data: loginPaket);
-                            Get.back();
-                            if(coba.data['status']){
-                              await GetStorage().write('auth', coba.data);
-                              Get.offNamed('/open-table');
-                            }else{
-                              Get.dialog(Center(child: Card(child: Text(coba.data['note']),),));
-                            }
-                          } catch (e) {
-                            Get.dialog(Center(child: Card(child: Text(e.toString())),));
-                          }
-
-                        }
-                      }, 
+                      onPressed: ()async => LoginController.to.cobaLogin(), 
                       child: Text('Login')
                     ),
                   ),

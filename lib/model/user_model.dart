@@ -36,7 +36,7 @@ class User {
   String updatedAt;
   String ipAddress;
   String deviceName;
-  Null listbillTemporaryId;
+  Map listbillTemporaryId;
 
   User(
       {this.name,

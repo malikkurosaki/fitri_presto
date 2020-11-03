@@ -40,7 +40,7 @@ class MyHomeAdaPesanan extends StatelessWidget {
                 padding: EdgeInsets.all(16),
                 child: ListView(
                   children: [
-                    for(var i = 0; i < controller.pesananNya.value.detailBills.length ;i++)
+                    for(var i = 0; i < controller.pesananNya.value.listbill.detailBills.length ;i++)
                     Container(
                       margin: EdgeInsets.only(bottom: 20),
                       width: double.infinity,
@@ -48,35 +48,38 @@ class MyHomeAdaPesanan extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
-                            child: Card(
-                              elevation: 5,
-                              child: Stack(
-                                children: [
-                                  CachedNetworkImage(
-                                    imageUrl: controller.pesananNya.value.detailBills[i].foto??"",
-                                    placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
-                                    errorWidget: (context, url, error) => Image.asset('assets/images/bahan.jpg',
-                                      width: double.infinity,
+                            child: Container(
+                              height: 150,
+                              child: Card(
+                                elevation: 5,
+                                child: Stack(
+                                  children: [
+                                    CachedNetworkImage(
+                                      imageUrl: controller.pesananNya.value.listbill.detailBills[i].foto??"",
+                                      placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
+                                      errorWidget: (context, url, error) => Image.asset('assets/images/bahan.jpg',
+                                        width: double.infinity,
+                                        fit: BoxFit.cover,
+                                      ),
                                       fit: BoxFit.cover,
+                                      width: double.infinity,
                                     ),
-                                    fit: BoxFit.cover,
-                                    width: double.infinity,
-                                  ),
-                                  Container(
-                                    alignment: Alignment.topRight,
-                                    child: Card(
-                                      elevation: 10,
-                                      color: Colors.deepOrangeAccent,
-                                      child: Text(controller.pesananNya.value.detailBills[i].qty.toString()+" X ",
-                                        style: TextStyle(
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.w800,
-                                          color: Colors.white,
+                                    Container(
+                                      alignment: Alignment.topRight,
+                                      child: Card(
+                                        elevation: 10,
+                                        color: Colors.deepOrangeAccent,
+                                        child: Text(controller.pesananNya.value.listbill.detailBills[i].qty.toString()+" X ",
+                                          style: TextStyle(
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w800,
+                                            color: Colors.white,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  )
-                                ],
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -88,20 +91,20 @@ class MyHomeAdaPesanan extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 
-                                Text(controller.pesananNya.value.detailBills[i].namaPro,
+                                Text(controller.pesananNya.value.listbill.detailBills[i].namaPro,
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 2,
                                   style: TextStyle(
                                     fontSize: 18,
                                   ),
                                 ),
-                                Text(controller.pesananNya.value.detailBills[i].hargaPro.toString().rupiah(),
+                                Text(controller.pesananNya.value.listbill.detailBills[i].hargaPro.toString().rupiah(),
                                   style: TextStyle(
                                     color: Color(0.empat()),
                                     fontWeight: FontWeight.w900
                                   ),
                                 ),
-                                Text(controller.pesananNya.value.detailBills[i].note??"",
+                                Text(controller.pesananNya.value.listbill.detailBills[i].note??"",
                                   maxLines: 3,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
@@ -135,12 +138,12 @@ class MyHomeAdaPesanan extends StatelessWidget {
                         child: Wrap(
                           crossAxisAlignment: WrapCrossAlignment.center,
                           children: [
-                            Text(controller.pesananNya.value.name + " | ",
+                            Text(controller.pesananNya.value.listbill.name + " | ",
                               style: TextStyle(
                                 fontSize: 18,
                               ),
                             ),
-                            Text("Table  "+controller.pesananNya.value.tableId,
+                            Text("Table  "+controller.pesananNya.value.listbill.tableId,
                               style: TextStyle(
                                 fontSize: 18
                               ),

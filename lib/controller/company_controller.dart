@@ -4,6 +4,8 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:presto_qr/model/company_model.dart';
+import 'package:presto_qr/component/garis_putus.dart';
+
 class CompanyProfileController extends GetxController {
   static CompanyProfileController get to => Get.find();
   final cp = CompanyModel().obs;
@@ -17,7 +19,7 @@ class CompanyProfileController extends GetxController {
     final res = await new Dio().get("${str.read('host')}/api/getCompanyProfile");
     await GetStorage().write('company', res.data['data']);
     cp.value = CompanyModel.fromJson(res.data);
-    print(jsonEncode(res.data).toString());
+    print(jsonEncode(res.data).toString().hijau());
     update();
   }
 }

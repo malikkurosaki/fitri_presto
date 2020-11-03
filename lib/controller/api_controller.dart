@@ -15,7 +15,8 @@ class ApiController {
     box.erase();
     await box.write('host', host);
     print(host);
-    await box.write('pesanan', res.data['listbill']);
+    print(res.data);
+    await box.write('pesanan', res.data);
     return res.data['status'];
   }
 
