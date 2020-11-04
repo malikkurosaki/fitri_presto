@@ -34,11 +34,28 @@ class OpenTable extends StatelessWidget {
             FloatingActionButton.extended(
               backgroundColor: Color(0.enam()),
               onPressed: (){
+                // showModalBottomSheet(
+                //   context: context, 
+                //   isScrollControlled: true,
+                //   builder: (context) => DetailOrderan(),
+                // );
+
+                // showModalBottomSheet(
+                //   context: context, 
+                //   isScrollControlled: true,
+                //   builder: (_) => DetailOrderan()
+                // );
                 showModalBottomSheet(
                   context: context, 
                   isScrollControlled: true,
-                  builder: (context) => DetailOrderan(),
+                  isDismissible: true,
+                  builder: (_) => 
+                  Container(
+                    height: Get.mediaQuery.size.height/1.1,
+                    child: DetailOrderan()
+                  )
                 );
+                
               },
               label: Text(controller.totalQty.toString()+" item of "+controller.totalOrder.toString()+" order"),
               icon: Icon(Icons.shopping_cart),

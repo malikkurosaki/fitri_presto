@@ -37,6 +37,11 @@ dependencies:
   get_storage: ^1.3.1
   ansicolor: ^1.0.5
 
+  bali:
+    git:
+      url: https://github.com/malikkurosaki/bali.git
+      ref: master
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

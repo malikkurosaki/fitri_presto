@@ -22,6 +22,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.5.0-nullsafety"
+  bali:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: master
+      resolved-ref: cc454301dc582d852069eef08f3bf902c9fe5d2b
+      url: "https://github.com/malikkurosaki/bali.git"
+    source: git
+    version: "0.0.1"
   basic_utils:
     dependency: transitive
     description:

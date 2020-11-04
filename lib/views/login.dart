@@ -1,4 +1,5 @@
 
+import 'package:bali/bali.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -203,26 +204,33 @@ class FormLogin extends StatelessWidget {
                       FlatButton(
                         textColor: Color(0.enam()),
                         onPressed: ()async{
-                          showDialog(context: context,
-                            child: AlertDialog(
-                              contentPadding: EdgeInsets.all(8),
-                              scrollable: true,
-                              content: Center(child: CircularProgressIndicator(),),
-                            )
-                          );
+                          Get.dialog(Center(child: CircularProgressIndicator(),),);
           
-                          final res = await new Dio().get('${GetStorage().read('host')}/api/getMenu?product=&group=&subgroup=');
+                          await new Dio().get('${GetStorage().read('host')}/api/getMenu?product=&group=&subgroup=');
                           // print(res.data);
-                          Navigator.of(context,rootNavigator: true).pop('dialog');
-                          showModalBottomSheet(context: context, 
+                          Get.back();
+                          // showModalBottomSheet(context: context, 
+                          //   isDismissible: true,
+                          //   isScrollControlled: true,
+                          //   builder: (context) => BookMenu(),
+                          // );
+
+                          showModalBottomSheet(
                             isDismissible: true,
                             isScrollControlled: true,
-                            builder: (context) => BookMenu(),
+                            context: Get.context, 
+                            builder: (_) => 
+                            Container(
+                              height: Get.mediaQuery.size.height/1.1,
+                              child: BookMenu(),
+                            )
                           );
+
                         }, 
                         // onLongPress: () => Navigator.of(context).push(""),
                         child: Text('MENU')
-                      )
+                      ),
+                      
                     ],
                   ),
                 )

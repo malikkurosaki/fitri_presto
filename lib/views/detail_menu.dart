@@ -16,27 +16,16 @@ class DetailMenu extends StatelessWidget {
   DetailMenu({Key key, this.listMenu, this.i, this.tambah}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      height: MediaQuery.of(context).size.height/1.1,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          InkWell(
-            child: Container(
-              width: double.infinity,
-              alignment: Alignment.center,
-              child: Icon(Icons.arrow_drop_down),
-            ),
-            onTap: (){
-              Get.back();
-            },
-          ),
-          Flexible(
-            child: Column(
+    return DraggableScrollableSheet(
+      initialChildSize: 1,
+      builder: (_,__) => 
+      Card(
+        child: ListView(
+          controller: __,
+          children: [
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
               children: [
                 Container(
                   height: 200,
@@ -53,55 +42,51 @@ class DetailMenu extends StatelessWidget {
                     ),
                   ),
                 ),
-                Flexible(
-                  child: Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        Text(listMenu.namaPro,
-                          textAlign: TextAlign.left,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold
-                          ),
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      Text(listMenu.namaPro,
+                        textAlign: TextAlign.left,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold
                         ),
-                        Text("Rp "+NumberFormat("#,###","IDR").format(int.parse(listMenu.hargaPro.toString())),
-                          style: TextStyle(
-                          ),
+                      ),
+                      Text("Rp "+NumberFormat("#,###","IDR").format(int.parse(listMenu.hargaPro.toString())),
+                        style: TextStyle(
                         ),
-                        !tambah?SizedBox.shrink():
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: FlatButton(
-                            color: Color(0.enam()),
-                            textColor: Colors.white,
-                            child: Text('add +'),
-                            onPressed: (){
-                              _theMenu.tambahQty(i);
-                              Get.back();
-                            },
-                          ),
+                      ),
+                      !tambah?SizedBox.shrink():
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: FlatButton(
+                          color: Color(0.enam()),
+                          textColor: Colors.white,
+                          child: Text('add +'),
+                          onPressed: (){
+                            _theMenu.tambahQty(i);
+                            Get.back();
+                          },
                         ),
-                        Flexible(
-                          flex: 1,
-                          child: Text(listMenu.ket,
-                            overflow: TextOverflow.fade,
-                            style: TextStyle(
-                              color: Colors.grey
-                            ),
-                          ),
+                      ),
+                      Text(listMenu.ket,
+                        overflow: TextOverflow.fade,
+                        style: TextStyle(
+                          color: Colors.grey
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 )
               ],
             ),
-          )
-        ],
-      ),
+          ],
+        ),
+      )
+          
     );
   }
 }

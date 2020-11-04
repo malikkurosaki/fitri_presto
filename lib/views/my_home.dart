@@ -1,4 +1,5 @@
 
+import 'package:bali/bali.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -191,8 +192,13 @@ class MyHomeAdaPesanan extends StatelessWidget {
                                   // Get.dialog(Center(child: CircularProgressIndicator(),));
                                   showModalBottomSheet(
                                     isScrollControlled: true,
+                                    isDismissible: true,
                                     context: context, 
-                                    builder: (context) => BookMenu(),
+                                    builder: (context) => 
+                                    Container(
+                                      height: Get.mediaQuery.size.height/1.1,
+                                      child: BookMenu()
+                                    ),
                                   );
                                   //Get.back();
                                 },
@@ -261,7 +267,7 @@ class MyHomeGakAdaPesanan extends StatelessWidget {
           InkWell(
             onLongPress: ()async{
               //http://prestoqr.probussystem.net/qr/#/login?meja=1&host=http://prestoqr.probussystem.net/presto/public
-              final urlNya = "http://prestoqr.probussystem.net/presto/public";
+              final urlNya = "https://prestoqr.probussystem.com";
               await _theMenu.kosongkanMeja("3",urlNya);
               print("hapus meja");
               Get.offAllNamed('/login?meja=3&host='+ Uri.encodeFull(urlNya));
