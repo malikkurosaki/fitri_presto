@@ -103,4 +103,4 @@ GET https://malikkurosaki.github.io/cdnjs/setting/presto_qr.json HTTP/1.1
 # http://localhost:58264/#login/3/host.com
 
 
-POST https://prestoqr.probussystem.com/api/clearTable/3 HTTP/1.1
+# POST https://prestoqr.probussystem.com/api/clearTable/3 HTTP/1.1
