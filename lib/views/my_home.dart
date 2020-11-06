@@ -229,7 +229,7 @@ class MyHomeGakAdaPesanan extends StatelessWidget {
         child: InkWell(
           child: CachedNetworkImage(
             imageUrl: "",
-            placeholder: (context, url) => CircularProgressIndicator(),
+            placeholder: (context, url) => Image.asset('assets/images/noimage.png'),
             errorWidget: (context, url, error) => Image.asset('assets/images/noimage.png'),
           ),
           onLongPress: () => kemana(),

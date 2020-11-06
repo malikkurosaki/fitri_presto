@@ -20,6 +20,8 @@ class CompanyProfileController extends GetxController {
     await GetStorage().write('company', res.data['data']);
     cp.value = CompanyModel.fromJson(res.data);
     print(jsonEncode(res.data).toString().hijau());
+    await GetStorage().write('gambar_terakhir', this.cp.value.data.image);
+    print("gambar terakhir ${this.cp.value.data.image}");
     update();
   }
 }

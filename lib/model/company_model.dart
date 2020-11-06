@@ -29,6 +29,7 @@ class Data {
   String urlBackend;
   String urlFrontend;
   String logo;
+  String image;
 
   Data(
       {this.office,
@@ -39,7 +40,8 @@ class Data {
       this.email,
       this.urlBackend,
       this.urlFrontend,
-      this.logo});
+      this.logo,
+      this.image});
 
   Data.fromJson(Map<String, dynamic> json) {
     office = json['office'];
@@ -51,6 +53,7 @@ class Data {
     urlBackend = json['urlBackend'];
     urlFrontend = json['urlFrontend'];
     logo = json['logo'];
+    image = json['image'];
   }
 
   Map<String, dynamic> toJson() {
@@ -64,6 +67,7 @@ class Data {
     data['urlBackend'] = this.urlBackend;
     data['urlFrontend'] = this.urlFrontend;
     data['logo'] = this.logo;
+    data['image'] = this.image;
     return data;
   }
 }
