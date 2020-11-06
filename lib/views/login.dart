@@ -9,6 +9,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:presto_qr/component/garis_putus.dart';
 import 'package:presto_qr/controller/company_controller.dart';
+import 'package:presto_qr/controller/list_menu_controller.dart';
 import 'package:presto_qr/controller/login_controller.dart';
 import 'package:presto_qr/model/login_model.dart';
 import 'package:presto_qr/views/book_menu.dart';
@@ -70,7 +71,7 @@ class LoginBarAtas extends StatelessWidget {
                     ),
                     Container(
                       padding: EdgeInsets.all(16),
-                      child: Text("Table #"+ GetStorage().read('meja',),
+                      child: Text("Table #"+ ListMenuNya.to.meja.value,
                         style: TextStyle(
                           fontSize: 42,
                           color: Color(0.enam()),
@@ -184,12 +185,14 @@ class FormLogin extends StatelessWidget {
                   padding: EdgeInsets.all(8),
                   width: double.infinity,
                   child: Card(
-                    child: FlatButton(
-                      color: Color(0.enam()),
-                      textColor: Colors.white,
-                      padding: EdgeInsets.all(16),
-                      onPressed: ()async => LoginController.to.cobaLogin(), 
-                      child: Text('Login')
+                    child: Obx(() => 
+                      FlatButton(
+                        color: Color(0.enam()),
+                        textColor: Colors.white,
+                        padding: EdgeInsets.all(16),
+                        onPressed: LoginController.to.ditekan.value?null:()async => LoginController.to.cobaLogin(), 
+                        child: Text('Login')
+                      )
                     ),
                   ),
                 ),
@@ -204,11 +207,11 @@ class FormLogin extends StatelessWidget {
                       FlatButton(
                         textColor: Color(0.enam()),
                         onPressed: ()async{
-                          Get.dialog(Center(child: CircularProgressIndicator(),),);
+                          // Get.dialog(Center(child: CircularProgressIndicator(),),);
           
-                          await new Dio().get('${GetStorage().read('host')}/api/getMenu?product=&group=&subgroup=');
-                          // print(res.data);
-                          Get.back();
+                          // await new Dio().get('${GetStorage().read('host')}/api/getMenu?product=&group=&subgroup=');
+                          // // print(res.data);
+                          // Get.back();
                           // showModalBottomSheet(context: context, 
                           //   isDismissible: true,
                           //   isScrollControlled: true,

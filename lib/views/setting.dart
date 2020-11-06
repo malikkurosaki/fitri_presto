@@ -26,7 +26,7 @@ class MySetting extends StatelessWidget {
               children: [
                 FlatButton(
                   onPressed: ()async{
-                   _theMenu.keluar();
+                   ListMenuNya.to.keluar();
                   }, 
                   child: Text('keluar')
                 ),

@@ -36,6 +36,9 @@ main() async{
               GetPage(name: '/login', page: (){
                   final at = GetStorage();
                   if(Get.parameters['meja'] != null && Get.parameters['host'] != null){
+                    ListMenuNya.to.meja.value = Get.parameters['meja'].toString();
+                    ListMenuNya.to.host.value = Get.parameters['host'].toString();
+                    
                     at.write('meja', Get.parameters['meja'].toString());
                     at.write('host', Uri.decodeFull(Get.parameters['host'].toString()));
                     return RootView();

@@ -12,6 +12,7 @@ import 'package:presto_qr/model/model_response_listbill.dart';
 import 'package:presto_qr/model/paket_orderan_model.dart';
 import 'package:presto_qr/model/user_model.dart';
 import 'package:get/get.dart';
+import 'package:presto_qr/component/garis_putus.dart';
 
 
 
@@ -100,46 +101,22 @@ class ListMenuNya extends GetxController{
   ].obs;
 
   getListMenu()async{
-    //final str = GetStorage();
-    final Response res = await Dio().get("${box.read('host')}/api/getMenu?product=&group=&subgroup=");
-    listMenu.value = (res.data as List).map((e) => MenuModel.fromJson(e)).toList();
-    await box.write("listmenu", res.data);
-    print('load list menu dari serverx');
-    // if(str.hasData("listmenu")){
-    //   listMenu.value =  (str.read("listmenu") as List).map((e) => MenuModel.fromJson(e)).toList();
-    //   print('load dari storage');
-    // }else{
-    //   final Response res = await Dio().get("${str.read('host')}/api/getMenu?product=&group=&subgroup=");
-    //   listMenu.value = (res.data as List).map((e) => MenuModel.fromJson(e)).toList();
-    //   await str.write("listmenu", res.data);
-    //   print('load list menu dari serverx');
-    // }
-
+    this.listMenu.value = await ApiController.getListMenu();
     for(var i = 0; i < this.listMenu.length;i++){
       this.listMenu[i].note = "";
       this.listMenu[i].lihatTambah = false;
       this.listMenu[i].lihatEditTambah = false;
       this.listMenu[i].qty = 0;
-      if(this.listMenu[i].groupp.toString().trim() == "FOOD"){
-        this.listMenu[i].terlihat = true;
-      }else{
-        this.listMenu[i].terlihat = false;
-      }
+      // if(this.listMenu[i].groupp.toString().trim() == "FOOD"){
+      //   this.listMenu[i].terlihat = true;
+      // }else{
+      //   this.listMenu[i].terlihat = false;
+      // }
     }
-    /* listMenu.forEach((e){
-        e.note = "";
-        e.lihatTambah = false;
-        e.lihatEditTambah = false;
-        e.qty = 0;
-        if(e.groupp.toString().trim() == "FOOD"){
-          e.terlihat = true;
-        }else{
-          e.terlihat = false;
-        }
-    }); */
-
+    this.listMenu.forEach((el) { el.groupp.toString().trim() == "FOOD"?el.terlihat = true:el.terlihat = false;});
     this.noteController.value = List.generate(listMenu.length, (index) => TextEditingController());
-    this.listMenu.update((value) {print('abis ambil list menu');});
+    update();
+    this.listMenu.update((value) {print('update abis ambil list menu');});
   }
 
   // meghitung total
@@ -226,15 +203,15 @@ class ListMenuNya extends GetxController{
 
 
   sortSubMenu(int i){
+    print(i.toString().ungu());
     this.subMenu.forEach((el) { el['nama'] == this.subMenu[i]['nama']?el['dipilih'] = true:el['dipilih'] = false;});
-    this.listMenu.forEach((el) { el.groupp == this.subMenu[i]['nama']?el.terlihat = true:el.terlihat = false;});
-    this.listMenu.update((value) { });
+    this.listMenu.forEach((el) { el.groupp.toString().trim().toUpperCase() == this.subMenu[i]['nama'].toString().toUpperCase()?el.terlihat = true:el.terlihat = false;});
+    this.listMenu.update((value) { print("update sort menu list".hijau()); });
   }
 
   // prosses orderan
   prossesOrderan(BuildContext context)async{
     Get.dialog(Center(child: CircularProgressIndicator(),));
-    final box = GetStorage();
     final user = UserController.to.user.value;
 
     final listBill = this.listMenu.where((e) => e.qty != 0).map((e) => BillDetail(
@@ -253,13 +230,12 @@ class ListMenuNya extends GetxController{
     );
 
     print(paket.toJson().toString());
-    final apaBerhasil = await ApiController.kirimPaket(paket);
-    //Get.back();
-    if(apaBerhasil){
-      kosongkanData();
-      Get.offAllNamed('/');
+    Response res = await ApiController.kirimPaket(paket);
+    if(res.data['status']){
+      keluar(psn: res);
     }else{
-      Get.dialog(Center(child: Card(child: Text("failed"),),));
+      Get.snackbar('info', res.data['note']);
+      //Get.dialog(Center(child: Card(child: Text("failed"),),));
       print('gagal kirim paketan');
     }
   }
@@ -282,8 +258,11 @@ class ListMenuNya extends GetxController{
     this.pesananNya.value = ResponseListBill.fromJson(box.read('pesanan'));
   }
 
-  keluar(){
-    box.erase();
+  keluar({Response psn})async{
+    await ApiController.hapusMeja();
+    box.remove('auth');
+    box.remove('pesanan');
+    if(psn != null) await box.write('pesanan', psn.data);
     Get.offAllNamed('/');
   }
 }

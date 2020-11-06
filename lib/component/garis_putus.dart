@@ -124,3 +124,8 @@ extension Warana on int{
   lima() => 0xff422B30;
   enam() => 0xff3381AD;
 }
+
+
+class Komponen {
+  
+}

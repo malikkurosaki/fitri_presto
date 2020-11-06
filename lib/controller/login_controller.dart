@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:presto_qr/controller/list_menu_controller.dart';
 import 'package:presto_qr/model/login_model.dart';
 import 'package:presto_qr/views/open_table.dart';
 import 'package:validators/validators.dart';
@@ -39,12 +40,12 @@ class LoginController extends GetxController {
     this.ditekan.value = true;
     if(LoginController.to.kunciState.currentState.validate()){
       if(!isEmail(LoginController.to.lsController[1].text)){
-        Get.dialog(Center(child: Card(child: Text("insert right email format")),));
+        Get.snackbar('info', "insert right email format");
         return;
       }
 
       if(LoginController.to.lsController[2].text.toString().length < 9 || !isNumeric(LoginController.to.lsController[2].text.replaceAll("0", "1"))){
-        Get.dialog(Center(child: Card(child: Text("wrong phone number"),),));
+        Get.snackbar('info', "wrong phone number");
         return;
       }
 
@@ -54,25 +55,27 @@ class LoginController extends GetxController {
         phone: LoginController.to.lsController[2].text.toString()
       );
 
-      Get.dialog(Center(child: CircularProgressIndicator(),));
+      //Get.dialog(Center(child: CircularProgressIndicator(),));
       
       try {
         print("coba login nih");
-        print("host: ${GetStorage().read('host')}/api/setUserTable/${GetStorage().read('meja')}".kuning());
-        final coba = await Dio().post("${GetStorage().read('host')}/api/setUserTable/${GetStorage().read('meja')}",data: loginPaket);
+        print("host: ${ListMenuNya.to.host}/api/setUserTable/${ListMenuNya.to.meja}".kuning());
+        final coba = await Dio().post("${ListMenuNya.to.host}/api/setUserTable/${ListMenuNya.to.meja}",data: loginPaket);
         print(coba.data['status'].toString().ungu());
+        this.ditekan.value = false;
         if(coba.data['status']){
           await GetStorage().write('auth', jsonEncode(coba.data));
           print("menuju ke meja order");
           Get.offAll(OpenTable());
           //Get.offNamed('/open-table');
         }else{
-          Get.back();
+          //Get.back();
           Get.snackbar('alert', 'table already in used');
         }
         
       } catch (e) {
-        Get.back();
+        this.ditekan.value = false;
+        //Get.back();
         Get.snackbar('alert', e.toString());
       }
     }

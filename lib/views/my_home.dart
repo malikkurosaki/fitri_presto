@@ -1,15 +1,15 @@
 
-import 'package:bali/bali.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:presto_qr/component/garis_putus.dart';
+import 'package:presto_qr/controller/api_controller.dart';
 import 'package:presto_qr/controller/list_menu_controller.dart';
-import 'package:presto_qr/model/model_response_listbill.dart';
 import 'package:presto_qr/views/book_menu.dart';
 import 'package:presto_qr/views/open_table.dart';
-import 'package:get/get.dart';
-import 'package:presto_qr/component/garis_putus.dart';
 
 class MyHome extends StatelessWidget {
   final box = GetStorage();
@@ -64,6 +64,7 @@ class MyHomeAdaPesanan extends StatelessWidget {
                                       ),
                                       fit: BoxFit.cover,
                                       width: double.infinity,
+                                      height: double.infinity,
                                     ),
                                     Container(
                                       alignment: Alignment.topRight,
@@ -196,6 +197,7 @@ class MyHomeAdaPesanan extends StatelessWidget {
                                     context: context, 
                                     builder: (context) => 
                                     Container(
+                                      color: Colors.transparent,
                                       height: Get.mediaQuery.size.height/1.1,
                                       child: BookMenu()
                                     ),
@@ -220,16 +222,102 @@ class MyHomeAdaPesanan extends StatelessWidget {
 }
 
 class MyHomeGakAdaPesanan extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Center(
+        child: InkWell(
+          child: CachedNetworkImage(
+            imageUrl: "",
+            placeholder: (context, url) => CircularProgressIndicator(),
+            errorWidget: (context, url, error) => Image.asset('assets/images/noimage.png'),
+          ),
+          onLongPress: () => kemana(),
+        ),
+      ),
+    );
+  }
+
+  kemana()async{
+    final con = TextEditingController();
+    final conHost = TextEditingController();
+    final apa = await ApiController.developer();
+    if(apa){
+      Get.bottomSheet(
+        Card(
+          child: Container(
+            padding: EdgeInsets.all(8),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("mau lanjut ?"),
+                Flexible(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            TextField(
+                              controller: con,
+                              decoration: InputDecoration(
+                                hintText: 'meja berapa'
+                              ),
+                            ),
+                            TextField(
+                              controller: conHost,
+                              decoration: InputDecoration(
+                                hintText: 'host'
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      FlatButton(
+                        onPressed: ()async{
+                          var meja = con.text.isEmpty?"3":con.text;
+                          var host = conHost.text.isNotEmpty?conHost.text:"https://prestoqr.probussystem.com";
+                          final ap = ApiController.hapusMeja2(host, meja);
+                          if(await ap) Get.offNamed('/login?meja=$meja&host=$host'); 
+                        }, 
+                        child: Text("OK")
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        )
+      );
+    }
+  }
+}
+
+
+
+/* class MyHomeGakAdaPesanan extends StatelessWidget {
   final _theMenu = Get.find<ListMenuNya>();
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Color(0.enam()),
       padding: EdgeInsets.all(32),
-      child: Column(
+      child: Stack(
         children: [
-          Flexible(
-            child: ListView(
+          Align(
+            alignment: Alignment.center,
+            child: Center(
+              child: Image.asset(
+                'assets/images/qr_scanner1.png',
+                width: 200,
+              ),
+            ),
+          ),
+          Container(
+            child: Column(
               children: [
                 Container(
                   padding: EdgeInsets.symmetric(vertical: 16),
@@ -239,6 +327,7 @@ class MyHomeGakAdaPesanan extends StatelessWidget {
                       fontSize: 24,
                       color: Colors.white
                     ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
                 Container(
@@ -247,42 +336,60 @@ class MyHomeGakAdaPesanan extends StatelessWidget {
                     """ 
                       The PrestoQR feature strongly supports the current social distancing policies to reduce the spread of Covid-19. Passive experiences for isolated communities will change to become more active and social.  can use PrestoQr to do contactless. This latest feature will meet the needs of customers to be able to order menus without having to contact directly.
                     """,
-                    textAlign: TextAlign.start,
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.blue[100]
                     ),
-                  ),
-                ),
-                Container(
-                  child: Center(
-                    child: Image.asset(
-                      'assets/images/qr_scanner1.png',
-                      width: 200,
-                    ),
+                    
                   ),
                 ),
               ],
             ),
           ),
-          InkWell(
-            onLongPress: ()async{
-              //http://prestoqr.probussystem.net/qr/#/login?meja=1&host=http://prestoqr.probussystem.net/presto/public
-              final urlNya = "https://prestoqr.probussystem.com";
-              await _theMenu.kosongkanMeja("3",urlNya);
-              print("hapus meja");
-              Get.offAllNamed('/login?meja=3&host='+ Uri.encodeFull(urlNya));
-              //print(Uri.decodeFull("http%3A%2F%2Fprestoqr.probussystem.net%2Fpresto%2Fpublic"));
-              print("menuju login");
-            },
-            child: Text('powered by PROBUSSYSTEM',
-              style: TextStyle(
-                color: Color(0.satu())
-              ),
-              textAlign: TextAlign.center,
-            )
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: InkWell(
+              onLongPress: ()async{
+                //http://prestoqr.probussystem.net/qr/#/login?meja=1&host=http://prestoqr.probussystem.net/presto/public
+                final urlNya = "https://prestoqr.probussystem.com";
+                await _theMenu.kosongkanMeja("3",urlNya);
+                print("hapus meja");
+                Get.offAllNamed('/login?meja=3&host='+ Uri.encodeFull(urlNya));
+                //print(Uri.decodeFull("http%3A%2F%2Fprestoqr.probussystem.net%2Fpresto%2Fpublic"));
+                print("menuju login");
+
+                /* Get.bottomSheet(
+                  Card(
+                    child: Container(
+                      padding: EdgeInsets.all(8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text('mau login ?'),
+                          FlatButton(
+                            onPressed: ()async{
+                              final apa = await ApiController.developer();
+                              print(apa);
+                            }, 
+                            child: Text("OK")
+                          )
+                        ],
+                      ),
+                    ),
+                  )
+                ); */
+              },
+              child: Text('powered by PROBUSSYSTEM',
+                style: TextStyle(
+                  color: Color(0.satu())
+                ),
+                textAlign: TextAlign.center,
+              )
+            ),
           )
         ],
       ),
     );
   }
 }
+ */

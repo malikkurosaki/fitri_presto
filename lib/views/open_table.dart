@@ -242,7 +242,7 @@ class AppBarAtas extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(CompanyProfileController?.to?.cp?.value?.data?.name??"name").putih(),
-              Text("Table "+UserController?.to?.user?.value?.table??"table").putih(),
+              Text("Table "+ListMenuNya.to.meja.value).putih(),
             ],
           )
         ],
