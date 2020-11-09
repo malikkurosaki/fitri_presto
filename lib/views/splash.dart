@@ -12,7 +12,7 @@ class RootView extends StatelessWidget {
   final spl = Get.find<SplashController>();
   @override
   Widget build(BuildContext context) {
-    Future.delayed(Duration(seconds: 1),(){
+    Future.delayed(Duration(seconds: 3),(){
       spl.pindah.value = true;
       print("pindah lah");
     });
@@ -27,6 +27,12 @@ class Splash extends StatelessWidget {
     return Container(
       child: Scaffold(
         body: Container(
+          padding: EdgeInsets.all(32),
+          child: Center(
+            child: Image.asset('assets/images/logo_qr_presto.png')
+          ),
+        )
+/*         Container(
           height: double.infinity,
           child: Stack(
             children: [
@@ -65,7 +71,7 @@ class Splash extends StatelessWidget {
               )
             ],
           ),
-        ),
+        ) */,
       ),      
     );
   }

@@ -228,9 +228,9 @@ class MyHomeGakAdaPesanan extends StatelessWidget {
       child: Center(
         child: InkWell(
           child: CachedNetworkImage(
-            imageUrl: "",
-            placeholder: (context, url) => Image.asset('assets/images/noimage.png'),
-            errorWidget: (context, url, error) => Image.asset('assets/images/noimage.png'),
+            imageUrl: GetStorage().read('gambar_terakhir')??"",
+            placeholder: (context, url) => Image.asset('assets/images/logo_qr_presto.png'),
+            errorWidget: (context, url, error) => Image.asset('assets/images/logo_qr_presto.png'),
           ),
           onLongPress: () => kemana(),
         ),

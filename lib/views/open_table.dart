@@ -60,7 +60,10 @@ class OpenTable extends StatelessWidget {
               label: Text(controller.totalQty.toString()+" item of "+controller.totalOrder.toString()+" order"),
               icon: Icon(Icons.shopping_cart),
             ),
-            body: ListMenuNya.to.listMenu.isEmpty?Center(child: CircularProgressIndicator(),):
+            body: ListMenuNya.to.listMenu.isEmpty?Padding(
+              padding: const EdgeInsets.all(64),
+              child: Center(child: Image.asset('assets/images/logo_qr_presto.png')),
+            ):
             SafeArea(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -311,7 +314,7 @@ class ListMenuView extends StatelessWidget {
     return Container(
       child: Obx(
         (){
-          return _theMenu.listMenu.isEmpty?Center(child: CircularProgressIndicator(),):
+          return _theMenu.listMenu.isEmpty?Center(child: Image.asset('assets/images/logo_qr_presto.png'),):
           ListView.builder(
             addAutomaticKeepAlives: true,
             //controller: _theMenu.scrollController.value,
@@ -336,13 +339,9 @@ class ListMenuView extends StatelessWidget {
                               height: 70,
                               fit: BoxFit.cover,
                               imageUrl: _theMenu.listMenu[i].foto??"",
-                              placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
+                              placeholder: (context, url) => Center(child: Image.asset('assets/images/logo_qr_presto.png'),),
                               errorWidget: (context, url, error) => 
-                              Center(
-                                child: Image.asset('assets/images/noimage.png',
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
+                              Center(child: Image.asset('assets/images/logo_qr_presto.png')),
                             ),
                           ),
                           onTap: (){

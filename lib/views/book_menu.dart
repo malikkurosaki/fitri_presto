@@ -6,6 +6,7 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:presto_qr/controller/list_menu_controller.dart';
 import 'package:presto_qr/views/detail_menu.dart';
 import 'package:presto_qr/views/open_table.dart';
+import 'package:presto_qr/component/garis_putus.dart';
 
 class BookMenu  extends StatelessWidget {
   @override
@@ -42,8 +43,8 @@ class BookMenu  extends StatelessWidget {
                               child: Card(
                                 child: CachedNetworkImage(
                                   imageUrl: ListMenuNya.to.listMenu[i].foto,
-                                  placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
-                                  errorWidget: (context, url, error) => Center(child: Text("error"),),
+                                  placeholder: (context, url) => Center(child: Image.asset('assets/images/logo_qr_presto.png'),),
+                                  errorWidget: (context, url, error) => Center(child: Image.asset('assets/images/logo_qr_presto.png'),),
                                   height: 70,
                                   width: 70,
                                   fit: BoxFit.cover,
@@ -62,7 +63,11 @@ class BookMenu  extends StatelessWidget {
                                         fontWeight: FontWeight.bold
                                       ),
                                     ).paddingOnly(bottom: 8),
-                                    Text(ListMenuNya.to.listMenu[i].hargaPro).paddingOnly(bottom: 8),
+                                    Text(ListMenuNya.to.listMenu[i].hargaPro.rupiah(),
+                                      style: TextStyle(
+                                        color: Colors.orange
+                                      ),
+                                    ).paddingSymmetric(vertical: 8),
                                     Text(ListMenuNya.to.listMenu[i].ket,
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 2,
