@@ -234,7 +234,13 @@ class ListMenuNya extends GetxController{
     if(res.data['status']){
       keluar(psn: res);
     }else{
-      Get.snackbar('info', res.data['note']);
+      Get.snackbar('info', res.data['note'],
+        backgroundColor: Colors.white,
+        mainButton: FlatButton(
+          onPressed: () => ListMenuNya.to.keluar(), 
+          child: Text('LOGOUT')
+        )
+      );
       //Get.dialog(Center(child: Card(child: Text("failed"),),));
       print('gagal kirim paketan');
     }

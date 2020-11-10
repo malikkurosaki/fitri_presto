@@ -40,11 +40,13 @@ class LoginController extends GetxController {
     this.ditekan.value = true;
     if(LoginController.to.kunciState.currentState.validate()){
       if(!isEmail(LoginController.to.lsController[1].text)){
+        this.ditekan.value = false;
         Get.snackbar('info', "insert right email format");
         return;
       }
 
       if(LoginController.to.lsController[2].text.toString().length < 9 || !isNumeric(LoginController.to.lsController[2].text.replaceAll("0", "1"))){
+        this.ditekan.value = false;
         Get.snackbar('info', "wrong phone number");
         return;
       }
@@ -79,5 +81,6 @@ class LoginController extends GetxController {
         Get.snackbar('alert', e.toString());
       }
     }
+    this.ditekan.value = false;
   }
 }

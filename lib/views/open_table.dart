@@ -47,13 +47,9 @@ class OpenTable extends StatelessWidget {
                 // );
                 showModalBottomSheet(
                   context: context, 
+                  backgroundColor: Colors.transparent,
                   isScrollControlled: true,
-                  isDismissible: true,
-                  builder: (_) => 
-                  Container(
-                    height: Get.mediaQuery.size.height/1.1,
-                    child: DetailOrderan()
-                  )
+                  builder: (_) => DetailOrderan()
                 );
                 
               },
@@ -229,8 +225,8 @@ class AppBarAtas extends StatelessWidget {
                   onTap: () => showModalBottomSheet(
                     context: context, 
                     isScrollControlled: true,
-                    builder: (context) => 
-                      UserProfile(),
+                    backgroundColor: Colors.transparent,
+                    builder: (context) => UserProfile()
                   )
                 ),
                 UserController.to.user.value.user.isNull?Text("name"):
@@ -272,27 +268,28 @@ class PanelBar extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 for(var i = 0; i < _theMenu.subMenu.length;i++)
-                Column(
-                  children: [
-                    InkWell(
-                      onTap: () => ListMenuNya.to.sortSubMenu(i), 
-                      child: Container(
-                        color: _theMenu.subMenu[i]['dipilih']?Colors.orange:Colors.green[200],
-                        width: 100,
+                Expanded(
+                  child: Column(
+                    children: [
+                      InkWell(
+                        onTap: () => ListMenuNya.to.sortSubMenu(i), 
                         child: Container(
-                          alignment: Alignment.center,
-                          margin: EdgeInsets.only(bottom: 3),
-                          padding: EdgeInsets.all(8),
-                          color: Color(0.enam()),
-                          child: Text(_theMenu.subMenu[i]['nama'],
-                            style: TextStyle(
-                              color: Colors.white
+                          color: _theMenu.subMenu[i]['dipilih']?Colors.orange:Color(0.enam()),
+                          
+                          child: Container(
+                            color: Color(0.enam()),
+                            alignment: Alignment.center,
+                            margin: EdgeInsets.only(bottom: 4),
+                            child: Text(_theMenu.subMenu[i]['nama'],
+                              style: TextStyle(
+                                color: Colors.white
+                              ),
                             ),
                           ),
-                        ),
-                      )
-                    ),
-                  ],
+                        )
+                      ),
+                    ],
+                  ),
                 ),
                 
               ],
@@ -347,6 +344,7 @@ class ListMenuView extends StatelessWidget {
                           onTap: (){
                             showModalBottomSheet(
                               context: context, 
+                              backgroundColor: Colors.transparent,
                               isScrollControlled: true,
                               builder: (context) => 
                               DetailMenu(listMenu: _theMenu.listMenu[i],i: i,tambah: true,),

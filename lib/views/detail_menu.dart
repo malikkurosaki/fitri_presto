@@ -17,77 +17,80 @@ class DetailMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
-      initialChildSize: 1,
+      initialChildSize: 0.9,
+      maxChildSize: 1,
+      minChildSize: 0.7,
       builder: (_,__) => 
       Card(
-        child: ListView(
-          controller: __,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Container(
-                  height: 200,
-                  child: Center(
-                    child: InkWell(
-                      onTap: () => Navigator.of(context,rootNavigator: true).pop(),
-                      child: CachedNetworkImage(
-                        width: double.infinity,
-                        height: double.infinity,
-                        imageUrl: listMenu.foto??"",
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => Center(child: Image.asset('assets/images/logo_qr_presto.png'),),
-                        errorWidget: (context, url, error) => Center(child: Image.asset('assets/images/logo_qr_presto.png'),),
+        child: Card(
+          child: ListView(
+            controller: __,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Container(
+                    height: 200,
+                    child: Center(
+                      child: InkWell(
+                        onTap: () => Navigator.of(context,rootNavigator: true).pop(),
+                        child: CachedNetworkImage(
+                          width: double.infinity,
+                          height: double.infinity,
+                          imageUrl: listMenu.foto??"",
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => Center(child: Image.asset('assets/images/logo_qr_presto.png'),),
+                          errorWidget: (context, url, error) => Center(child: Image.asset('assets/images/logo_qr_presto.png'),),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.all(16),
-                  child: Column(
-                    children: [
-                      Text(listMenu.namaPro,
-                        textAlign: TextAlign.left,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.all(16),
+                    child: Column(
+                      children: [
+                        Text(listMenu.namaPro,
+                          textAlign: TextAlign.left,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold
+                          ),
                         ),
-                      ),
-                      Text("Rp "+NumberFormat("#,###","IDR").format(int.parse(listMenu.hargaPro.toString())),
-                        style: TextStyle(
+                        Text("Rp "+NumberFormat("#,###","IDR").format(int.parse(listMenu.hargaPro.toString())),
+                          style: TextStyle(
+                          ),
                         ),
-                      ),
-                      !tambah?SizedBox.shrink():
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: FlatButton(
-                          color: Color(0.enam()),
-                          textColor: Colors.white,
-                          child: Text('add +'),
-                          onPressed: (){
-                            _theMenu.tambahQty(i);
-                            Get.back();
-                          },
+                        !tambah?SizedBox.shrink():
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: FlatButton(
+                            color: Color(0.enam()),
+                            textColor: Colors.white,
+                            child: Text('add +'),
+                            onPressed: (){
+                              _theMenu.tambahQty(i);
+                              Get.back();
+                            },
+                          ),
                         ),
-                      ),
-                      Text(listMenu.ket,
-                        overflow: TextOverflow.fade,
-                        style: TextStyle(
-                          color: Colors.grey
+                        Text(listMenu.ket,
+                          overflow: TextOverflow.fade,
+                          style: TextStyle(
+                            color: Colors.grey
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ],
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ),
         ),
-      )
-          
+      )  
     );
   }
 }

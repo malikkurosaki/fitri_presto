@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:presto_qr/controller/list_menu_controller.dart';
-import 'package:presto_qr/controller/user_controller.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 import 'package:presto_qr/component/garis_putus.dart';
+import 'package:presto_qr/controller/list_menu_controller.dart';
+import 'package:presto_qr/controller/user_controller.dart';
 
 class UserProfile extends StatelessWidget {
   // final Map user;
@@ -13,68 +12,61 @@ class UserProfile extends StatelessWidget {
   //const UserProfile({Key key, this.user, this.meja, this.host}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height/1.1,
-      width: double.infinity,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          InkWell(
-            child: Container(
-              padding: EdgeInsets.all(8),
-              width: double.infinity,
-              alignment: Alignment.center,
-              child: Icon(Icons.arrow_drop_down),
-            ),
-            onTap: () => Get.back(),
-          ),
-          Container(
-            height: 250,
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                Column(
-                  children: [
-                    Container(
-                      height: 160,
-                      color: Colors.cyan,
-                    ),
-                    Container(
-                      height: 90,
-                      color: Colors.white,
-                    )
-                  ],
-                ),
-                Container(
-                  alignment: Alignment.bottomCenter,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
+    return DraggableScrollableSheet(
+      initialChildSize: 0.9,
+      maxChildSize: 1,
+      minChildSize: 0.7,
+      builder: (context, scrollController) => 
+      Card(
+        color: Colors.white,
+        child: ListView(
+          controller: scrollController,
+          children: [
+            Container(
+              height: 250,
+              child: Stack(
+                children: [
+                  Column(
                     children: [
-                      CircleAvatar(
-                        radius: 50,
-                        backgroundColor: Colors.grey[100],
-                        child: Icon(Icons.people_alt_rounded),
+                      Container(
+                        height: 160,
+                        color: Colors.cyan,
                       ),
-                      RaisedButton(
-                        color: Colors.deepOrange,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                        onPressed: ()async{
-                          ListMenuNya.to.keluar();
-                        },
-                        child: Text('LOGOUT',
-                          style: TextStyle(
-                            color: Colors.white
-                          ),
-                        ),
-                      ),
+                      Container(
+                        height: 90,
+                        color: Colors.white,
+                      )
                     ],
                   ),
-                ),
-              ],
+                  Container(
+                    alignment: Alignment.bottomCenter,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        CircleAvatar(
+                          radius: 50,
+                          backgroundColor: Colors.grey[100],
+                          child: Icon(Icons.people_alt_rounded),
+                        ),
+                        RaisedButton(
+                          color: Colors.deepOrange,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                          onPressed: ()async{
+                            ListMenuNya.to.keluar();
+                          },
+                          child: Text('LOGOUT',
+                            style: TextStyle(
+                              color: Colors.white
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          Flexible(
-            child: GetX<UserController>(
+            GetX<UserController>(
               initState: (state) => UserController.to.getUserNya(),
               builder: (_) => 
               Column(
@@ -89,28 +81,9 @@ class UserProfile extends StatelessWidget {
                   Text(_.user.value.user.email).judul()
                 ],
               ),
-            ),
-          )
-          /* for(var x = 0;x < user.entries.map((e) => e.value).toList().length;x++)
-          ListTile(
-            title: Text(user.entries.map((e) => e.value).toList()[x].toString(),
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.grey
-              ),
-            ),
-            dense: true,
-            leading: Icon(Icons.donut_small),
-          ) */
-          // Container(
-          //   padding: EdgeInsets.all(8),
-          //   child: Text(user.toString()),
-          // ),
-          // Container(
-          //   padding: EdgeInsets.all(8),
-          //   child: Text(user['email']),
-          // )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

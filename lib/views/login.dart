@@ -207,19 +207,9 @@ class FormLogin extends StatelessWidget {
                       FlatButton(
                         textColor: Color(0.enam()),
                         onPressed: ()async{
-                          // Get.dialog(Center(child: CircularProgressIndicator(),),);
-          
-                          // await new Dio().get('${GetStorage().read('host')}/api/getMenu?product=&group=&subgroup=');
-                          // // print(res.data);
-                          // Get.back();
-                          // showModalBottomSheet(context: context, 
-                          //   isDismissible: true,
-                          //   isScrollControlled: true,
-                          //   builder: (context) => BookMenu(),
-                          // );
 
                           showModalBottomSheet(
-                            isDismissible: true,
+                            backgroundColor: Colors.transparent,
                             isScrollControlled: true,
                             context: Get.context, 
                             builder: (_) => 

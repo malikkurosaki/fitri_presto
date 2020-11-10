@@ -58,7 +58,7 @@ class MyHomeAdaPesanan extends StatelessWidget {
                                     CachedNetworkImage(
                                       imageUrl: controller.pesananNya.value.listbill.detailBills[i].foto??"",
                                       placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
-                                      errorWidget: (context, url, error) => Image.asset('assets/images/bahan.jpg',
+                                      errorWidget: (context, url, error) => Image.asset('assets/images/logo_qr_presto.png',
                                         width: double.infinity,
                                         fit: BoxFit.cover,
                                       ),

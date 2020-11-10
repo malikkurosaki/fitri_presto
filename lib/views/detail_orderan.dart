@@ -2,10 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_navigation/src/dialog/dialog_route.dart';
 import 'package:presto_qr/component/garis_putus.dart';
 import 'package:presto_qr/controller/list_menu_controller.dart';
-import 'package:get/get.dart';
 
 class DetailOrderan extends StatelessWidget {
   final _theMenu = Get.find<ListMenuNya>();
@@ -16,10 +14,9 @@ class DetailOrderan extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
-      initialChildSize: 1,
+      initialChildSize: 0.9,
       maxChildSize: 1,
-      minChildSize: 0.9,
-      expand: true,
+      minChildSize: 0.7,
       builder: (_,__) => 
         Card(
         child: Obx(()=>
@@ -45,7 +42,9 @@ class DetailOrderan extends StatelessWidget {
                                         width: 50,
                                         height: 50,
                                         fit: BoxFit.cover,
-                                        imageUrl: _theMenu.listMenu[i].foto
+                                        imageUrl: _theMenu.listMenu[i].foto??"",
+                                        placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
+                                        errorWidget: (context, url, error) => Image.asset('assets/images/logo_qr_presto.png'),
                                       ),
                                     ),
                                     Container(
@@ -189,7 +188,7 @@ class DetailOrderan extends StatelessWidget {
                           onPressed: (){
                             _theMenu.prossesOrderan(context);
                           }, 
-                          child: Text('Prosses')
+                          child: Text('PROCCESS')
                         ),
                       )
                     ],
