@@ -1,6 +1,5 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,6 +7,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:presto_qr/component/garis_putus.dart';
 import 'package:presto_qr/controller/api_controller.dart';
 import 'package:presto_qr/controller/list_menu_controller.dart';
+import 'package:presto_qr/controller/lognya_controller.dart';
 import 'package:presto_qr/views/book_menu.dart';
 import 'package:presto_qr/views/open_table.dart';
 

@@ -6,6 +6,7 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:presto_qr/controller/list_menu_controller.dart';
+import 'package:presto_qr/controller/lognya_controller.dart';
 import 'package:presto_qr/model/login_model.dart';
 import 'package:presto_qr/views/open_table.dart';
 import 'package:validators/validators.dart';
@@ -62,13 +63,17 @@ class LoginController extends GetxController {
       try {
         print("coba login nih");
         print("host: ${ListMenuNya.to.host}/api/setUserTable/${ListMenuNya.to.meja}".kuning());
+        // LognyaController.to.log.add("\n hostnya: ${ListMenuNya.to.host}/api/setUserTable/${ListMenuNya.to.meja} \n");
+        // LognyaController.to.log.add("\n data usernya yang dikirim: ${loginPaket.name} ${loginPaket.email} ${loginPaket.phone} \n");
+
         final coba = await Dio().post("${ListMenuNya.to.host}/api/setUserTable/${ListMenuNya.to.meja}",data: loginPaket);
+        
         print(coba.data['status'].toString().ungu());
         this.ditekan.value = false;
         if(coba.data['status']){
           await GetStorage().write('auth', jsonEncode(coba.data));
           print("menuju ke meja order");
-          Get.offAll(OpenTable());
+          Get.off(OpenTable());
           //Get.offNamed('/open-table');
         }else{
           //Get.back();

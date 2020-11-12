@@ -5,9 +5,13 @@ import 'package:get/route_manager.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:presto_qr/controller/company_controller.dart';
 import 'package:presto_qr/controller/login_controller.dart';
+import 'package:presto_qr/controller/lognya_controller.dart';
+import 'package:presto_qr/controller/myhome_controller.dart';
+import 'package:presto_qr/controller/natya_controller.dart';
 import 'package:presto_qr/controller/splash_controller.dart';
 import 'package:presto_qr/controller/user_controller.dart';
 import 'package:presto_qr/views/login.dart';
+import 'package:presto_qr/views/lognya.dart';
 import 'package:presto_qr/views/my_home.dart';
 import 'package:presto_qr/views/open_table.dart';
 import 'package:presto_qr/views/setting.dart';
@@ -55,7 +59,8 @@ main() async{
                   }
                 )
               ),
-              GetPage(name: '/setting', page: ()=>MySetting())
+              GetPage(name: '/setting', page: ()=>MySetting()),
+              GetPage(name: '/log', page: () => LogNya())
             ],
           ),
         ),
@@ -72,6 +77,9 @@ class BindingPertama implements Bindings {
       Get.put<ListMenuNya>(ListMenuNya());
       Get.put<LoginController>(LoginController());
       Get.put<UserController>(UserController());
+      Get.put<LognyaController>(LognyaController());
+      Get.put<MyHomeController>(MyHomeController());
+      Get.put<NatyaController>(NatyaController());
   }
   
 }

@@ -1,18 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:presto_qr/component/garis_putus.dart';
 import 'package:presto_qr/controller/api_controller.dart';
 import 'package:presto_qr/controller/user_controller.dart';
 import 'package:presto_qr/model/menu_model.dart';
 import 'package:presto_qr/model/model_response_listbill.dart';
 import 'package:presto_qr/model/paket_orderan_model.dart';
-import 'package:presto_qr/model/user_model.dart';
-import 'package:get/get.dart';
-import 'package:presto_qr/component/garis_putus.dart';
 
 
 
@@ -197,7 +194,8 @@ class ListMenuNya extends GetxController{
     this.listMenu[i].lihatEditTambah = false;
     this.listMenu.update((value) {print('hapus orderan');});
     Get.snackbar('success', 'one item remove success',
-      snackPosition: SnackPosition.BOTTOM
+      backgroundColor: Colors.white,
+      snackPosition: SnackPosition.BOTTOM,
     );
   }
 
@@ -268,6 +266,7 @@ class ListMenuNya extends GetxController{
     await ApiController.hapusMeja();
     box.remove('auth');
     box.remove('pesanan');
+    box.remove('company');
     if(psn != null) await box.write('pesanan', psn.data);
     Get.offAllNamed('/');
   }

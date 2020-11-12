@@ -1,31 +1,17 @@
 
-import 'package:bali/bali.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:presto_qr/component/garis_putus.dart';
 import 'package:presto_qr/controller/company_controller.dart';
 import 'package:presto_qr/controller/list_menu_controller.dart';
 import 'package:presto_qr/controller/login_controller.dart';
-import 'package:presto_qr/model/login_model.dart';
 import 'package:presto_qr/views/book_menu.dart';
-import 'package:validators/validators.dart';
 
 
 class Login extends StatelessWidget {
-
-  
-  // static final _judul = ['User Name','Email', 'Phone Number'];
-  // static final _iconInput = [Icons.person_outline_sharp,Icons.email, Icons.phone_android];
-  // final _lsCon = List.generate(_judul.length, (index) => TextEditingController()).toList();
-  // final _kunci = GlobalKey<FormState>();
-
-  // final str = GetStorage();
-  // final cpn = Get.find<CompanyProfileController>();
 
   @override
   Widget build(BuildContext context) {
@@ -218,9 +204,7 @@ class FormLogin extends StatelessWidget {
                               child: BookMenu(),
                             )
                           );
-
                         }, 
-                        // onLongPress: () => Navigator.of(context).push(""),
                         child: Text('MENU')
                       ),
                       

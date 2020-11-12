@@ -10,6 +10,7 @@ import 'package:presto_qr/controller/list_menu_controller.dart';
 import 'package:presto_qr/controller/user_controller.dart';
 import 'package:presto_qr/views/detail_menu.dart';
 import 'package:presto_qr/views/detail_orderan.dart';
+import 'package:presto_qr/views/natya.dart';
 import 'package:presto_qr/views/user_profile.dart';
 
 class OpenTable extends StatelessWidget {
@@ -34,25 +35,22 @@ class OpenTable extends StatelessWidget {
             FloatingActionButton.extended(
               backgroundColor: Color(0.enam()),
               onPressed: (){
-                // showModalBottomSheet(
-                //   context: context, 
-                //   isScrollControlled: true,
-                //   builder: (context) => DetailOrderan(),
-                // );
-
-                // showModalBottomSheet(
-                //   context: context, 
-                //   isScrollControlled: true,
-                //   builder: (_) => DetailOrderan()
-                // );
-                showModalBottomSheet(
+                /* showModalBottomSheet(
                   context: context, 
                   backgroundColor: Colors.transparent,
                   isScrollControlled: true,
                   builder: (_) => DetailOrderan()
+                ); */
+
+                showModalBottomSheet(
+                  context: context, 
+                  backgroundColor: Colors.transparent,
+                  isScrollControlled: true,
+                  builder: (_) => Natya()
                 );
                 
               },
+              
               label: Text(controller.totalQty.toString()+" item of "+controller.totalOrder.toString()+" order"),
               icon: Icon(Icons.shopping_cart),
             ),

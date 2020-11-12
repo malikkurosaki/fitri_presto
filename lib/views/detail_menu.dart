@@ -1,11 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:presto_qr/controller/list_menu_controller.dart';
-import 'package:presto_qr/model/menu_model.dart';
 import 'package:get/get.dart';
 import 'package:presto_qr/component/garis_putus.dart';
+import 'package:presto_qr/controller/list_menu_controller.dart';
+import 'package:presto_qr/model/menu_model.dart';
 
 class DetailMenu extends StatelessWidget {
   final MenuModel listMenu;
@@ -59,7 +58,7 @@ class DetailMenu extends StatelessWidget {
                             fontWeight: FontWeight.bold
                           ),
                         ),
-                        Text("Rp "+NumberFormat("#,###","IDR").format(int.parse(listMenu.hargaPro.toString())),
+                        Text("Rp "+listMenu.hargaPro.toString().rupiah(),
                           style: TextStyle(
                           ),
                         ),
