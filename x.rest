@@ -20,13 +20,14 @@ GET https://prestoqr.probussystem.net/presto/public/api/getShift HTTP/1.1
 ### set customer id
 # table sesuai nomer meja
 # http://192.168.192.188:8887/index.html/#/login?meja=3&host=http://192.168.192.110
-POST http://192.168.192.110/PRESTO/public/api/setUserTable/8 HTTP/1,1
+POST https://prestoqr.probussystem.com/api/setUserTable/8 HTTP/1,1
 Content-Type: application/json
 
 {
     "name": "adi",
     "phone": "0987654321",
-    "email": "adi@adi.com"
+    "email": "adi@adi.com",
+    "token": "zwrty"
 }
 
 # {

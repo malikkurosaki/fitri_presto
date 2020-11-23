@@ -45,6 +45,8 @@ main() async{
                     
                     at.write('meja', Get.parameters['meja'].toString());
                     at.write('host', Uri.decodeFull(Get.parameters['host'].toString()));
+                    at.write('token', Get.parameters['token']??"");
+
                     return RootView();
                   }else{
                     return at.hasData('user')?OpenTable():MyHome();

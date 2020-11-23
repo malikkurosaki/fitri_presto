@@ -2,15 +2,14 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/get.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:presto_qr/component/garis_putus.dart';
 import 'package:presto_qr/controller/list_menu_controller.dart';
-import 'package:presto_qr/controller/lognya_controller.dart';
 import 'package:presto_qr/model/login_model.dart';
 import 'package:presto_qr/views/open_table.dart';
 import 'package:validators/validators.dart';
-import 'package:presto_qr/component/garis_putus.dart';
 
 class LoginController extends GetxController {
   static  LoginController get to => Get.find();
@@ -55,7 +54,8 @@ class LoginController extends GetxController {
       final loginPaket = LoginModel(
         name: LoginController.to.lsController[0].text.toString(),
         email: LoginController.to.lsController[1].text.toString(),
-        phone: LoginController.to.lsController[2].text.toString()
+        phone: LoginController.to.lsController[2].text.toString(),
+        token: GetStorage().read('token')??""
       );
 
       //Get.dialog(Center(child: CircularProgressIndicator(),));
@@ -77,7 +77,7 @@ class LoginController extends GetxController {
           //Get.offNamed('/open-table');
         }else{
           //Get.back();
-          Get.snackbar('alert', 'table already in used');
+          Get.snackbar('alert', coba.data['note']);
         }
         
       } catch (e) {
