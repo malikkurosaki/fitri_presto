@@ -48,12 +48,10 @@ class LoginBarAtas extends StatelessWidget {
                 height: 150,
                 child: Stack(
                   children: [
-                    Card(
-                      child: Image.asset('assets/images/gb1.jpeg',
-                        width: double.infinity,
-                        height: double.infinity,
-                        fit: BoxFit.cover,
-                      ),
+                    Image.asset('assets/images/gb1.jpeg',
+                      width: double.infinity,
+                      height: double.infinity,
+                      fit: BoxFit.cover,
                     ),
                     Container(
                       padding: EdgeInsets.all(16),

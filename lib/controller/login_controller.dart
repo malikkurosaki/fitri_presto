@@ -77,7 +77,9 @@ class LoginController extends GetxController {
           //Get.offNamed('/open-table');
         }else{
           //Get.back();
-          Get.snackbar('alert', coba.data['note']);
+          Get.snackbar('alert', coba.data['note'],
+            backgroundColor: Colors.white
+          );
         }
         
       } catch (e) {

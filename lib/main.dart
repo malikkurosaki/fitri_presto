@@ -10,6 +10,7 @@ import 'package:presto_qr/controller/myhome_controller.dart';
 import 'package:presto_qr/controller/natya_controller.dart';
 import 'package:presto_qr/controller/splash_controller.dart';
 import 'package:presto_qr/controller/user_controller.dart';
+import 'package:presto_qr/views/change_log.dart';
 import 'package:presto_qr/views/login.dart';
 import 'package:presto_qr/views/lognya.dart';
 import 'package:presto_qr/views/my_home.dart';
@@ -62,7 +63,8 @@ main() async{
                 )
               ),
               GetPage(name: '/setting', page: ()=>MySetting()),
-              GetPage(name: '/log', page: () => LogNya())
+              GetPage(name: '/log', page: () => LogNya()),
+              GetPage(name: '/changelog', page: () => ChangeLog())
             ],
           ),
         ),
