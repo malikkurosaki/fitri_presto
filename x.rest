@@ -1,5 +1,8 @@
 ### DOCUMENTASI
+@host = https://prestoqr.probussystem.com
 https://prestoqrcode.docs.apiary.io/#
+
+
 
 
 ### lihat group
@@ -98,7 +101,7 @@ Content-Type: application/json
 GET https://prestoqr.probussystem.com/api/getCustomerTable HTTP/1.1
 
 ### bersihkan meja
-POST http://192.168.192.110/PRESTO/public/api/clearTable/DC6 HTTP/1.1
+POST {{host}}/api/clearTable/1 HTTP/1.1
 
 
 ### setting

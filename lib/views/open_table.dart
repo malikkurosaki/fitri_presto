@@ -35,19 +35,19 @@ class OpenTable extends StatelessWidget {
             FloatingActionButton.extended(
               backgroundColor: Color(0.enam()),
               onPressed: (){
-                /* showModalBottomSheet(
-                  context: context, 
-                  backgroundColor: Colors.transparent,
-                  isScrollControlled: true,
-                  builder: (_) => DetailOrderan()
-                ); */
-
                 showModalBottomSheet(
                   context: context, 
                   backgroundColor: Colors.transparent,
                   isScrollControlled: true,
-                  builder: (_) => Natya()
+                  builder: (_) => DetailOrderan()
                 );
+
+                // showModalBottomSheet(
+                //   context: context, 
+                //   backgroundColor: Colors.transparent,
+                //   isScrollControlled: true,
+                //   builder: (_) => Natya()
+                // );
                 
               },
               
@@ -227,10 +227,10 @@ class AppBarAtas extends StatelessWidget {
                     builder: (context) => UserProfile()
                   )
                 ),
-                UserController.to.user.value.user.isNull?Text("name"):
+                UserController.to.user.value.isNull?Text("name"):
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 8),
-                  child: Text(UserController.to.user.value.user.name).judulPutih
+                  child: Text(UserController.to.user.value.name??"loading ...").judulPutih
                 )
               ],
             ),

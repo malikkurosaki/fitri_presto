@@ -72,13 +72,13 @@ class UserProfile extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(_.user.value.user.name).judul(),
+                  Text(_.user.value.name??"loading ...").judul(),
                   GarisPutus(),
-                  Text(_.user.value.user.phone).judul(),
+                  Text(_.user.value.phone??"loading ...").judul(),
                   GarisPutus(),
-                  Text(_.user.value.user.deviceName).judul(),
+                  Text(_.user.value.deviceName??"loading ...").judul(),
                   GarisPutus(),
-                  Text(_.user.value.user.email).judul()
+                  Text(_.user.value.email??"loading ...").judul()
                 ],
               ),
             )

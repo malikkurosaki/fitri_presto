@@ -7,6 +7,7 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:presto_qr/component/garis_putus.dart';
 import 'package:presto_qr/controller/list_menu_controller.dart';
+import 'package:presto_qr/controller/lognya_controller.dart';
 import 'package:presto_qr/model/login_model.dart';
 import 'package:presto_qr/views/open_table.dart';
 import 'package:validators/validators.dart';
@@ -37,17 +38,20 @@ class LoginController extends GetxController {
   }
 
   cobaLogin()async{
+    LognyaController.to.online("coba untuk login");
     this.ditekan.value = true;
     if(LoginController.to.kunciState.currentState.validate()){
       if(!isEmail(LoginController.to.lsController[1].text)){
         this.ditekan.value = false;
         Get.snackbar('info', "insert right email format");
+        LognyaController.to.online("insert right email format");
         return;
       }
 
       if(LoginController.to.lsController[2].text.toString().length < 9 || !isNumeric(LoginController.to.lsController[2].text.replaceAll("0", "1"))){
         this.ditekan.value = false;
         Get.snackbar('info', "wrong phone number");
+        LognyaController.to.online("wrong phone number");
         return;
       }
 
@@ -57,26 +61,25 @@ class LoginController extends GetxController {
         phone: LoginController.to.lsController[2].text.toString(),
         token: GetStorage().read('token')??""
       );
-
-      //Get.dialog(Center(child: CircularProgressIndicator(),));
       
       try {
         print("coba login nih");
+        LognyaController.to.online("coba kirim data login");
         print("host: ${ListMenuNya.to.host}/api/setUserTable/${ListMenuNya.to.meja}".kuning());
-        // LognyaController.to.log.add("\n hostnya: ${ListMenuNya.to.host}/api/setUserTable/${ListMenuNya.to.meja} \n");
-        // LognyaController.to.log.add("\n data usernya yang dikirim: ${loginPaket.name} ${loginPaket.email} ${loginPaket.phone} \n");
-
+       
         final coba = await Dio().post("${ListMenuNya.to.host}/api/setUserTable/${ListMenuNya.to.meja}",data: loginPaket);
         
         print(coba.data['status'].toString().ungu());
         this.ditekan.value = false;
+        print(jsonEncode(coba.data).toString());
+        
         if(coba.data['status']){
-          await GetStorage().write('auth', jsonEncode(coba.data));
+          await GetStorage().write('auth', coba.data);
           print("menuju ke meja order");
           Get.off(OpenTable());
-          //Get.offNamed('/open-table');
+          LognyaController.to.online("login berhasil");
         }else{
-          //Get.back();
+          LognyaController.to.online(coba.data['note']);
           Get.snackbar('alert', coba.data['note'],
             backgroundColor: Colors.white
           );
@@ -85,6 +88,8 @@ class LoginController extends GetxController {
       } catch (e) {
         this.ditekan.value = false;
         //Get.back();
+        print(e);
+        LognyaController.to.online(e);
         Get.snackbar('alert', e.toString());
       }
     }

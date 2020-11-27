@@ -11,6 +11,8 @@ import 'package:presto_qr/model/menu_model.dart';
 import 'package:presto_qr/model/model_response_listbill.dart';
 import 'package:presto_qr/model/paket_orderan_model.dart';
 
+import 'lognya_controller.dart';
+
 
 
 class ListMenuNya extends GetxController{
@@ -114,6 +116,7 @@ class ListMenuNya extends GetxController{
     this.noteController.value = List.generate(listMenu.length, (index) => TextEditingController());
     update();
     this.listMenu.update((value) {print('update abis ambil list menu');});
+    LognyaController.to.online("coba mendapatkan list menu");
   }
 
   // meghitung total
@@ -143,6 +146,7 @@ class ListMenuNya extends GetxController{
     }
    
     this.listMenu.update((value) {print('pengurangan qty');});
+    LognyaController.to.online("mengurangi qty");
   }
 
 
@@ -153,6 +157,7 @@ class ListMenuNya extends GetxController{
     this.hitungTotal();
     this.adaOrderan.value = true;
     this.listMenu.update((value) {print('tambah qty order');});
+    LognyaController.to.online("menambah qty");
   }
 
   tambahOrderan(int i){
@@ -160,6 +165,7 @@ class ListMenuNya extends GetxController{
     this.adaOrderan.value = true;
     this.hitungTotal();
     this.listMenu.update((value) { print('tamabah item');});
+    LognyaController.to.online("tambah orderan");
   }
 
   /* tambah note */
@@ -170,6 +176,8 @@ class ListMenuNya extends GetxController{
     this.listMenu.update((value) { 
       print('act : tombol edit note');
     });
+
+    LognyaController.to.online("tambah note");
   }
 
   // lihat total orderannya
@@ -197,6 +205,8 @@ class ListMenuNya extends GetxController{
       backgroundColor: Colors.white,
       snackPosition: SnackPosition.BOTTOM,
     );
+
+    LognyaController.to.online("hapus orderan");
   }
 
 
@@ -220,11 +230,12 @@ class ListMenuNya extends GetxController{
     )).toList();
 
     final paket = PaketOrderan(
-      customerId: user.user.phone,
-      email: user.user.email,
-      name: user.user.name,
-      phone: user.user.phone,
-      billDetail: listBill
+      customerId: user.phone,
+      email: user.email,
+      name: user.name,
+      phone: user.phone,
+      billDetail: listBill,
+      token: GetStorage().read('token')
     );
 
     print(paket.toJson().toString());
@@ -242,6 +253,8 @@ class ListMenuNya extends GetxController{
       //Get.dialog(Center(child: Card(child: Text("failed"),),));
       print('gagal kirim paketan');
     }
+
+    LognyaController.to.online("memprosses orderan");
   }
 
 
@@ -267,7 +280,9 @@ class ListMenuNya extends GetxController{
     box.remove('auth');
     box.remove('pesanan');
     box.remove('company');
+    box.remove('token');
     if(psn != null) await box.write('pesanan', psn.data);
     Get.offAllNamed('/');
+    LognyaController.to.online("logout");
   }
 }

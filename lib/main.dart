@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
@@ -8,6 +7,7 @@ import 'package:presto_qr/controller/login_controller.dart';
 import 'package:presto_qr/controller/lognya_controller.dart';
 import 'package:presto_qr/controller/myhome_controller.dart';
 import 'package:presto_qr/controller/natya_controller.dart';
+import 'package:presto_qr/controller/socket_controller.dart';
 import 'package:presto_qr/controller/splash_controller.dart';
 import 'package:presto_qr/controller/user_controller.dart';
 import 'package:presto_qr/views/change_log.dart';
@@ -18,8 +18,11 @@ import 'package:presto_qr/views/open_table.dart';
 import 'package:presto_qr/views/setting.dart';
 import 'package:presto_qr/views/splash.dart';
 import 'controller/list_menu_controller.dart';
+
+
 main() async{
   await GetStorage.init();
+
   runApp(
     Center(
       child: Container(
@@ -37,8 +40,13 @@ main() async{
             initialRoute: "/",
             unknownRoute: GetPage(name: '/404', page: () => Scaffold(body: Center(child: Text('404'),),)),
             getPages: [
-              GetPage(name: '/', page: ()=>MyHome(),),
-              GetPage(name: '/login', page: (){
+              GetPage(name: '/', page: (){
+                LognyaController.to.catat("instance home ");
+                return MyHome();
+              },),
+              GetPage(name: '/login', page: () {
+                  GetStorage().erase();
+                  LognyaController.to.catat("instance login");
                   final at = GetStorage();
                   if(Get.parameters['meja'] != null && Get.parameters['host'] != null){
                     ListMenuNya.to.meja.value = Get.parameters['meja'].toString();
@@ -48,6 +56,7 @@ main() async{
                     at.write('host', Uri.decodeFull(Get.parameters['host'].toString()));
                     at.write('token', Get.parameters['token']??"");
 
+                    LognyaController.to.log.add(Get.parameters['token']);
                     return RootView();
                   }else{
                     return at.hasData('user')?OpenTable():MyHome();
@@ -84,6 +93,7 @@ class BindingPertama implements Bindings {
       Get.put<LognyaController>(LognyaController());
       Get.put<MyHomeController>(MyHomeController());
       Get.put<NatyaController>(NatyaController());
+      Get.put<SocketController>(SocketController());
   }
   
 }

@@ -4,9 +4,10 @@ class PaketOrderan {
   String phone;
   String email;
   List<BillDetail> billDetail;
+  String token;
 
   PaketOrderan(
-      {this.customerId, this.name, this.phone, this.email, this.billDetail});
+      {this.customerId, this.name, this.phone, this.email, this.billDetail, this.token});
 
   PaketOrderan.fromJson(Map<String, dynamic> json) {
     customerId = json['customer_id'];
@@ -19,6 +20,7 @@ class PaketOrderan {
         billDetail.add(new BillDetail.fromJson(v));
       });
     }
+    token = json['token'];
   }
 
   Map<String, dynamic> toJson() {
@@ -30,6 +32,7 @@ class PaketOrderan {
     if (this.billDetail != null) {
       data['billDetail'] = this.billDetail.map((v) => v.toJson()).toList();
     }
+    data['token'] = this.token;
     return data;
   }
 }

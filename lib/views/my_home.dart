@@ -13,10 +13,16 @@ import 'package:presto_qr/views/open_table.dart';
 
 class MyHome extends StatelessWidget {
   final box = GetStorage();
-
   
+
   @override
   Widget build(BuildContext context) {
+    
+    Future.microtask(() async {
+      print("ini di home");
+      LognyaController.to.online("instance myhome");
+    });
+
     return Container(
       child: Scaffold(
         body:
