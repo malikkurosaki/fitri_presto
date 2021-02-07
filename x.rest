@@ -23,7 +23,8 @@ GET https://prestoqr.probussystem.net/presto/public/api/getShift HTTP/1.1
 ### set customer id
 # table sesuai nomer meja
 # http://192.168.192.188:8887/index.html/#/login?meja=3&host=http://192.168.192.110
-POST https://prestoqr.probussystem.com/api/setUserTable/8 HTTP/1,1
+# POST https://prestoqr.probussystem.com/api/setUserTable/8 HTTP/1,1
+POST https://prestoqr.probussystem.com/api/setUserTable/1
 Content-Type: application/json
 
 {

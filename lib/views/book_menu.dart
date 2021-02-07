@@ -22,7 +22,7 @@ class BookMenu  extends StatelessWidget {
         builder: (_) => ListMenuNya.to.listMenu.isEmpty?Center(child: CircularProgressIndicator( ),):
         Column(
           children: [
-            PanelBar(),
+            //PanelBar(),
             Flexible(
               child: Card(
                 child: Container(

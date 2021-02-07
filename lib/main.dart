@@ -22,7 +22,6 @@ import 'controller/list_menu_controller.dart';
 
 main() async{
   await GetStorage.init();
-
   runApp(
     Center(
       child: Container(
@@ -40,29 +39,24 @@ main() async{
             initialRoute: "/",
             unknownRoute: GetPage(name: '/404', page: () => Scaffold(body: Center(child: Text('404'),),)),
             getPages: [
-              GetPage(name: '/', page: (){
-                LognyaController.to.catat("instance home ");
-                return MyHome();
-              },),
-              GetPage(name: '/login', page: () {
-                  GetStorage().erase();
-                  LognyaController.to.catat("instance login");
-                  final at = GetStorage();
-                  if(Get.parameters['meja'] != null && Get.parameters['host'] != null){
-                    ListMenuNya.to.meja.value = Get.parameters['meja'].toString();
-                    ListMenuNya.to.host.value = Get.parameters['host'].toString();
+              GetPage(name: '/', page: () => MyHome()),
+              GetPage(name: '/login', page: () => GetStorage().hasData("auth")?OpenTable():Login()),
+              // GetPage(name: '/login', page: (){
+              //     GetStorage().erase();
+              //     final at = GetStorage();
+              //     if(Get.parameters['meja'] != null && Get.parameters['host'] != null){
+              //       ListMenuNya.to.meja.value = Get.parameters['meja'].toString();
+              //       ListMenuNya.to.host.value = Get.parameters['host'].toString();
                     
-                    at.write('meja', Get.parameters['meja'].toString());
-                    at.write('host', Uri.decodeFull(Get.parameters['host'].toString()));
-                    at.write('token', Get.parameters['token']??"");
-
-                    LognyaController.to.log.add(Get.parameters['token']);
-                    return RootView();
-                  }else{
-                    return at.hasData('user')?OpenTable():MyHome();
-                  }
-                },
-              ),
+              //       at.write('meja', Get.parameters['meja'].toString());
+              //       at.write('host', Uri.decodeFull(Get.parameters['host'].toString()));
+              //       at.write('token', Get.parameters['token']??"");
+              //       return RootView();
+              //     }else{
+              //       return at.hasData('user')?OpenTable():MyHome();
+              //     }
+              //   },
+              // ),
               GetPage(name: '/masuk', page: () => Login()),
               GetPage(name: '/open-table', page: ()=> OpenTable(),
                 binding: BindingsBuilder(
@@ -85,21 +79,18 @@ main() async{
 class BindingPertama implements Bindings {
   @override
   void dependencies()async{
-      Get.put<SplashController>(SplashController());
-      Get.put<CompanyProfileController>(CompanyProfileController());
-      Get.put<ListMenuNya>(ListMenuNya());
-      Get.put<LoginController>(LoginController());
-      Get.put<UserController>(UserController());
-      Get.put<LognyaController>(LognyaController());
-      Get.put<MyHomeController>(MyHomeController());
-      Get.put<NatyaController>(NatyaController());
-      Get.put<SocketController>(SocketController());
+    Get.put<SplashController>(SplashController());
+    Get.put<CompanyProfileController>(CompanyProfileController());
+    Get.put<ListMenuNya>(ListMenuNya());
+    Get.put<LoginController>(LoginController());
+    Get.put<UserController>(UserController());
+    Get.put<LognyaController>(LognyaController());
+    Get.put<MyHomeController>(MyHomeController());
+    Get.put<NatyaController>(NatyaController());
+    Get.put<SocketController>(SocketController());
+    Get.put(MyCtrl());
   }
   
 }
 
-
-
-
-
-
+class MyCtrl extends GetxController{}

@@ -21,6 +21,7 @@ class LognyaController extends GetxController{
     }else{
       await GetStorage().write('log', ["$tanggal : $note"]);
     }
+    //print("catat log");
   }
 
   online(String text){

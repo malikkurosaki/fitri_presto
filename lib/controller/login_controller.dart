@@ -38,61 +38,64 @@ class LoginController extends GetxController {
   }
 
   cobaLogin()async{
-    LognyaController.to.online("coba untuk login");
-    this.ditekan.value = true;
-    if(LoginController.to.kunciState.currentState.validate()){
-      if(!isEmail(LoginController.to.lsController[1].text)){
-        this.ditekan.value = false;
-        Get.snackbar('info', "insert right email format");
-        LognyaController.to.online("insert right email format");
-        return;
-      }
-
-      if(LoginController.to.lsController[2].text.toString().length < 9 || !isNumeric(LoginController.to.lsController[2].text.replaceAll("0", "1"))){
-        this.ditekan.value = false;
-        Get.snackbar('info', "wrong phone number");
-        LognyaController.to.online("wrong phone number");
-        return;
-      }
-
-      final loginPaket = LoginModel(
-        name: LoginController.to.lsController[0].text.toString(),
-        email: LoginController.to.lsController[1].text.toString(),
-        phone: LoginController.to.lsController[2].text.toString(),
-        token: GetStorage().read('token')??""
-      );
-      
-      try {
-        print("coba login nih");
-        LognyaController.to.online("coba kirim data login");
-        print("host: ${ListMenuNya.to.host}/api/setUserTable/${ListMenuNya.to.meja}".kuning());
-       
-        final coba = await Dio().post("${ListMenuNya.to.host}/api/setUserTable/${ListMenuNya.to.meja}",data: loginPaket);
-        
-        print(coba.data['status'].toString().ungu());
-        this.ditekan.value = false;
-        print(jsonEncode(coba.data).toString());
-        
-        if(coba.data['status']){
-          await GetStorage().write('auth', coba.data);
-          print("menuju ke meja order");
-          Get.off(OpenTable());
-          LognyaController.to.online("login berhasil");
-        }else{
-          LognyaController.to.online(coba.data['note']);
-          Get.snackbar('alert', coba.data['note'],
-            backgroundColor: Colors.white
-          );
+    try {
+      this.ditekan.value = true;
+      if(LoginController.to.kunciState.currentState.validate()){
+        if(!isEmail(LoginController.to.lsController[1].text)){
+          this.ditekan.value = false;
+          Get.snackbar('info', "insert right email format");
+          LognyaController.to.online("insert right email format");
+          return;
         }
+
+        if(LoginController.to.lsController[2].text.toString().length < 9 || !isNumeric(LoginController.to.lsController[2].text.replaceAll("0", "1"))){
+          this.ditekan.value = false;
+          Get.snackbar('info', "wrong phone number");
+          LognyaController.to.online("wrong phone number");
+          return;
+        }
+
+        final loginPaket = LoginModel(
+          name: LoginController.to.lsController[0].text.toString(),
+          email: LoginController.to.lsController[1].text.toString(),
+          phone: LoginController.to.lsController[2].text.toString(),
+          token: GetStorage().read('token')??""
+        );
         
-      } catch (e) {
-        this.ditekan.value = false;
-        //Get.back();
-        print(e);
-        LognyaController.to.online(e);
-        Get.snackbar('alert', e.toString());
+        try {
+          print("coba login nih");
+          print("host: ${ListMenuNya.to.host}/api/setUserTable/${ListMenuNya.to.meja}".kuning());
+        
+          final coba = await Dio().post("${ListMenuNya.to.host}/api/setUserTable/${ListMenuNya.to.meja}",data: loginPaket);
+          
+          print(coba.data['status'].toString().ungu());
+          this.ditekan.value = false;
+          print(jsonEncode(coba.data).toString());
+          
+          if(coba.data['status']){
+            await GetStorage().write('auth', coba.data);
+            print("menuju ke meja order");
+            Get.off(OpenTable());
+          }else{
+            LognyaController.to.online(coba.data['note']);
+            Get.snackbar('alert', coba.data['note'],
+              backgroundColor: Colors.white
+            );
+          }
+          
+        } catch (e) {
+          this.ditekan.value = false;
+          //Get.back();
+          print(e);
+          LognyaController.to.online(e);
+          Get.snackbar('alert', e.toString());
+        }
       }
+      this.ditekan.value = false;
+      
+    } catch (e) {
+      LognyaController.to.online(e.toString());
     }
-    this.ditekan.value = false;
+    
   }
 }

@@ -7,22 +7,14 @@ import 'package:get_storage/get_storage.dart';
 import 'package:presto_qr/component/garis_putus.dart';
 import 'package:presto_qr/controller/api_controller.dart';
 import 'package:presto_qr/controller/list_menu_controller.dart';
-import 'package:presto_qr/controller/lognya_controller.dart';
+import 'package:presto_qr/main.dart';
 import 'package:presto_qr/views/book_menu.dart';
 import 'package:presto_qr/views/open_table.dart';
 
 class MyHome extends StatelessWidget {
   final box = GetStorage();
-  
-
   @override
   Widget build(BuildContext context) {
-    
-    Future.microtask(() async {
-      print("ini di home");
-      LognyaController.to.online("instance myhome");
-    });
-
     return Container(
       child: Scaffold(
         body:
@@ -232,13 +224,20 @@ class MyHomeGakAdaPesanan extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Center(
-        child: InkWell(
+        child: GestureDetector(
+          onLongPress: () => kemana(),
           child: CachedNetworkImage(
             imageUrl: GetStorage().read('gambar_terakhir')??"",
-            placeholder: (context, url) => Image.asset('assets/images/logo_qr_presto.png'),
-            errorWidget: (context, url, error) => Image.asset('assets/images/logo_qr_presto.png'),
+            placeholder: (context, url) => Image.asset('assets/images/logo_qr_presto.png',
+              width: 100,
+              height: 100,
+            ),
+            errorWidget: (context, url, error) => Image.asset('assets/images/logo_qr_presto.png',
+              width: 100,
+              height: 100,
+              color: Colors.red,
+            ),
           ),
-          onLongPress: () => kemana(),
         ),
       ),
     );
@@ -247,61 +246,73 @@ class MyHomeGakAdaPesanan extends StatelessWidget {
   kemana()async{
     final con = TextEditingController();
     final conHost = TextEditingController();
-    final apa = await ApiController.developer();
-    if(apa){
-      Get.bottomSheet(
-        Card(
-          child: Container(
-            padding: EdgeInsets.all(8),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("mau lanjut ?"),
-                Flexible(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            TextField(
-                              controller: con,
-                              decoration: InputDecoration(
-                                hintText: 'meja berapa'
-                              ),
+    // final apa = await ApiController.developer();
+    Get.bottomSheet(
+      DraggableScrollableSheet(
+        builder: (context, scrollController) => 
+          Card(
+          child: ListView(
+            controller: scrollController,
+            children: [
+              Container(
+                padding: EdgeInsets.all(8),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("mau lanjut ?"),
+                    Flexible(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                TextField(
+                                  controller: con,
+                                  decoration: InputDecoration(
+                                    hintText: 'meja berapa'
+                                  ),
+                                ),
+                                TextField(
+                                  controller: conHost,
+                                  decoration: InputDecoration(
+                                    hintText: 'host'
+                                  ),
+                                ),
+                              ],
                             ),
-                            TextField(
-                              controller: conHost,
-                              decoration: InputDecoration(
-                                hintText: 'host'
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                          FlatButton(
+                            onPressed: ()async{
+                              var meja = con.text.isEmpty?"3":con.text;
+                              var host = conHost.text.isNotEmpty?conHost.text:"https://prestoqr.probussystem.com";
+                              
+                              final ap = ApiController.hapusMeja2(host, meja);
+
+                              if(await ap) Get.offNamed('/login?meja=1&host=http%3A%2F%2F192.168.192.110%2Fpresto-qr%2Fpublic&token=FETE3D1'); 
+                            }, 
+                            child: Text("OK")
+                          )
+                        ],
                       ),
-                      FlatButton(
-                        onPressed: ()async{
-                          var meja = con.text.isEmpty?"3":con.text;
-                          var host = conHost.text.isNotEmpty?conHost.text:"https://prestoqr.probussystem.com";
-                          final ap = ApiController.hapusMeja2(host, meja);
-                          if(await ap) Get.offNamed('/login?meja=$meja&host=$host'); 
-                        }, 
-                        child: Text("OK")
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
+                    )
+                  ],
+                ),
+              ),
+            ],
           ),
-        )
-      );
-    }
+        ),
+      )
+    );
   }
 }
 
+
+class MyHomeCtrl extends MyCtrl{
+
+}
 
 
 /* class MyHomeGakAdaPesanan extends StatelessWidget {

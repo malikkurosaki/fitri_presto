@@ -19,9 +19,14 @@ class UserController extends GetxController {
   }
 
   getUserNya()async{
-    final auth = await GetStorage().read('auth');
-    final Map<dynamic, dynamic> apa = auth['user'];
-    user.value = User.fromJson(apa);
-    LognyaController.to.online("mendapatkan user: ${user.value.name.toString()}");
+    try {
+      final auth = await GetStorage().read('auth');
+      final Map<dynamic, dynamic> apa = auth['user'];
+      user.value = User.fromJson(apa);
+      
+    } catch (e) {
+      LognyaController.to.online(e.toString());
+    }
+    
   }
 }
