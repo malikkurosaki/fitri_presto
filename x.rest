@@ -2,7 +2,7 @@
 @host = https://prestoqr.probussystem.com
 https://prestoqrcode.docs.apiary.io/#
 
-
+# /#/login?meja=1&host=https%3A%2F%2Fprestoqr.probussystem.com&token=CBFCC61
 
 
 ### lihat group

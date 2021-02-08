@@ -17,8 +17,8 @@ import 'package:presto_qr/views/my_home.dart';
 import 'package:presto_qr/views/open_table.dart';
 import 'package:presto_qr/views/setting.dart';
 import 'package:presto_qr/views/splash.dart';
+import 'package:presto_qr/views/tunggu_pesanan.dart';
 import 'controller/list_menu_controller.dart';
-
 
 main() async{
   await GetStorage.init();
@@ -40,34 +40,14 @@ main() async{
             unknownRoute: GetPage(name: '/404', page: () => Scaffold(body: Center(child: Text('404'),),)),
             getPages: [
               GetPage(name: '/', page: () => MyHome()),
-              GetPage(name: '/login', page: () => GetStorage().hasData("auth")?OpenTable():Login()),
-              // GetPage(name: '/login', page: (){
-              //     GetStorage().erase();
-              //     final at = GetStorage();
-              //     if(Get.parameters['meja'] != null && Get.parameters['host'] != null){
-              //       ListMenuNya.to.meja.value = Get.parameters['meja'].toString();
-              //       ListMenuNya.to.host.value = Get.parameters['host'].toString();
-                    
-              //       at.write('meja', Get.parameters['meja'].toString());
-              //       at.write('host', Uri.decodeFull(Get.parameters['host'].toString()));
-              //       at.write('token', Get.parameters['token']??"");
-              //       return RootView();
-              //     }else{
-              //       return at.hasData('user')?OpenTable():MyHome();
-              //     }
-              //   },
-              // ),
+              // GetStorage().hasData("auth")?OpenTable():Login()
+              GetPage(name: '/login', page: () => GetStorage().hasData("auth")?OpenTable(): Login()),
               GetPage(name: '/masuk', page: () => Login()),
-              GetPage(name: '/open-table', page: ()=> OpenTable(),
-                binding: BindingsBuilder(
-                  ()async{
-                    Get.put<ListMenuNya>(ListMenuNya());
-                  }
-                )
-              ),
+              GetPage(name: '/open-table', page: ()=> OpenTable()),
               GetPage(name: '/setting', page: ()=>MySetting()),
               GetPage(name: '/log', page: () => LogNya()),
-              GetPage(name: '/changelog', page: () => ChangeLog())
+              GetPage(name: '/changelog', page: () => ChangeLog()),
+              GetPage(name: "/tunggu-pesanan", page: () => TungguPesanan())
             ],
           ),
         ),

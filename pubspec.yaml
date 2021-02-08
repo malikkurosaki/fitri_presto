@@ -38,6 +38,9 @@ dependencies:
   ansicolor: ^1.0.5
   device_info_plus: ^0.5.0
   hide_keyboard: ^0.0.1
+  pecahan_rupiah: ^0.0.1
+  story_view: ^0.12.8
+  swipe_up: ^1.0.0
 
 
   bali:

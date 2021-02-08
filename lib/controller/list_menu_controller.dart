@@ -265,45 +265,45 @@ class ListMenuNya extends GetxController{
 
   // prosses orderan
   prossesOrderan(BuildContext context)async{
-    try {
-      Get.dialog(Center(child: CircularProgressIndicator(),));
-      final user = UserController.to.user.value;
+    // try {
+    //   Get.dialog(Center(child: CircularProgressIndicator(),));
+    //   final user = UserController.to.user.value;
 
-      final listBill = this.listMenu.where((e) => e.qty != 0).map((e) => BillDetail(
-        note: e.note,
-        productId: e.kodePro,
-        qty: e.qty,
-        productPrice: e.hargaPro
-      )).toList();
+    //   final listBill = this.listMenu.where((e) => e.qty != 0).map((e) => BillDetail(
+    //     note: e.note,
+    //     productId: e.kodePro,
+    //     qty: e.qty,
+    //     productPrice: e.hargaPro
+    //   )).toList();
 
-      final paket = PaketOrderan(
-        customerId: user.phone,
-        email: user.email,
-        name: user.name,
-        phone: user.phone,
-        billDetail: listBill,
-        token: GetStorage().read('token')
-      );
+    //   final paket = PaketOrderan(
+    //     customerId: user.phone,
+    //     email: user.email,
+    //     name: user.name,
+    //     phone: user.phone,
+    //     billDetail: listBill,
+    //     token: GetStorage().read('token')
+    //   );
 
-      print(paket.toJson().toString());
-      final res = await ApiController.kirimPaket(paket);
-      if(res.data['status']){
-        keluar(psn: res);
-      }else{
-        Get.snackbar('info', res.data['note'],
-          backgroundColor: Colors.white,
-          mainButton: FlatButton(
-            onPressed: () => ListMenuNya.to.keluar(), 
-            child: Text('LOGOUT')
-          )
-        );
-        //Get.dialog(Center(child: Card(child: Text("failed"),),));
-        print('gagal kirim paketan');
-      }
+    //   print(paket.toJson().toString());
+    //   final res = await ApiController.kirimPaket(paket);
+    //   if(res.data['status']){
+    //     keluar(psn: res);
+    //   }else{
+    //     Get.snackbar('info', res.data['note'],
+    //       backgroundColor: Colors.white,
+    //       mainButton: FlatButton(
+    //         onPressed: () => ListMenuNya.to.keluar(), 
+    //         child: Text('LOGOUT')
+    //       )
+    //     );
+    //     //Get.dialog(Center(child: Card(child: Text("failed"),),));
+    //     print('gagal kirim paketan');
+    //   }
       
-    } catch (e) {
-      LognyaController.to.online(e.toString());
-    }
+    // } catch (e) {
+    //   LognyaController.to.online(e.toString());
+    // }
   }
 
 

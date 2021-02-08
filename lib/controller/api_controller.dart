@@ -11,7 +11,7 @@ import 'package:presto_qr/model/paket_orderan_model.dart';
 
 class ApiController {
   
-  static Future<Response> kirimPaket(PaketOrderan paketOrderan)async{
+  static Future<Response> kirimPaket(Map paketOrderan)async{
     try {
       final meja = GetStorage().read('meja');
       final host = GetStorage().read('host');
@@ -53,10 +53,10 @@ class ApiController {
   static getListMenu()async{
     try {
       final Response res = await Dio().get("${GetStorage().read('host')}/api/getMenu?product=&group=&subgroup=");
+      //print(res.data);
       return (res.data as List).map((e) => MenuModel.fromJson(e)).toList();
-    
     } catch (e) {
-      LognyaController.to.online(e.toString());
+      print(e.toString());
     }
     return null;
   }

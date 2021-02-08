@@ -1,9 +1,11 @@
+import 'package:presto_qr/model/menu_model.dart';
+
 class PaketOrderan {
   String customerId;
   String name;
   String phone;
   String email;
-  List<BillDetail> billDetail;
+  List<MenuModel> billDetail;
   String token;
 
   PaketOrderan(
@@ -15,9 +17,9 @@ class PaketOrderan {
     phone = json['phone'];
     email = json['email'];
     if (json['billDetail'] != null) {
-      billDetail = new List<BillDetail>();
+      billDetail = <MenuModel>[];
       json['billDetail'].forEach((v) {
-        billDetail.add(new BillDetail.fromJson(v));
+        billDetail.add(new MenuModel.fromJson(v));
       });
     }
     token = json['token'];

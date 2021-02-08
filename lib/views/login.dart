@@ -16,6 +16,7 @@ import 'package:presto_qr/main.dart';
 import 'package:presto_qr/model/login_model.dart';
 import 'package:presto_qr/views/book_menu.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'open_table.dart';
 
 
@@ -230,6 +231,7 @@ class Login extends StatelessWidget {
   Widget build(BuildContext context) {
     return HideKeyboard(
       child: Scaffold(
+        key: UniqueKey(),
         body: SafeArea(
           child: FutureBuilder(
             future: LoginCtrl.init(),
@@ -276,12 +278,13 @@ class FormLogin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      key: UniqueKey(),
       child: Column(
         children: [
-          FlatButton(
-            onPressed: () => ApiController.hapusMeja2(LoginCtrl.hostParam, LoginCtrl.mejaParam), 
-            child: Text("hapus meje ${LoginCtrl.mejaParam}")
-          ),
+          // FlatButton(
+          //   onPressed: () => ApiController.hapusMeja2(LoginCtrl.hostParam, LoginCtrl.mejaParam), 
+          //   child: Text("hapus meje ${LoginCtrl.mejaParam}")
+          // ),
           Container(
             width: double.infinity,
             height: 100,
@@ -299,64 +302,67 @@ class FormLogin extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Card(
-                  child: Container(
-                    padding: EdgeInsets.all(32),
-                    child: Form(
-                      key: LoginCtrl.kunciState,
-                      child: Column(
-                        children: [
-                          for(var i = 0; i < LoginCtrl.lsForm.length; i++)
-                          Container(
-                            padding: EdgeInsets.all(8),
-                            child: TextFormField(
-                              controller: LoginCtrl.lsTextCtrl[i],
-                              validator: (value) => value.isEmpty? "fill in all data completely": null,
-                              decoration: InputDecoration(
-                                labelText: LoginCtrl.lsForm[i]['nama'],
-                                labelStyle: TextStyle(
-                                  color: Colors.orange[100]
-                                ),
-                                prefixIcon: Icon(LoginCtrl.lsForm[i]['icon'],
-                                  color: Colors.orange[100],
-                                ),
-                                isDense: true,
-                                filled: true,
-                                fillColor: Colors.cyan[900],
-                                border: InputBorder.none
+                Container(
+                  padding: EdgeInsets.all(16),
+                  child: Form(
+                    key: LoginCtrl.kunciState,
+                    child: Column(
+                      children: [
+                        for(var i = 0; i < LoginCtrl.lsForm.length; i++)
+                        Container(
+                          padding: EdgeInsets.all(8),
+                          margin: EdgeInsets.only(bottom: 16),
+                          child: TextFormField(
+                            controller: LoginCtrl.lsTextCtrl[i],
+                            validator: (value) => value.isEmpty? "fill in all data completely": null,
+                            decoration: InputDecoration(
+                              labelText: LoginCtrl.lsForm[i]['nama'],
+                              labelStyle: TextStyle(
+                                color: Colors.orange[100]
                               ),
-                              textInputAction: TextInputAction.next,
+                              prefixIcon: Icon(LoginCtrl.lsForm[i]['icon'],
+                                color: Colors.orange[100],
+                              ),
+                              isDense: true,
+                              filled: true,
+                              fillColor: Colors.cyan[900],
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide: BorderSide.none
+                              )
+                            ),
+                            textInputAction: TextInputAction.next,
+                          ),
+                        ),
+                        Obx( () => 
+                          LoginCtrl.loading.value?CircularProgressIndicator(strokeWidth: 0.5,)
+                          :InkWell(
+                            onTap: () => LoginCtrl.cobaLogin(),
+                            child: Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.all(8),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text("LOGIN",
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      color: Colors.orange[900],
+                                      fontWeight: FontWeight.w700
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.arrow_forward_ios_outlined
+                                  )
+                                ],
+                              )
                             ),
                           )
-                        ],
-                      ),
+                        )
+                      ],
                     ),
                   ),
                 ),
-                Obx( () => 
-                  LoginCtrl.loading.value?CircularProgressIndicator(strokeWidth: 0.5,)
-                  :InkWell(
-                    onTap: () => LoginCtrl.cobaLogin(),
-                    child: Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.all(8),
-                      child: Row(
-                        children: [
-                          Text("LOGIN",
-                            style: TextStyle(
-                              fontSize: 24,
-                              color: Colors.orange[900],
-                              fontWeight: FontWeight.w700
-                            ),
-                          ),
-                          Icon(
-                            Icons.arrow_forward_ios_outlined
-                          )
-                        ],
-                      )
-                    ),
-                  )
-                )
               ],
             ),
           ),
@@ -376,7 +382,7 @@ class LoginCtrl extends MyCtrl{
   static final hostParam = Get.parameters['host'];
   static final mejaParam = Get.parameters['meja'];
   static final tokenParam = Get.parameters['token'];
-  static final kunciState = GlobalKey<FormState>();
+  static GlobalKey<FormState> kunciState = GlobalKey<FormState>();
   static final List<TextEditingController> lsTextCtrl = List.generate(lsForm.length, (index) => TextEditingController());
   static final lsForm = [
     {
@@ -393,7 +399,10 @@ class LoginCtrl extends MyCtrl{
     }
   ];
 
+  
+
   static init()async{
+    await GetStorage().write("activ", true);
     await Future.delayed(Duration(seconds: 2));
   }
 
@@ -438,9 +447,9 @@ class LoginCtrl extends MyCtrl{
           await GetStorage().write("meja", mejaParam);
           await GetStorage().write("host", hostParam);
           await GetStorage().write("token", tokenParam);
-
           loading.value = false;
-          Get.off(OpenTable());
+          
+          Get.offNamed("/open-table");
         }
         else{
           Get.snackbar("login", coba.data['note'].toString(),

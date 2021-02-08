@@ -7,6 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:hide_keyboard/hide_keyboard.dart';
+import 'package:pecahan_rupiah/pecahan_rupiah.dart';
 import 'package:presto_qr/component/garis_putus.dart';
 import 'package:presto_qr/controller/api_controller.dart';
 import 'package:presto_qr/controller/company_controller.dart';
@@ -14,6 +15,7 @@ import 'package:presto_qr/controller/list_menu_controller.dart';
 import 'package:presto_qr/controller/user_controller.dart';
 import 'package:presto_qr/main.dart';
 import 'package:presto_qr/model/menu_model.dart';
+import 'package:presto_qr/model/paket_orderan_model.dart';
 import 'package:presto_qr/views/detail_menu.dart';
 import 'package:presto_qr/views/detail_orderan.dart';
 import 'package:presto_qr/views/user_profile.dart';
@@ -116,7 +118,9 @@ class OpenTable extends StatelessWidget {
                                   ),
                                 ),
                                 IconButton(
-                                  icon: Icon(Icons.arrow_forward_ios), 
+                                  icon: Icon(Icons.arrow_forward_ios,
+                                    color: Colors.cyan[900],
+                                  ), 
                                   onPressed: () => 
                                   TableCtrl.pageCtrl.nextPage(
                                     duration: Duration(microseconds: 500),
@@ -142,22 +146,30 @@ class OpenTable extends StatelessWidget {
                                       title: Row(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              border: Border.all(color: Colors.orange, width: 0.1)
-                                            ),
-                                            margin: EdgeInsets.all(4),
-                                            child: Image.network(produk.foto,
-                                              height: 70,
-                                              width: 70,
-                                              fit: BoxFit.cover,
-                                              errorBuilder: (context, error, stackTrace) => 
-                                              Container(
+                                          InkWell(
+                                            onTap: () => Get.dialog(DetailsProduct(produk: produk,)),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                color: Colors.cyan[900],
+                                                border: Border.all(color: Colors.orange, width: 0.1)
+                                              ),
+                                              margin: EdgeInsets.all(4),
+                                              child: Image.network(produk.foto,
                                                 height: 70,
                                                 width: 70,
-                                                child: Center(
-                                                  child: Text("no image")
-                                                )
+                                                fit: BoxFit.cover,
+                                                errorBuilder: (context, error, stackTrace) => 
+                                                Container(
+                                                  height: 70,
+                                                  width: 70,
+                                                  child: Center(
+                                                    child: Text("no image",
+                                                      style: TextStyle(
+                                                        color: Colors.orange[100]
+                                                      ),
+                                                    )
+                                                  )
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -168,11 +180,17 @@ class OpenTable extends StatelessWidget {
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 mainAxisAlignment: MainAxisAlignment.start,
                                                 children: [
-                                                  Text(produk.namaPro.toLowerCase()),
-                                                  Text(produk.hargaPro.toString(),
+                                                  Text(produk.namaPro.toLowerCase(),
+                                                    style: TextStyle(
+                                                      fontWeight: FontWeight.bold,
+                                                      fontSize: 18
+                                                    ),
+                                                    overflow: TextOverflow.ellipsis,
+                                                  ),
+                                                  Text(Pecahan.rupiah(value: int.parse(produk.hargaPro), withRp: true),
                                                     style: TextStyle(
                                                       fontSize: 18,
-                                                      fontWeight: FontWeight.bold,
+                                                      color: Colors.orange
                                                     ),
                                                   ),
                                                   Text(produk.ket.toLowerCase(),
@@ -183,38 +201,45 @@ class OpenTable extends StatelessWidget {
                                                     ),
                                                   ),
                                                   produk.qty == null?SizedBox.shrink():
-                                                  Container(
-                                                    padding: EdgeInsets.all(4),
-                                                    child: Row(
-                                                      children: [
-                                                        Expanded(
-                                                          child: Container(
-                                                            padding: EdgeInsets.all(4),
-                                                            color: Colors.grey[100],
-                                                            child: Text(produk.note)
-                                                          )
-                                                        ),
-                                                        // edit orderan
-                                                        FlatButton(
-                                                          onPressed: () {
-                                                            TableCtrl.qty.value = produk.qty;
-                                                            TableCtrl.note.value = produk.note;
-                                                            Get.bottomSheet(
-                                                              TambahOrder(
-                                                                produk: produk,
-                                                                data: TableCtrl.lsGroup[TableCtrl.lsGroup.indexOf(group)]['data'],
+                                                  InkWell(
+                                                    onTap: () {
+                                                      TableCtrl.qty.value = produk.qty;
+                                                      TableCtrl.note.value = produk.note;
+                                                      Get.bottomSheet(
+                                                        TambahOrder(
+                                                          produk: produk,
+                                                          data: TableCtrl.lsGroup[TableCtrl.lsGroup.indexOf(group)]['data'],
+                                                        )
+                                                      );
+                                                    },
+                                                    child: Container(
+                                                      padding: EdgeInsets.all(4),
+                                                      child: Row(
+                                                        children: [
+                                                          Expanded(
+                                                            child: Container(
+                                                              padding: EdgeInsets.all(4),
+                                                              child: Text(produk.note,
+                                                                style: TextStyle(
+                                                                  color: Colors.cyan[900]
+                                                                ),
                                                               )
-                                                            );
-                                                          }
-                                                          ,
-                                                          child: Text("QTY : ${produk.qty}",
-                                                            style: TextStyle(
-                                                              color: Colors.cyan[900]
+                                                            )
+                                                          ),
+                                                          Container(
+                                                            decoration: BoxDecoration(
+                                                              border: Border.all(width: 0.3, color: Colors.grey)
+                                                            ),
+                                                            padding: EdgeInsets.only(bottom: 4,left: 16, top: 4, right: 16),
+                                                            child: Text("QTY : ${produk.qty}",
+                                                              style: TextStyle(
+                                                                color: Colors.cyan[900]
+                                                              ),
                                                             ),
                                                           )
-                                                        )
-                                                      ],
-                                                    ) ,
+                                                        ],
+                                                      ) ,
+                                                    ),
                                                   ),
                                                 ],
                                               )
@@ -232,12 +257,14 @@ class OpenTable extends StatelessWidget {
                                             data: TableCtrl.lsGroup[TableCtrl.lsGroup.indexOf(group)]['data'],
                                           ),
                                         ),
-                                        icon: Icon(Icons.plus_one),
+                                        icon: Icon(Icons.plus_one,
+                                          color: Colors.cyan[900],
+                                        ),
                                       ): 
                                       // hapus orderan
                                       IconButton(
-                                        icon: Icon(Icons.remove,
-                                          color: Colors.orangeAccent,
+                                        icon: Icon(Icons.remove_circle,
+                                          color: Colors.red,
                                         ), 
                                         onPressed: (){
                                           produk.note = null;
@@ -261,21 +288,29 @@ class OpenTable extends StatelessWidget {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  Icon(Icons.add_shopping_cart),
-                                  Chip(
-                                    backgroundColor: Colors.red,
-                                    label: Text(TableCtrl.totalOrder.toString(),
+                                  Icon(Icons.add_shopping_cart,
+                                    color: Colors.cyan[900],
+                                  ),
+                                  CircleAvatar(
+                                    backgroundColor: Colors.cyan[900],
+                                    child: Text(TableCtrl.totalOrder.toString(),
                                       style: TextStyle(
-                                        color: Colors.white
+                                        color: Colors.orange[100]
                                       ),
                                     ),
                                   ),
                                   Container(
                                     padding: EdgeInsets.all(8),
-                                    child: Text("next to proccess"),
+                                    child: Text("next to proccess",
+                                      style: TextStyle(
+                                        color: Colors.cyan[900]
+                                      ),
+                                    ),
                                   ),
                                   IconButton(
-                                    icon: Icon(Icons.arrow_forward_ios), 
+                                    icon: Icon(Icons.arrow_forward_ios,
+                                      color: Colors.cyan[900],
+                                    ), 
                                     onPressed: (){
                                       Get.dialog(ProsesOrder());
                                     }
@@ -301,6 +336,76 @@ class OpenTable extends StatelessWidget {
 
 }
 
+
+class DetailsProduct extends StatelessWidget {
+  final MenuModel produk;
+
+  const DetailsProduct({Key key, this.produk}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return DraggableScrollableSheet(
+      maxChildSize: 1,
+      initialChildSize: 1,
+      builder: (context, scrollController) => 
+      Card(
+        child: Column(
+          children: [
+            Container(
+              color: Colors.cyan[900],
+              padding: EdgeInsets.all(4),
+              child: Row(
+                children: [
+                  BackButton(),
+                ],
+              ),
+            ),
+            Flexible(
+              child: ListView(
+                controller: scrollController,
+                children: [
+                  Container(
+                    child: Image.network(produk.foto,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => 
+                      Container(
+                        color: Colors.cyan[900],
+                        width: double.infinity,
+                        height: 200,
+                        child: Center(
+                          child: Text("No Image",
+                            style: TextStyle(
+                              color: Colors.orange[100]
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(8),
+                    child: Text(produk.namaPro,
+                      style: TextStyle(
+                        fontSize: 24
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(8),
+                    child: Text(produk.ket),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+/// proses orderan
+/// ======================================
 class ProsesOrder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -308,23 +413,137 @@ class ProsesOrder extends StatelessWidget {
       child: DraggableScrollableSheet(
         builder: (context, scrollController) => 
         Card(
-          child: Container(
-            padding: EdgeInsets.all(8),
-            child: ListView(
-              controller: scrollController,
-              children: [
-                Row(
+          child: Column(
+            children: [
+              Container(
+                color: Colors.cyan[900],
+                padding: EdgeInsets.all(4),
+                child: Row(
                   children: [
                     BackButton(),
                     Text("my shopping cart",
                       style: TextStyle(
-                        fontSize: 18
+                        fontSize: 18,
+                        color: Colors.orange[100]
                       ),
                     ),
                   ],
-                )
-              ],
-            ),
+                ),
+              ),
+              Flexible(
+                child: ListView(
+                  controller: scrollController,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        for(final odr in TableCtrl.lsorderan)
+                        Container(
+                          color: Colors.grey[100],
+                          padding: EdgeInsets.all(8),
+                          margin: EdgeInsets.only(bottom: 16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(odr['name'],
+                              style: TextStyle(
+                                fontSize: 18
+                              ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(8),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    for(MenuModel itm in odr['data'])
+                                    Container(
+                                      padding: EdgeInsets.only(bottom: 8),
+                                      child: Row(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            child: Image.network(itm.foto,
+                                            width: 50,
+                                            height: 50,
+                                            fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Container(
+                                              padding: EdgeInsets.symmetric(horizontal: 8),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(itm.namaPro.toLowerCase(),
+                                                    style: TextStyle(
+                                                      fontWeight: FontWeight.bold
+                                                    ),
+                                                  ),
+                                                  Text(Pecahan.rupiah(value: int.parse(itm.hargaPro), withRp: true)),
+                                                  Text("${itm.qty} x")
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            child: OutlineButton(
+                                              onPressed: () => TableCtrl.dimana(itm),
+                                              child: Text("edit",
+                                              style: TextStyle(
+                                                color: Colors.cyan[900]
+                                              ),
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                alignment: Alignment.bottomRight,
+                                child: Text("Esimation : ${Pecahan.rupiah(value: odr['total'], withRp: true)}"),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                    Container(
+                      alignment: Alignment.bottomRight,
+                      child: Text("Total Extimation : ${Pecahan.rupiah(value: TableCtrl.lsorderan.map((e) => e['total']).toList().reduce((value, element) => value + element), withRp: true)}")
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                alignment: Alignment.centerRight,
+                child: Card(
+                  color: Colors.cyan[900],
+                  child: FlatButton(
+                    onPressed: () => TableCtrl.kirimOrderan(),
+                    child: Container(
+                      padding: EdgeInsets.only(right: 16, top: 4, left: 16, bottom: 4),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text("proccess",
+                            style: TextStyle(
+                              color: Colors.orange[100]
+                            ),
+                          ),
+                          Icon(Icons.arrow_forward_ios,
+                            color: Colors.orange[100],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
           ),
         ),
       ),
@@ -344,93 +563,108 @@ class TambahOrder extends StatelessWidget {
     return DraggableScrollableSheet(
       builder: (context, scrollController) => Card(
         child: Container(
-          child: ListView(
-            controller: scrollController,
+          child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  BackButton(
-                    onPressed: () {
-                      TableCtrl.qty.value = 1;
-                      TableCtrl.note.value = "";
-                      Get.back();
-                    },
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(8),
-                    child: Text("add order",
-                      style: TextStyle(
-                        fontSize: 24
-                      ),
-                    ),
-                  ),
-                  FlatButton(
-                    onPressed: (){
-                      data[data.indexOf(produk)].note = TableCtrl.note.value;
-                      data[data.indexOf(produk)].qty = TableCtrl.qty.value;
-                      TableCtrl.lsGroup.refresh();
-
-                      TableCtrl.qty.value = 1;
-                      TableCtrl.note.value = "";
-
-                      TableCtrl.cekAdaOrderan();
-                      Get.back();
-                    }, 
-                    child: Text("OK",
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.cyan[900]
-                      ),
-                    )
-                  )
-                ],
-              ),
               Container(
                 padding: EdgeInsets.all(4),
-                child: TextFormField(
-                  onChanged: (value) => TableCtrl.note.value = value,
-                  decoration: InputDecoration(
-                    isDense: true,
-                    prefixIcon: Icon(Icons.edit),
-                    hintText: produk.note == null?"add some note": produk.note,
-                    border: InputBorder.none,
-                    fillColor: Colors.grey[100],
-                    filled: true,
-                    alignLabelWithHint: true
-                  ),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 8),
+                color: Colors.cyan[900],
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    IconButton(
-                      icon: Icon(Icons.arrow_back_ios), 
-                      onPressed: (){
-                        TableCtrl.qty.value --;
-                        if(TableCtrl.qty.value < 1) TableCtrl.qty.value = 1;
-                      }
+                    BackButton(
+                      color: Colors.orange[100],
+                      onPressed: () {
+                        TableCtrl.qty.value = 1;
+                        TableCtrl.note.value = "";
+                        Get.back();
+                      },
                     ),
-                    Chip(
-                      label: Obx(() =>
-                        Text(TableCtrl.qty.value.toString(),
-                          style: TextStyle(
-                            fontSize: 18
-                          ),
-                        )
+                    Container(
+                      padding: EdgeInsets.all(8),
+                      child: Text("add order",
+                        style: TextStyle(
+                          fontSize: 24,
+                          color: Colors.orange[100]
+                        ),
+                      ),
+                    ),
+                    FlatButton(
+                      color: Colors.orange[100],
+                      onPressed: (){
+                        data[data.indexOf(produk)].note = TableCtrl.note.value;
+                        data[data.indexOf(produk)].qty = TableCtrl.qty.value;
+                        TableCtrl.lsGroup.refresh();
+
+                        TableCtrl.qty.value = 1;
+                        TableCtrl.note.value = "";
+
+                        TableCtrl.cekAdaOrderan();
+                        Get.back();
+                      }, 
+                      child: Text("OK",
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.cyan[900]
+                        ),
                       )
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.arrow_forward_ios), 
-                      onPressed: (){
-                        TableCtrl.qty.value ++;
-                      }
                     )
                   ],
                 ),
-              )
+              ),
+              Flexible(
+                child: ListView(
+                  controller: scrollController,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(4),
+                      child: TextFormField(
+                        onChanged: (value) => TableCtrl.note.value = value,
+                        decoration: InputDecoration(
+                          isDense: true,
+                          prefixIcon: Icon(Icons.edit),
+                          hintText: produk.note == null?"add some note": produk.note,
+                          border: InputBorder.none,
+                          fillColor: Colors.grey[100],
+                          filled: true,
+                          alignLabelWithHint: true
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.arrow_back_ios), 
+                            onPressed: (){
+                              TableCtrl.qty.value --;
+                              if(TableCtrl.qty.value < 1) TableCtrl.qty.value = 1;
+                            }
+                          ),
+                          CircleAvatar(
+                            backgroundColor: Colors.cyan[900],
+                            child: Obx(() =>
+                              Text(TableCtrl.qty.value.toString(),
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.orange[100]
+                                ),
+                              )
+                            ),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.arrow_forward_ios), 
+                            onPressed: (){
+                              TableCtrl.qty.value ++;
+                            }
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -478,29 +712,30 @@ class MySearch extends StatelessWidget {
                           ),
                         ),
                         title: Text(cari.namaPro.toLowerCase()),
-                        onTap: () async{
-                          final idx = TableCtrl.lsGroup.map((element) => element['name'].toString().toLowerCase()).toList().indexOf(cari.groupp.toLowerCase());
-                          final List<MenuModel> ls = TableCtrl.lsGroup[idx]['data'];
-                          final idx2 = ls.indexOf(cari);
-                          TableCtrl.pageCtrl.jumpToPage(idx);
-                          await Future.delayed(Duration(milliseconds: 500));
-                          final ScrollController  scrl = TableCtrl.lsGroup[idx]['lsCon'];
+                        onTap: () => TableCtrl.dimana(cari),
+                        // onTap: () async{
+                        //   final idx = TableCtrl.lsGroup.map((element) => element['name'].toString().toLowerCase()).toList().indexOf(cari.groupp.toLowerCase());
+                        //   final List<MenuModel> ls = TableCtrl.lsGroup[idx]['data'];
+                        //   final idx2 = ls.indexOf(cari);
+                        //   TableCtrl.pageCtrl.jumpToPage(idx);
+                        //   await Future.delayed(Duration(milliseconds: 500));
+                        //   final ScrollController  scrl = TableCtrl.lsGroup[idx]['lsCon'];
                           
-                          ls[idx2].terlihat = true;
-                          TableCtrl.lsGroup.refresh();
+                        //   ls[idx2].terlihat = true;
+                        //   TableCtrl.lsGroup.refresh();
 
-                          // scrl.jumpTo((100 * idx2).toDouble());
-                          scrl.animateTo(100 * idx2.toDouble(),
-                            duration: Duration(milliseconds: 500),
-                            curve: Curves.ease
-                          );
-                          Get.back();
+                        //   // scrl.jumpTo((100 * idx2).toDouble());
+                        //   scrl.animateTo(100 * idx2.toDouble(),
+                        //     duration: Duration(milliseconds: 500),
+                        //     curve: Curves.ease
+                        //   );
+                        //   Get.back();
 
-                          Future.delayed(Duration(seconds: 2),(){
-                            ls[idx2].terlihat = null;
-                            TableCtrl.lsGroup.refresh();
-                          });
-                        },
+                        //   Future.delayed(Duration(seconds: 2),(){
+                        //     ls[idx2].terlihat = null;
+                        //     TableCtrl.lsGroup.refresh();
+                        //   });
+                        // },
                       )
                     ],
                   )
@@ -543,6 +778,7 @@ class TableCtrl extends MyCtrl{
   static final qty = 1.obs;
   static final note = "".obs;
   static final adaOrderan = false.obs;
+  static final lsorderan = [].obs;
   static final totalOrder = 0.obs;
 
   static final PageController pageCtrl = PageController();
@@ -594,9 +830,122 @@ class TableCtrl extends MyCtrl{
     final od = lsGroup.map((element) => element['data']).toList().expand((element) => element).toList().where((element) => element.qty != null).toList();
     totalOrder.value = od.length;
     adaOrderan.value = totalOrder.value > 0;
-    print(adaOrderan.value);
+    ambilListOrderan();
   }
 
+  static dimana(MenuModel cari)async{
+    final idx = lsGroup.map((element) => element['name'].toString().toLowerCase()).toList().indexOf(cari.groupp.toLowerCase());
+    final List<MenuModel> ls = lsGroup[idx]['data'];
+    final idx2 = ls.indexOf(cari);
+    pageCtrl.jumpToPage(idx);
+
+    await Future.delayed(Duration(milliseconds: 500));
+    final ScrollController  scrl = lsGroup[idx]['lsCon'];
+    
+    ls[idx2].terlihat = true;
+    lsGroup.refresh();
+
+    // scrl.jumpTo((100 * idx2).toDouble());
+    scrl.animateTo(130 * idx2.toDouble(),
+      duration: Duration(milliseconds: 500),
+      curve: Curves.ease
+    );
+    Get.back();
+
+    Future.delayed(Duration(seconds: 2),(){
+      ls[idx2].terlihat = null;
+      lsGroup.refresh();
+    });
+  }
+
+  static ambilListOrderan(){
+    final ls = [
+      {
+        "name": "food",
+        "data": lsFood.where((e) => e.qty != null).toList(),
+        "total": lsFood.where((e) => e.qty != null).toList().length == 0? 0: lsFood.where((e) => e.qty != null).toList().map((e) => int.parse(e.hargaPro)).toList().reduce((value, element) => value + element) * lsFood.where((e) => e.qty != null).toList().map((e) => e.qty).toList().reduce((value, element) => value + element)
+      },
+      {
+        "name": "beverage",
+        "data": lsBeverage.where((e) => e.qty != null).toList(),
+        "total": lsBeverage.where((e) => e.qty != null).toList().length == 0? 0:lsBeverage.where((e) => e.qty != null).toList().map((e) => int.parse(e.hargaPro)).toList().reduce((value, element) => value + element) * lsBeverage.where((e) => e.qty != null).toList().map((e) => e.qty).toList().reduce((value, element) => value + element)
+      },
+      {
+        "name": "others",
+        "data": lsOthers.where((e) => e.qty != null).toList(),
+        "total": lsOthers.where((e) => e.qty != null).toList().length == 0? 0: lsOthers.where((e) => e.qty != null).toList().map((e) => int.parse(e.hargaPro)).toList().reduce((value, element) => value + element) * lsOthers.where((e) => e.qty != null).toList().map((e) => e.qty).toList().reduce((value, element) => value + element)
+      }
+    ];
+    lsorderan.assignAll(ls);
+  }
+
+  static kirimOrderan()async{
+    final listBill = lsorderan.map((element) => element['data']).toList().expand((element) => element).toList().map((e) => {
+      "note": e.note,
+      "product_id": e.kodePro,
+      "qty": e.qty,
+      "product_price": e.hargaPro
+    }).toList();
+    // final listBill = dataBill.map((e) => MenuModel(
+    //   note: e['note'],
+    //   kodePro: e['kode_pro'],
+    //   qty: e['qty'],
+    //   hargaPro: e['harga_pro']
+    // )).toList();
+
+    final user = GetStorage().read("auth")['user'];
+    
+    final paket = {
+      "customer_id": user['phone'],
+      "email": user['email'],
+      "name": user['name'],
+      "phone": user['phone'],
+      "billDetail": listBill,
+      "token": GetStorage().read('token')
+    };
+
+    //print(jsonEncode(paket));
+
+    final res = await ApiController.kirimPaket(paket);
+    if(res.data['status']){
+      Get.back();
+      print("berhasil ${res.data}");
+      await GetStorage().write("listbill", lsorderan.map((element) => element['data']).toList().expand((element) => element).toList());
+      await GetStorage().write("listmenu", lsMenu.map((element) => element.toJson()).toList());
+      await ApiController.hapusMeja2(GetStorage().read("host"), GetStorage().read("meja"));
+      await GetStorage().remove("auth");
+      Get.offNamed('/tunggu-pesanan');
+
+    }else{
+      
+      Get.dialog(
+        Center(
+          child: Card(
+            child: Container(
+              padding: EdgeInsets.all(8),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(res.data['note']),
+                  Container(
+                    alignment: Alignment.bottomRight,
+                    child: OutlineButton(
+                      onPressed: () => Get.back(),
+                      child: Text("OK"),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        )
+      );
+
+      await GetStorage().remove("auth");
+      await ApiController.hapusMeja2(GetStorage().read("host"), GetStorage().read("meja"));
+      print(res.data.toString());
+    }
+  }
 
 }
 
