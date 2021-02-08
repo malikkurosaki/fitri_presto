@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -31,8 +32,8 @@ class OpenTable extends StatelessWidget {
             Obx(() => 
               AnimatedContainer(
                 padding: EdgeInsets.all(8),
-                duration: Duration(milliseconds: 500),
-                height: TableCtrl.animateTinggi.value?0.0:100.0,
+                duration: Duration(milliseconds: 1),
+                height: TableCtrl.tinggiScroll.value,
                 width: double.infinity,
                 color: Colors.cyan[900],
                 child: Column(
@@ -98,10 +99,16 @@ class OpenTable extends StatelessWidget {
               child: FutureBuilder(
                 future: TableCtrl.init(),
                 builder: (context, snapshot) => snapshot.connectionState != ConnectionState.done?
-                Text("loading"): 
+                Center(
+                  child: CircularProgressIndicator(
+                    strokeWidth: 0.5,
+                    backgroundColor: Colors.cyan[900],
+                  ),
+                ): 
                 Obx( () => 
                   PageView(
                     controller: TableCtrl.pageCtrl,
+                    physics: ClampingScrollPhysics(),
                     children: [
                       for(final group in TableCtrl.lsGroup)
                       Column(
@@ -783,6 +790,7 @@ class TableCtrl extends MyCtrl{
 
   static final PageController pageCtrl = PageController();
   static final animateTinggi = false.obs;
+  static final tinggiScroll = 100.0.obs;
 
   static final lsGroup = [
     {
@@ -808,10 +816,17 @@ class TableCtrl extends MyCtrl{
     for(final c in con){
       c.addListener(() {
         if(c.position.userScrollDirection == ScrollDirection.forward){
+          //print("kebawah");
+          tinggiScroll.value += 4;
+          if(tinggiScroll.value > 100) tinggiScroll.value = 100;
           animateTinggi.value = false;
         }else{
+          //print("keatas");
+          tinggiScroll.value -= 4;
+          if(tinggiScroll.value < 0 ) tinggiScroll.value = 0;
           animateTinggi.value = true;
         }
+
       });
     }
   }
@@ -820,9 +835,12 @@ class TableCtrl extends MyCtrl{
     final List<MenuModel> data = await ApiController.getListMenu();
     
     lsMenu.assignAll(data);
-    lsFood.assignAll(data.where((element) => element.groupp.toLowerCase().contains("food")));
-    lsBeverage.assignAll(data.where((element) => element.groupp.toLowerCase().contains("beverage")));
-    lsOthers.assignAll(data.where((element) => element.groupp.toLowerCase().contains("others")));
+    final preFood = await compute( (_) => data.where((element) => element.groupp.toLowerCase().contains("food")),"");
+    lsFood.assignAll(preFood);
+    final preBeverage = await compute((_) => data.where((element) => element.groupp.toLowerCase().contains("beverage")),"");
+    lsBeverage.assignAll(preBeverage);
+    final preOthers = await compute((_) => data.where((element) => element.groupp.toLowerCase().contains("others")),"");
+    lsOthers.assignAll(preOthers);
     
   }
 
@@ -835,17 +853,19 @@ class TableCtrl extends MyCtrl{
 
   static dimana(MenuModel cari)async{
     final idx = lsGroup.map((element) => element['name'].toString().toLowerCase()).toList().indexOf(cari.groupp.toLowerCase());
+    
     final List<MenuModel> ls = lsGroup[idx]['data'];
+    
     final idx2 = ls.indexOf(cari);
+
     pageCtrl.jumpToPage(idx);
 
-    await Future.delayed(Duration(milliseconds: 500));
+    await Future.delayed(Duration(milliseconds: 10));
     final ScrollController  scrl = lsGroup[idx]['lsCon'];
     
     ls[idx2].terlihat = true;
     lsGroup.refresh();
 
-    // scrl.jumpTo((100 * idx2).toDouble());
     scrl.animateTo(130 * idx2.toDouble(),
       duration: Duration(milliseconds: 500),
       curve: Curves.ease
