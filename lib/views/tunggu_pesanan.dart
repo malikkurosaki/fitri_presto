@@ -200,31 +200,33 @@ class ItemStory implements StoryItem{
               ],
             ),
           ),
-          // Container(
-          //   padding: EdgeInsets.only(bottom: 50),
-          //   child: Column(
-          //     mainAxisAlignment: MainAxisAlignment.end,
-          //     children: [
-          //       Container(
-          //         padding: EdgeInsets.all(8),
-          //         child: Text(data,
-          //           style: TextStyle(
-          //             fontSize: 24,
-          //             color: Colors.white,
-          //           ),
-          //         ),
-          //       ),
-          //       Container(
-          //         padding: EdgeInsets.all(8,),
-          //         child: Text(ket,
-          //           style: TextStyle(
-          //             color: Colors.white
-          //           ),
-          //         ),
-          //       )
-          //     ],
-          //   ),
-          // ),
+          Container(
+            padding: EdgeInsets.only(bottom: 50),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Container(
+                  padding: EdgeInsets.all(8),
+                  child: Text(data,
+                    style: TextStyle(
+                      fontSize: 24,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.all(8,),
+                  child: Text(ket,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
         ],
       ),
     ),
