@@ -5,6 +5,8 @@ import 'package:pecahan_rupiah/pecahan_rupiah.dart';
 import 'package:presto_qr/main.dart';
 import 'package:get/get.dart';
 import 'package:presto_qr/model/menu_model.dart';
+import 'package:presto_qr/views/open_table.dart';
+import 'package:presto_qr/views/thank.dart';
 import 'package:story_view/story_view.dart';
 import 'package:swipe_up/swipe_up.dart';
 
@@ -14,15 +16,18 @@ class TungguPesanan extends StatelessWidget {
     return SwipeUp(
       onSwipe: () => Get.dialog(Pesanan()) ,
       child: Material(
-        color: Colors.transparent,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.keyboard_arrow_up_outlined,
-              color: Colors.white
-            ),
-            Text('show last order', style: TextStyle(color: Colors.white)),
-          ],
+        color: Colors.black54,
+        child: Container(
+          padding: EdgeInsets.all(8),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.keyboard_arrow_up_outlined,
+                color: Colors.white
+              ),
+              Text('show last order', style: TextStyle(color: Colors.white)),
+            ],
+          ),
         ),
       ),
       body : Scaffold(
@@ -31,16 +36,108 @@ class TungguPesanan extends StatelessWidget {
             future: TungguCtrl.init(),
             builder: (context, snapshot) => 
             snapshot.connectionState != ConnectionState.done?
-            Text("tunggu"): Obx(() => 
-              TungguCtrl.lsStory.length == 0? Text("loading item"):
-              StoryView(
-                storyItems: TungguCtrl.lsStory,
-                repeat: true,
-                controller: TungguCtrl.controller,
+            Image.network(TableCtrl.company.value.image??"",
+              height: double.infinity,
+              width: double.infinity,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) => 
+              Container(
+                height: double.infinity,
+                width: double.infinity,
+                color: Colors.cyan,
+                child: Center(
+                  child: Text("THANK YOU",
+                    style: TextStyle(
+                      color: Colors.white
+                    ),
+                  ),
+                ),
+              ),
+            ): Obx(() => 
+              Column(
+                children: [
+                  Flexible(
+                    child: GridView.count(
+                      crossAxisCount: 3,
+                      children: [
+                        for(final MenuModel itm in TableCtrl.lsMenu)
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.white
+                            ),
+                            color: Colors.grey,
+                          ),
+                          child: GestureDetector(
+                            onTap: () => Get.dialog(
+                              DetailsGambar(model: itm,),
+                              transitionCurve: Curves.elasticIn, 
+                              transitionDuration: Duration(microseconds: 1)
+                            ),
+                            child: Image.network(itm.foto,
+                              key: UniqueKey(),
+                              height: double.infinity,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) => 
+                              Container(
+                                child: Center(
+                                  child: Text("no image"),
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    )
+                  )
+                ],
               )
             )
           ),
         ),
+      ),
+    );
+  }
+}
+
+class DetailsGambar extends StatelessWidget {
+  final MenuModel model;
+
+  const DetailsGambar({Key key, this.model}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            BackButton(),
+            Flexible(
+              child: Image.network(model.foto,
+                fit: BoxFit.cover,
+                width: double.infinity,
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.all(8),
+              child: Text(model.namaPro,
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.all(8),
+              child: Text(model.ket,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey
+                ),
+              ),
+            )
+          ],
+        ),     
       ),
     );
   }
@@ -72,7 +169,7 @@ class Pesanan extends StatelessWidget {
                     ],
                   ),
                 ),
-                for(MenuModel psn in TungguCtrl.lsPesanan)
+                for(MenuModel psn in TableCtrl.lsorderan.map((element) => element['data']).toList().expand((element) => element))
                 Container(
                   padding: EdgeInsets.all(8),
                   child: Row(
@@ -123,117 +220,6 @@ class Pesanan extends StatelessWidget {
   }
 }
 
-class ItemStory implements StoryItem{
-  final data;
-  final url;
-  final ket;
-  final harga;
-  ItemStory({this.data, this.url, this.ket, this.harga});
-
-  @override
-  bool shown = true;
-
-  @override
-  Duration get duration => Duration(seconds: 3);
-
-  @override
-  Widget get view => Center(
-    child: Container(
-      color: Colors.black,
-      child: Stack(
-        children: [
-          Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  margin: EdgeInsets.all(8),
-                  padding: EdgeInsets.only(top: 32),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: Colors.white,
-                        child: Text("Rp"),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(8),
-                        child: Text(Pecahan.rupiah(value: int.parse(harga)),
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Flexible(
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Image.network(url,
-                        height: double.infinity,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => 
-                        Center(
-                          child: Text("error image"),
-                        ),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Colors.transparent,
-                              Colors.black
-                            ]
-                          )
-                        ),
-                        height: double.infinity,
-                        width: double.infinity,
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.only(bottom: 50),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Container(
-                  padding: EdgeInsets.all(8),
-                  child: Text(data,
-                    style: TextStyle(
-                      fontSize: 24,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.all(8,),
-                  child: Text(ket,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
-    ),
-  );
-  
-}
-
 class TungguCtrl extends MyCtrl{
   static final lsPesanan = [].obs;
   static final lsmenu = [].obs;
@@ -243,23 +229,15 @@ class TungguCtrl extends MyCtrl{
   static final tinggi = 0.obs;
 
   static init()async{
+    await Future.delayed(Duration(seconds: 3));
     await getListmenu();
     await getListPesanan();
   }
 
   static getListmenu()async{
     try {
-      final List lm = await GetStorage().read("listmenu");
-      //print(lm);
-      final itm = lm.map((e) => ItemStory(
-        data: e['nama_pro'],
-        url: e['foto'],
-        ket: e['ket'],
-        harga: e['harga_pro']
-      ));
-
-      lsStory.assignAll(itm);
-      lsmenu.assignAll(lm);
+      final lm = GetStorage().read("listmenu");
+      // print(TableCtrl.lsMenu);
     } catch (e) {
       print(e.toString());
     }
@@ -268,9 +246,7 @@ class TungguCtrl extends MyCtrl{
   static getListPesanan()async{
     try {
       final ps = await GetStorage().read("listbill");
-      lsPesanan.assignAll(ps);
-      
-      //print(lsPesanan);
+      // print(TableCtrl.lsorderan.map((element) => element['data']).toList());
     } catch (e) {
       print(e.toString());
     }

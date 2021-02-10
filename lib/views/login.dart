@@ -9,12 +9,13 @@ import 'package:get_storage/get_storage.dart';
 import 'package:hide_keyboard/hide_keyboard.dart';
 import 'package:presto_qr/component/garis_putus.dart';
 import 'package:presto_qr/controller/api_controller.dart';
-import 'package:presto_qr/controller/company_controller.dart';
-import 'package:presto_qr/controller/list_menu_controller.dart';
-import 'package:presto_qr/controller/login_controller.dart';
+import 'package:presto_qr/controller/company_controller_bak.dart';
+import 'package:presto_qr/controller/list_menu_controller_bak.dart';
+import 'package:presto_qr/controller/login_controller_bak.dart';
 import 'package:presto_qr/main.dart';
+import 'package:presto_qr/model/company_model.dart';
 import 'package:presto_qr/model/login_model.dart';
-import 'package:presto_qr/views/book_menu.dart';
+import 'package:presto_qr/views/book_menu_bak.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'open_table.dart';
@@ -230,14 +231,18 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return HideKeyboard(
+      key: UniqueKey(),
       child: Scaffold(
         key: UniqueKey(),
-        body: SafeArea(
-          child: FutureBuilder(
-            future: LoginCtrl.init(),
-            builder: (context, snapshot) => snapshot.connectionState != ConnectionState.done?
-            SplashScreen(): FormLogin()
-          )
+        body: Container(
+          color: Colors.cyan[900],
+          child: SafeArea(
+            child: FutureBuilder(
+              future: LoginCtrl.init(),
+              builder: (context, snapshot) => snapshot.connectionState != ConnectionState.done?
+              SplashScreen(): FormLogin()
+            )
+          ),
         ),
       ),
     );
@@ -249,6 +254,7 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      key: UniqueKey(),
       color: Colors.cyan[900],
       child: Center(
         child: Column(
@@ -277,94 +283,98 @@ class SplashScreen extends StatelessWidget {
 class FormLogin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    GlobalKey<FormState> kunciState = GlobalKey<FormState>();
     return Container(
+      padding: EdgeInsets.all(8),
       key: UniqueKey(),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // FlatButton(
           //   onPressed: () => ApiController.hapusMeja2(LoginCtrl.hostParam, LoginCtrl.mejaParam), 
           //   child: Text("hapus meje ${LoginCtrl.mejaParam}")
           // ),
           Container(
-            width: double.infinity,
-            height: 100,
-            color: Colors.cyan[900],
-            padding: EdgeInsets.all(8),
-            child: Text("Login",
-              style: TextStyle(
-                fontSize: 32,
-                color: Colors.orange[100]
-              ),
+            alignment: Alignment.center,
+            child: Image.network(LoginCtrl?.company?.value?.logo??"",
+              width: 100,
+              height: 100,
+              fit: BoxFit.cover,
             ),
           ),
-          Flexible(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: EdgeInsets.all(16),
-                  child: Form(
-                    key: LoginCtrl.kunciState,
-                    child: Column(
-                      children: [
-                        for(var i = 0; i < LoginCtrl.lsForm.length; i++)
-                        Container(
-                          padding: EdgeInsets.all(8),
-                          margin: EdgeInsets.only(bottom: 16),
-                          child: TextFormField(
-                            controller: LoginCtrl.lsTextCtrl[i],
-                            validator: (value) => value.isEmpty? "fill in all data completely": null,
-                            decoration: InputDecoration(
-                              labelText: LoginCtrl.lsForm[i]['nama'],
-                              labelStyle: TextStyle(
-                                color: Colors.orange[100]
-                              ),
-                              prefixIcon: Icon(LoginCtrl.lsForm[i]['icon'],
-                                color: Colors.orange[100],
-                              ),
-                              isDense: true,
-                              filled: true,
-                              fillColor: Colors.cyan[900],
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20),
-                                borderSide: BorderSide.none
-                              )
+          Text("Login",
+            style: TextStyle(
+              fontSize: 62,
+              color: Colors.orange[100]
+            ),
+          ),
+          Column(
+            children: [
+              Container(
+                padding: EdgeInsets.all(16),
+                child: Form(
+                  key: kunciState,
+                  child: Column(
+                    children: [
+                      for(var i = 0; i < LoginCtrl.lsForm.length; i++)
+                      Container(
+                        padding: EdgeInsets.all(8),
+                        margin: EdgeInsets.only(bottom: 16),
+                        child: TextFormField(
+                          key: UniqueKey(),
+                          controller: LoginCtrl.lsTextCtrl[i],
+                          validator: (value) => value.isEmpty? "fill in all data completely": null,
+                          decoration: InputDecoration(
+                            labelText: LoginCtrl.lsForm[i]['nama'],
+                            labelStyle: TextStyle(
+                              color: Colors.orange[100]
                             ),
-                            textInputAction: TextInputAction.next,
+                            prefixIcon: Icon(LoginCtrl.lsForm[i]['icon'],
+                              color: Colors.orange[100],
+                            ),
+                            focusedBorder: InputBorder.none,
+                            isDense: true,
+                            filled: true,
+                            fillColor: Colors.cyan[900],
+                            enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.orange[100]))
                           ),
+                          textInputAction: TextInputAction.next,
                         ),
-                        Obx( () => 
-                          LoginCtrl.loading.value?CircularProgressIndicator(strokeWidth: 0.5,)
-                          :InkWell(
-                            onTap: () => LoginCtrl.cobaLogin(),
-                            child: Container(
-                              width: double.infinity,
-                              padding: EdgeInsets.all(8),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Text("LOGIN",
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      color: Colors.orange[900],
-                                      fontWeight: FontWeight.w700
-                                    ),
+                      ),
+                      Obx( () => 
+                        LoginCtrl.loading.value?CircularProgressIndicator(strokeWidth: 0.5,)
+                        :InkWell(
+                          key: UniqueKey(),
+                          onTap: () => LoginCtrl.cobaLogin(kunciState),
+                          onLongPress: () => ApiController.hapusMeja2(LoginCtrl.hostParam, LoginCtrl.mejaParam),
+                          child: Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.all(8),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text("LOGIN",
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    color: Colors.orange[100],
+                                    fontWeight: FontWeight.w700
                                   ),
-                                  Icon(
-                                    Icons.arrow_forward_ios_outlined
-                                  )
-                                ],
-                              )
-                            ),
-                          )
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios_outlined,
+                                  color: Colors.orange[100],
+                                )
+                              ],
+                            )
+                          ),
                         )
-                      ],
-                    ),
+                      )
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),
@@ -382,7 +392,8 @@ class LoginCtrl extends MyCtrl{
   static final hostParam = Get.parameters['host'];
   static final mejaParam = Get.parameters['meja'];
   static final tokenParam = Get.parameters['token'];
-  static GlobalKey<FormState> kunciState = GlobalKey<FormState>();
+  static final company = ModelCompany().obs;
+
   static final List<TextEditingController> lsTextCtrl = List.generate(lsForm.length, (index) => TextEditingController());
   static final lsForm = [
     {
@@ -402,11 +413,14 @@ class LoginCtrl extends MyCtrl{
   
 
   static init()async{
+    company.value = await ApiController.getDtaCompany(hostParam);
+    await GetStorage().write("company", company.value);
+
     await GetStorage().write("activ", true);
     await Future.delayed(Duration(seconds: 2));
   }
 
-  static cobaLogin()async{
+  static cobaLogin(GlobalKey<FormState> kunciState)async{
     loading.value = true;
     HideKeyboard.now();
     if(kunciState.currentState.validate()){
@@ -442,6 +456,8 @@ class LoginCtrl extends MyCtrl{
 
       try {
         final coba = await Dio().post("$hostParam/api/setUserTable/$mejaParam",data: loginPaket.toJson());
+        //print(coba.data);
+        
         if(coba.data['status']){
           await GetStorage().write('auth', coba.data);
           await GetStorage().write("meja", mejaParam);

@@ -1,13 +1,15 @@
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:presto_qr/component/garis_putus.dart';
-import 'package:presto_qr/controller/lognya_controller.dart';
-import 'package:presto_qr/controller/user_controller.dart';
-import 'package:presto_qr/model/log_model.dart';
+import 'package:presto_qr/controller/lognya_controller_bak.dart';
+import 'package:presto_qr/controller/user_controller_bak.dart';
+import 'package:presto_qr/model/company_model.dart';
+import 'package:presto_qr/model/log_model_bak.dart';
 import 'package:presto_qr/model/menu_model.dart';
-import 'package:presto_qr/model/paket_orderan_model.dart';
+import 'package:presto_qr/model/paket_orderan_model_bak.dart';
 
 class ApiController {
   
@@ -19,23 +21,23 @@ class ApiController {
       final res = await new Dio().post("$host/api/saveOrder/"+meja,data: paketOrderan);
       return res;
     } catch (e) {
-      LognyaController.to.online(e.toString());
+      // LognyaController.to.online(e.toString());
     }
     return null;
   }
 
-  static hapusMeja()async{
-    try {
-      print("${GetStorage().read('host')}/api/clearTable/${GetStorage().read('meja')}".kuning());
-      final res = await new Dio().post("${GetStorage().read('host')}/api/clearTable/${GetStorage().read('meja')}");
-      return res.data['status'];
+  // static hapusMeja()async{
+  //   try {
+  //     print("${GetStorage().read('host')}/api/clearTable/${GetStorage().read('meja')}".kuning());
+  //     final res = await new Dio().post("${GetStorage().read('host')}/api/clearTable/${GetStorage().read('meja')}");
+  //     return res.data['status'];
       
-    } catch (e) {
-      LognyaController.to.online(e.toString());
-    }
+  //   } catch (e) {
+  //     // LognyaController.to.online(e.toString());
+  //   }
 
-    return null;
-  }
+  //   return null;
+  // }
 
   static hapusMeja2(String host, String meja)async{
     try {
@@ -45,7 +47,7 @@ class ApiController {
       return res.data['status'];
       
     } catch (e) {
-      LognyaController.to.online(e.toString());
+      // LognyaController.to.online(e.toString());
     }
     return null;
   }
@@ -61,37 +63,50 @@ class ApiController {
     return null;
   }
 
-  static developer()async{
+ static Future<ModelCompany> getDtaCompany(String host)async{
+   ModelCompany hasil;
     try {
-      Response res = await new Dio().get("https://malikkurosaki.github.io/cdnjs/setting/developer_prestoqr.json");
-      return res.data['edit'];
-      
-    } catch (e) {
-      LognyaController.to.online(e.toString());
-    }
-
-    return null;
-  }
-
-  static tambahLog(String text) async {
-    Response res;
-    try {
-      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-      WebBrowserInfo info = await deviceInfo.webBrowserInfo;
-      LogModel log = LogModel(
-        user: UserController.to.user.value.name??info.product,
-        log: text,
-        device_id: info.vendor
-      );
-      
-      print("coba kirim ${log.toJson()}");
-      res = await new Dio().post('http://188.166.218.138:8080/simpan-log',data: log.toJson());
+      final res = await new Dio().get("$host/api/getCompanyProfile");
+      // final ModelCompany dataCompany = ModelCompany.fromJson(res.data['data']);
+      // hasil = dataCompany;
+      hasil = await compute((_) => ModelCompany.fromJson(res.data['data']), "");
     } catch (e) {
       print(e.toString());
-      res.data = "note log error";
     }
-    return res.data;
+    return hasil;
   }
+
+  // static developer()async{
+  //   try {
+  //     Response res = await new Dio().get("https://malikkurosaki.github.io/cdnjs/setting/developer_prestoqr.json");
+  //     return res.data['edit'];
+      
+  //   } catch (e) {
+  //     LognyaController.to.online(e.toString());
+  //   }
+
+  //   return null;
+  // }
+
+  // static tambahLog(String text) async {
+  //   Response res;
+  //   try {
+  //     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+  //     WebBrowserInfo info = await deviceInfo.webBrowserInfo;
+  //     LogModel log = LogModel(
+  //       user: UserController.to.user.value.name??info.product,
+  //       log: text,
+  //       device_id: info.vendor
+  //     );
+      
+  //     print("coba kirim ${log.toJson()}");
+  //     res = await new Dio().post('http://188.166.218.138:8080/simpan-log',data: log.toJson());
+  //   } catch (e) {
+  //     print(e.toString());
+  //     res.data = "note log error";
+  //   }
+  //   return res.data;
+  // }
 
   
 }

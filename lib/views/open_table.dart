@@ -1,7 +1,5 @@
-import 'dart:convert';
 import 'dart:ui';
-
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -9,91 +7,117 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:hide_keyboard/hide_keyboard.dart';
 import 'package:pecahan_rupiah/pecahan_rupiah.dart';
-import 'package:presto_qr/component/garis_putus.dart';
 import 'package:presto_qr/controller/api_controller.dart';
-import 'package:presto_qr/controller/company_controller.dart';
-import 'package:presto_qr/controller/list_menu_controller.dart';
-import 'package:presto_qr/controller/user_controller.dart';
 import 'package:presto_qr/main.dart';
+import 'package:presto_qr/model/company_model.dart';
 import 'package:presto_qr/model/menu_model.dart';
-import 'package:presto_qr/model/paket_orderan_model.dart';
-import 'package:presto_qr/views/detail_menu.dart';
-import 'package:presto_qr/views/detail_orderan.dart';
-import 'package:presto_qr/views/user_profile.dart';
+import 'package:presto_qr/views/login.dart';
 
 class OpenTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return HideKeyboard(
       child: Scaffold(
+        backgroundColor: Colors.grey[100],
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Obx(() => 
-              AnimatedContainer(
-                padding: EdgeInsets.all(8),
-                duration: Duration(milliseconds: 1),
-                height: TableCtrl.tinggiScroll.value,
+            Obx( () => 
+              Container(
                 width: double.infinity,
-                color: Colors.cyan[900],
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Flexible(
-                      child: Row(
-                        children: [
-                          CircleAvatar(
-                            backgroundColor: Colors.orange[100],
-                            child: Icon(Icons.people,
-                              color: Colors.black,
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(8),
-                            child: Text(GetStorage().read("auth")['user']['name'].toString(),
-                              style: TextStyle(
-                                color: Colors.orange[100],
-                                fontSize: 18
+                child: Card(
+                  color: Colors.cyan,
+                  child: Container(
+                    padding: EdgeInsets.all(8),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                child: Text(TableCtrl.company?.value?.name?.toString()??"",
+                                  style: TextStyle(
+                                    color: Colors.orange[100],
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w700
+                                  ),
+                                ),
                               ),
-                            )
-                          )
-                        ],
-                      ),
-                    ),
-                    Flexible(
-                      child: Text("@ Table ${GetStorage().read("meja")}",
-                        style: TextStyle(
-                          fontSize: 24,
-                          color: Colors.white
+                              Container(
+                                child: Row(
+                                  children: [
+                                    Text(GetStorage().read("auth")['user']['name'].toString(),
+                                      style: TextStyle(
+                                        color: Colors.white
+                                      ),
+                                    ),
+                                    Text(" @ Table ${GetStorage().read("meja")}",
+                                      style: TextStyle(
+                                        color: Colors.white
+                                      ),
+                                    )
+                                  ],
+                                )
+                              ),
+                              Flexible(
+                                child: Card(
+                                  child: Container(
+                                    padding: EdgeInsets.all(4),
+                                    child: Text("${TableCtrl.jam.value.hour} : ${TableCtrl.jam.value.minute}",
+                                      style: TextStyle(
+                                        fontSize: 24
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              
+                            ],
+                          ),
                         ),
-                      )
-                    )
-                  ],
-                ),
-              ),
-            ),
-            FlatButton(
-              minWidth: double.infinity,
-              color: Colors.grey[100],
-              onPressed: (){
-                TableCtrl.animateTinggi.value = !TableCtrl.animateTinggi.value;
-                TableCtrl.lsSearch.assignAll(TableCtrl.lsMenu);
-                Get.dialog(MySearch());
-              }, 
-              child: Container(
-                padding: EdgeInsets.all(8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("search ...",
-                      style: TextStyle(
-                        color: Colors.grey
-                      ),
+                        Image.network(TableCtrl.company?.value?.logo??"",
+                          height: 70,
+                          width: 70,
+                          errorBuilder: (context, error, stackTrace) => 
+                          Center(
+                            child: Text("loading .... "),
+                          ),
+                        )
+                      ],
                     ),
-                    Icon(Icons.search)
-                  ],
+                  ),
                 ),
               )
+            ),
+            Container(
+              padding: EdgeInsets.all(4),
+              child: FlatButton(
+                minWidth: double.infinity,
+                color: Colors.grey[200],
+                onPressed: (){
+                  TableCtrl.animateTinggi.value = !TableCtrl.animateTinggi.value;
+                  TableCtrl.lsSearch.assignAll(TableCtrl.lsMenu);
+                  Get.dialog(MySearch());
+                }, 
+                child: Container(
+                  padding: EdgeInsets.all(8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("search ...",
+                        style: TextStyle(
+                          color: Colors.grey
+                        ),
+                      ),
+                      Icon(Icons.search,
+                        color: Colors.cyan,
+                      )
+                    ],
+                  ),
+                )
+              ),
             ),
             Flexible(
               child: FutureBuilder(
@@ -120,13 +144,14 @@ class OpenTable extends StatelessWidget {
                                 Expanded(
                                   child: Text(group['name'],
                                     style: TextStyle(
-                                      fontSize: 24
+                                      fontSize: 24,
+                                      color: Colors.cyan
                                     ),
                                   ),
                                 ),
                                 IconButton(
                                   icon: Icon(Icons.arrow_forward_ios,
-                                    color: Colors.cyan[900],
+                                    color: Colors.cyan
                                   ), 
                                   onPressed: () => 
                                   TableCtrl.pageCtrl.nextPage(
@@ -141,13 +166,15 @@ class OpenTable extends StatelessWidget {
                             child: Container(
                               color: Colors.grey[100],
                               child: ListView(
+                                addAutomaticKeepAlives: true,
+                                physics: ScrollPhysics(),
                                 controller: group['lsCon'],
                                 children: [
                                   for(final MenuModel produk in group['data'])
                                   Container(
                                     height: 130,
                                     color: produk.terlihat == null? Colors.white: Colors.orange[50],
-                                    margin: EdgeInsets.only(bottom: 0.5),
+                                    margin: EdgeInsets.only(bottom: 1),
                                     child: ListTile(
                                       dense: true,
                                       title: Row(
@@ -190,7 +217,8 @@ class OpenTable extends StatelessWidget {
                                                   Text(produk.namaPro.toLowerCase(),
                                                     style: TextStyle(
                                                       fontWeight: FontWeight.bold,
-                                                      fontSize: 18
+                                                      fontSize: 18,
+                                                      color: Colors.grey[700]
                                                     ),
                                                     overflow: TextOverflow.ellipsis,
                                                   ),
@@ -228,7 +256,7 @@ class OpenTable extends StatelessWidget {
                                                               padding: EdgeInsets.all(4),
                                                               child: Text(produk.note,
                                                                 style: TextStyle(
-                                                                  color: Colors.cyan[900]
+                                                                  color: Colors.cyan
                                                                 ),
                                                               )
                                                             )
@@ -240,7 +268,7 @@ class OpenTable extends StatelessWidget {
                                                             padding: EdgeInsets.only(bottom: 4,left: 16, top: 4, right: 16),
                                                             child: Text("QTY : ${produk.qty}",
                                                               style: TextStyle(
-                                                                color: Colors.cyan[900]
+                                                                color: Colors.cyan
                                                               ),
                                                             ),
                                                           )
@@ -265,7 +293,7 @@ class OpenTable extends StatelessWidget {
                                           ),
                                         ),
                                         icon: Icon(Icons.plus_one,
-                                          color: Colors.cyan[900],
+                                          color: Colors.cyan
                                         ),
                                       ): 
                                       // hapus orderan
@@ -296,10 +324,10 @@ class OpenTable extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   Icon(Icons.add_shopping_cart,
-                                    color: Colors.cyan[900],
+                                    color: Colors.cyan,
                                   ),
                                   CircleAvatar(
-                                    backgroundColor: Colors.cyan[900],
+                                    backgroundColor: Colors.cyan,
                                     child: Text(TableCtrl.totalOrder.toString(),
                                       style: TextStyle(
                                         color: Colors.orange[100]
@@ -310,13 +338,13 @@ class OpenTable extends StatelessWidget {
                                     padding: EdgeInsets.all(8),
                                     child: Text("next to proccess",
                                       style: TextStyle(
-                                        color: Colors.cyan[900]
+                                        color: Colors.cyan
                                       ),
                                     ),
                                   ),
                                   IconButton(
                                     icon: Icon(Icons.arrow_forward_ios,
-                                      color: Colors.cyan[900],
+                                      color: Colors.cyan,
                                     ), 
                                     onPressed: (){
                                       Get.dialog(ProsesOrder());
@@ -358,7 +386,7 @@ class DetailsProduct extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              color: Colors.cyan[900],
+              color: Colors.cyan,
               padding: EdgeInsets.all(4),
               child: Row(
                 children: [
@@ -423,7 +451,7 @@ class ProsesOrder extends StatelessWidget {
           child: Column(
             children: [
               Container(
-                color: Colors.cyan[900],
+                color: Colors.cyan,
                 padding: EdgeInsets.all(4),
                 child: Row(
                   children: [
@@ -497,7 +525,7 @@ class ProsesOrder extends StatelessWidget {
                                               onPressed: () => TableCtrl.dimana(itm),
                                               child: Text("edit",
                                               style: TextStyle(
-                                                color: Colors.cyan[900]
+                                                color: Colors.cyan
                                               ),
                                               ),
                                             ),
@@ -527,7 +555,7 @@ class ProsesOrder extends StatelessWidget {
               Container(
                 alignment: Alignment.centerRight,
                 child: Card(
-                  color: Colors.cyan[900],
+                  color: Colors.cyan,
                   child: FlatButton(
                     onPressed: () => TableCtrl.kirimOrderan(),
                     child: Container(
@@ -574,7 +602,7 @@ class TambahOrder extends StatelessWidget {
             children: [
               Container(
                 padding: EdgeInsets.all(4),
-                color: Colors.cyan[900],
+                color: Colors.cyan,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -623,15 +651,17 @@ class TambahOrder extends StatelessWidget {
                   controller: scrollController,
                   children: [
                     Container(
-                      padding: EdgeInsets.all(4),
+                      padding: EdgeInsets.all(8),
                       child: TextFormField(
                         onChanged: (value) => TableCtrl.note.value = value,
                         decoration: InputDecoration(
                           isDense: true,
-                          prefixIcon: Icon(Icons.edit),
+                          prefixIcon: Icon(Icons.edit,
+                            color: Colors.cyan,
+                          ),
                           hintText: produk.note == null?"add some note": produk.note,
                           border: InputBorder.none,
-                          fillColor: Colors.grey[100],
+                          fillColor: Colors.grey[200],
                           filled: true,
                           alignLabelWithHint: true
                         ),
@@ -650,7 +680,7 @@ class TambahOrder extends StatelessWidget {
                             }
                           ),
                           CircleAvatar(
-                            backgroundColor: Colors.cyan[900],
+                            backgroundColor: Colors.cyan,
                             child: Obx(() =>
                               Text(TableCtrl.qty.value.toString(),
                                 style: TextStyle(
@@ -790,7 +820,11 @@ class TableCtrl extends MyCtrl{
 
   static final PageController pageCtrl = PageController();
   static final animateTinggi = false.obs;
-  static final tinggiScroll = 100.0.obs;
+  static final tinggiScroll = 150.0.obs;
+
+  static final jam = DateTime.now().obs;
+
+  static final company = ModelCompany().obs;
 
   static final lsGroup = [
     {
@@ -811,6 +845,11 @@ class TableCtrl extends MyCtrl{
   ].obs;
 
   static init()async{
+
+    // kosongkan orderan jika login yang kedua kalinya
+    lsorderan.assignAll([]);
+    adaOrderan.value = false;
+
     await getData();
     List<ScrollController> con = [lsGroup[0]['lsCon'], lsGroup[1]['lsCon'], lsGroup[2]['lsCon']];
     for(final c in con){
@@ -818,7 +857,7 @@ class TableCtrl extends MyCtrl{
         if(c.position.userScrollDirection == ScrollDirection.forward){
           //print("kebawah");
           tinggiScroll.value += 4;
-          if(tinggiScroll.value > 100) tinggiScroll.value = 100;
+          if(tinggiScroll.value > 150) tinggiScroll.value = 150;
           animateTinggi.value = false;
         }else{
           //print("keatas");
@@ -828,6 +867,19 @@ class TableCtrl extends MyCtrl{
         }
 
       });
+    }
+
+    getDtaCompany();
+  }
+
+  static void getDtaCompany()async{
+    try {
+      // final res = await new Dio().get("${GetStorage().read("host")}/api/getCompanyProfile");
+      final res = GetStorage().read("company");
+      company.value = await compute((_) => ModelCompany.fromJson(res), "" );
+      //print(company.value.name);
+    } catch (e) {
+      print(e.toString());
     }
   }
 
@@ -929,13 +981,13 @@ class TableCtrl extends MyCtrl{
     final res = await ApiController.kirimPaket(paket);
     if(res.data['status']){
       Get.back();
-      print("berhasil ${res.data}");
-      await GetStorage().write("listbill", lsorderan.map((element) => element['data']).toList().expand((element) => element).toList());
-      await GetStorage().write("listmenu", lsMenu.map((element) => element.toJson()).toList());
+      // print("berhasil ${res.data}");
+      await GetStorage().write("listbill", lsorderan);
+      await GetStorage().write("listmenu", lsMenu);
       await ApiController.hapusMeja2(GetStorage().read("host"), GetStorage().read("meja"));
       await GetStorage().remove("auth");
+      Get.reset();
       Get.offNamed('/tunggu-pesanan');
-
     }else{
       
       Get.dialog(
@@ -963,7 +1015,7 @@ class TableCtrl extends MyCtrl{
 
       await GetStorage().remove("auth");
       await ApiController.hapusMeja2(GetStorage().read("host"), GetStorage().read("meja"));
-      print(res.data.toString());
+      // print(res.data.toString());
     }
   }
 

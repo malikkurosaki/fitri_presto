@@ -1,25 +1,25 @@
-class CompanyModel {
-  bool status;
-  Data data;
+// class CompanyModel {
+//   bool status;
+//   Data data;
 
-  CompanyModel({this.status, this.data});
+//   CompanyModel({this.status, this.data});
 
-  CompanyModel.fromJson(Map<String, dynamic> json) {
-    status = json['status'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
-  }
+//   CompanyModel.fromJson(Map<String, dynamic> json) {
+//     status = json['status'];
+//     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+//   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    if (this.data != null) {
-      data['data'] = this.data.toJson();
-    }
-    return data;
-  }
-}
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     data['status'] = this.status;
+//     if (this.data != null) {
+//       data['data'] = this.data.toJson();
+//     }
+//     return data;
+//   }
+// }
 
-class Data {
+class ModelCompany {
   String office;
   String name;
   String address;
@@ -31,7 +31,7 @@ class Data {
   String logo;
   String image;
 
-  Data(
+  ModelCompany(
       {this.office,
       this.name,
       this.address,
@@ -43,7 +43,7 @@ class Data {
       this.logo,
       this.image});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  ModelCompany.fromJson(Map<String, dynamic> json) {
     office = json['office'];
     name = json['name'];
     address = json['address'];
