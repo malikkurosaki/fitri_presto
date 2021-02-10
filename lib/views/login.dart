@@ -255,7 +255,7 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       key: UniqueKey(),
-      color: Colors.cyan[900],
+      color: Colors.cyan,
       child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
