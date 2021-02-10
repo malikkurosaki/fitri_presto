@@ -19,7 +19,7 @@ class Login extends StatelessWidget {
       child: Scaffold(
         key: UniqueKey(),
         body: Container(
-          color: Colors.cyan[900],
+          color: Colors.cyan,
           child: SafeArea(
             child: FutureBuilder(
               future: LoginCtrl.init(),
@@ -124,7 +124,7 @@ class FormLogin extends StatelessWidget {
                             focusedBorder: InputBorder.none,
                             isDense: true,
                             filled: true,
-                            fillColor: Colors.cyan[900],
+                            fillColor: Colors.cyan,
                             enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.orange[100]))
                           ),
                           textInputAction: TextInputAction.next,

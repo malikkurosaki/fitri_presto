@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:dio/dio.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -11,7 +11,6 @@ import 'package:presto_qr/controller/api_controller.dart';
 import 'package:presto_qr/main.dart';
 import 'package:presto_qr/model/company_model.dart';
 import 'package:presto_qr/model/menu_model.dart';
-import 'package:presto_qr/views/login.dart';
 
 class OpenTable extends StatelessWidget {
   @override
@@ -184,11 +183,12 @@ class OpenTable extends StatelessWidget {
                                             onTap: () => Get.dialog(DetailsProduct(produk: produk,)),
                                             child: Container(
                                               decoration: BoxDecoration(
-                                                color: Colors.cyan[900],
+                                                color: Colors.cyan,
                                                 border: Border.all(color: Colors.orange, width: 0.1)
                                               ),
                                               margin: EdgeInsets.all(4),
-                                              child: Image.network(produk.foto,
+                                              child: Image.network(produk?.foto??"",
+                                                key: UniqueKey(),
                                                 height: 70,
                                                 width: 70,
                                                 fit: BoxFit.cover,
@@ -217,7 +217,6 @@ class OpenTable extends StatelessWidget {
                                                   Text(produk.namaPro.toLowerCase(),
                                                     style: TextStyle(
                                                       fontWeight: FontWeight.bold,
-                                                      fontSize: 18,
                                                       color: Colors.grey[700]
                                                     ),
                                                     overflow: TextOverflow.ellipsis,
@@ -715,6 +714,8 @@ class MySearch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
+      maxChildSize: 1,
+      initialChildSize: 0.8,
       builder: (context, scrollController) => 
       Card(
         child: Container(
@@ -734,7 +735,7 @@ class MySearch extends StatelessWidget {
                           padding: EdgeInsets.all(1),
                           margin: EdgeInsets.all(2),
                           color: Colors.grey[100],
-                          child: Image.network(cari.foto,
+                          child: Image.network(cari?.foto??"",
                             height: 50,
                             width: 50,
                             fit: BoxFit.cover,
@@ -904,16 +905,16 @@ class TableCtrl extends MyCtrl{
   }
 
   static dimana(MenuModel cari)async{
-    final idx = lsGroup.map((element) => element['name'].toString().toLowerCase()).toList().indexOf(cari.groupp.toLowerCase());
+    final idx = await compute((_) => lsGroup.map((element) => element['name'].toString().toLowerCase()).toList().indexOf(cari.groupp.toLowerCase()), "");
     
-    final List<MenuModel> ls = lsGroup[idx]['data'];
+    final List<MenuModel> ls = await compute((_) => lsGroup[idx]['data'], "");
     
-    final idx2 = ls.indexOf(cari);
+    final idx2 = await compute((_) => ls.indexOf(cari), "");
 
     pageCtrl.jumpToPage(idx);
 
     await Future.delayed(Duration(milliseconds: 10));
-    final ScrollController  scrl = lsGroup[idx]['lsCon'];
+    final ScrollController  scrl = await compute((_) => lsGroup[idx]['lsCon'], "");
     
     ls[idx2].terlihat = true;
     lsGroup.refresh();
@@ -922,6 +923,7 @@ class TableCtrl extends MyCtrl{
       duration: Duration(milliseconds: 500),
       curve: Curves.ease
     );
+
     Get.back();
 
     Future.delayed(Duration(seconds: 2),(){

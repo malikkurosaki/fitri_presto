@@ -23,23 +23,27 @@ class TungguPesanan extends StatelessWidget {
           future: TungguCtrl.init(),
           builder: (context, snapshot) => 
           snapshot.connectionState != ConnectionState.done?
-          Image.network(TungguCtrl.company.value?.image??"",
-            height: double.infinity,
-            width: double.infinity,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) => 
-            Container(
+          Obx(() => 
+            TungguCtrl.company.value == null?Text("loading"):
+            Image.network(TungguCtrl.company.value?.image??"",
+              key: UniqueKey(),
               height: double.infinity,
               width: double.infinity,
-              color: Colors.cyan,
-              child: Center(
-                child: Text("THANK YOU",
-                  style: TextStyle(
-                    color: Colors.white
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) => 
+              Container(
+                height: double.infinity,
+                width: double.infinity,
+                color: Colors.cyan,
+                child: Center(
+                  child: Text("THANK YOU",
+                    style: TextStyle(
+                      color: Colors.white
+                    ),
                   ),
                 ),
               ),
-            ),
+            )
           ): Obx(() => 
             Stack(
               children: [
@@ -246,16 +250,16 @@ class TungguCtrl extends MyCtrl{
   static final company = ModelCompany().obs;
 
   static init()async{
-    try {
-      final cm = await GetStorage().read("company");
-      company.value = await compute((_) => ModelCompany.fromJson(cm),"");
-      
-      await Future.delayed(Duration(seconds: 5));
-      await getListmenu();
-      await getListPesanan();
-    } catch (e) {
-      print(e.toString());
-    }
+    await thank();
+    await Future.delayed(Duration(seconds: 3));
+    await getListmenu();
+    await getListPesanan();
+  }
+
+  static thank()async{
+    final cm = await GetStorage().read("company");
+    company.value = await compute((_) => ModelCompany.fromJson(cm),"");
+    print(company.value.image);
   }
 
   static getListmenu()async{
