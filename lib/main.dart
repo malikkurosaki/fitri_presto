@@ -63,15 +63,7 @@ main() async{
 class BindingPertama implements Bindings {
   @override
   void dependencies()async{
-    // Get.put<SplashController>(SplashController());
-    // Get.put<CompanyProfileController>(CompanyProfileController());
-    // Get.put<ListMenuNya>(ListMenuNya());
-    // Get.put<LoginController>(LoginController());
-    // Get.put<UserController>(UserController());
-    // Get.put<LognyaController>(LognyaController());
-    // Get.put<MyHomeController>(MyHomeController());
-    // Get.put<NatyaController>(NatyaController());
-    // Get.put<SocketController>(SocketController());
+  
     Get.put(MyCtrl());
   }
   
