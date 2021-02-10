@@ -202,9 +202,8 @@ class LoginCtrl extends MyCtrl{
 
   static init()async{
     company.value = await ApiController.getDtaCompany(hostParam);
-    await GetStorage().write("company", company.value);
+    await GetStorage().write("company", company.value.toJson());
 
-    await GetStorage().write("activ", true);
     await Future.delayed(Duration(seconds: 2));
   }
 

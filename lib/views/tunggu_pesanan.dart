@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:pecahan_rupiah/pecahan_rupiah.dart';
+import 'package:presto_qr/controller/api_controller.dart';
 import 'package:presto_qr/main.dart';
 import 'package:get/get.dart';
+import 'package:presto_qr/model/company_model.dart';
 import 'package:presto_qr/model/menu_model.dart';
 import 'package:presto_qr/views/open_table.dart';
 import 'package:presto_qr/views/thank.dart';
@@ -11,90 +14,102 @@ import 'package:story_view/story_view.dart';
 import 'package:swipe_up/swipe_up.dart';
 
 class TungguPesanan extends StatelessWidget {
+  // Get.dialog(Pesanan()) 
   @override
   Widget build(BuildContext context) {
-    return SwipeUp(
-      onSwipe: () => Get.dialog(Pesanan()) ,
-      child: Material(
-        color: Colors.black54,
-        child: Container(
-          padding: EdgeInsets.all(8),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.keyboard_arrow_up_outlined,
-                color: Colors.white
-              ),
-              Text('show last order', style: TextStyle(color: Colors.white)),
-            ],
-          ),
-        ),
-      ),
-      body : Scaffold(
-        body: SafeArea(
-          child: FutureBuilder(
-            future: TungguCtrl.init(),
-            builder: (context, snapshot) => 
-            snapshot.connectionState != ConnectionState.done?
-            Image.network(TableCtrl.company.value.image??"",
+    return Scaffold(
+      body: SafeArea(
+        child: FutureBuilder(
+          future: TungguCtrl.init(),
+          builder: (context, snapshot) => 
+          snapshot.connectionState != ConnectionState.done?
+          Image.network(TungguCtrl.company.value?.image??"",
+            height: double.infinity,
+            width: double.infinity,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) => 
+            Container(
               height: double.infinity,
               width: double.infinity,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) => 
-              Container(
-                height: double.infinity,
-                width: double.infinity,
-                color: Colors.cyan,
-                child: Center(
-                  child: Text("THANK YOU",
-                    style: TextStyle(
-                      color: Colors.white
-                    ),
+              color: Colors.cyan,
+              child: Center(
+                child: Text("THANK YOU",
+                  style: TextStyle(
+                    color: Colors.white
                   ),
                 ),
               ),
-            ): Obx(() => 
-              Column(
-                children: [
-                  Flexible(
-                    child: GridView.count(
-                      crossAxisCount: 3,
-                      children: [
-                        for(final MenuModel itm in TableCtrl.lsMenu)
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.white
+            ),
+          ): Obx(() => 
+            Stack(
+              children: [
+                Column(
+                  children: [
+                    Flexible(
+                      child: GridView.count(
+                        crossAxisCount: 3,
+                        children: [
+                          for(final MenuModel itm in TableCtrl.lsMenu)
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.white
+                              ),
+                              color: Colors.grey,
                             ),
-                            color: Colors.grey,
-                          ),
-                          child: GestureDetector(
-                            onTap: () => Get.dialog(
-                              DetailsGambar(model: itm,),
-                              transitionCurve: Curves.elasticIn, 
-                              transitionDuration: Duration(microseconds: 1)
-                            ),
-                            child: Image.network(itm.foto,
-                              key: UniqueKey(),
-                              height: double.infinity,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) => 
-                              Container(
-                                child: Center(
-                                  child: Text("no image"),
+                            child: GestureDetector(
+                              onTap: () => Get.dialog(
+                                DetailsGambar(model: itm,),
+                                transitionCurve: Curves.elasticIn, 
+                                transitionDuration: Duration(microseconds: 1)
+                              ),
+                              child: Image.network(itm.foto,
+                                key: UniqueKey(),
+                                height: double.infinity,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) => 
+                                Container(
+                                  child: Center(
+                                    child: Text("no image"),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        )
-                      ],
+                          )
+                        ],
+                      )
                     )
-                  )
-                ],
-              )
+                  ],
+                ),
+                Container(
+                  alignment: Alignment.bottomCenter,
+                  child: InkWell(
+                    onTap: () => Get.dialog(Pesanan()) ,
+                    child: Card(
+                      color: Colors.cyan,
+                      child: Container(
+                        padding: EdgeInsets.all(8),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.arrow_circle_up_outlined,
+                              color: Colors.white
+                            ),
+                            Text("show last order",
+                              style: TextStyle(
+                                color: Colors.white
+                              ),
+                            ),
+                          ],
+                        )
+                      ),
+                    ),
+                  ),
+                )
+              ],
             )
-          ),
+          )
         ),
       ),
     );
@@ -228,10 +243,19 @@ class TungguCtrl extends MyCtrl{
   static final scrCon = ScrollController();
   static final tinggi = 0.obs;
 
+  static final company = ModelCompany().obs;
+
   static init()async{
-    await Future.delayed(Duration(seconds: 3));
-    await getListmenu();
-    await getListPesanan();
+    try {
+      final cm = await GetStorage().read("company");
+      company.value = await compute((_) => ModelCompany.fromJson(cm),"");
+      
+      await Future.delayed(Duration(seconds: 5));
+      await getListmenu();
+      await getListPesanan();
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   static getListmenu()async{
