@@ -14,19 +14,23 @@ import 'package:presto_qr/model/login_model.dart';
 class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return HideKeyboard(
+    return Scaffold(
       key: UniqueKey(),
-      child: Scaffold(
-        key: UniqueKey(),
-        body: Container(
-          color: Colors.cyan,
-          child: SafeArea(
-            child: FutureBuilder(
-              future: LoginCtrl.init(),
-              builder: (context, snapshot) => snapshot.connectionState != ConnectionState.done?
-              SplashScreen(): FormLogin()
-            )
-          ),
+      body: HideKeyboard(
+        child: SafeArea(
+          child: Container(
+            width: double.infinity,
+            height: double.infinity,
+            color: Colors.cyan,
+            alignment: Alignment.center,
+            child: SingleChildScrollView(
+              child: FutureBuilder(
+                future: LoginCtrl.init(),
+                builder: (context, snapshot) => snapshot.connectionState != ConnectionState.done?
+                SplashScreen(): FormLogin()
+              ),
+            ),
+          )
         ),
       ),
     );
@@ -36,29 +40,23 @@ class Login extends StatelessWidget {
 class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      key: UniqueKey(),
-      color: Colors.cyan,
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text("PRESTO QR",
-              style: TextStyle(
-                fontSize: 32,
-                color: Colors.orange[100]
-              ),
-            ),
-            Text("probus system",
-              style: TextStyle(
-                fontStyle: FontStyle.italic,
-                color: Colors.white,
-                fontSize: 12
-              ),
-            )
-          ],
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text("PRESTO QR",
+          style: TextStyle(
+            fontSize: 32,
+            color: Colors.orange[100]
+          ),
         ),
-      ),
+        Text("probus system",
+          style: TextStyle(
+            fontStyle: FontStyle.italic,
+            color: Colors.white,
+            fontSize: 12
+          ),
+        )
+      ],
     );
   }
 }
@@ -201,6 +199,7 @@ class LoginCtrl extends MyCtrl{
   
 
   static init()async{
+    print(hostParam);
     company.value = await ApiController.getDtaCompany(hostParam);
     await GetStorage().write("company", company.value.toJson());
 

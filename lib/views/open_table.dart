@@ -61,15 +61,34 @@ class OpenTable extends StatelessWidget {
                                 )
                               ),
                               Flexible(
-                                child: Card(
-                                  child: Container(
-                                    padding: EdgeInsets.all(4),
-                                    child: Text("${TableCtrl.jam.value.hour} : ${TableCtrl.jam.value.minute}",
-                                      style: TextStyle(
-                                        fontSize: 24
+                                child: Row(
+                                  children: [
+                                    Card(
+                                      child: Container(
+                                        padding: EdgeInsets.all(4),
+                                        child: Text("${TableCtrl.jam.value.hour} : ${TableCtrl.jam.value.minute}",
+                                          style: TextStyle(
+                                            fontSize: 24
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
+                                    Card(
+                                      color: Colors.orange,
+                                      child: InkWell(
+                                        onTap: () => TableCtrl.cobaLogout(),
+                                        child: Container(
+                                          padding: EdgeInsets.all(4),
+                                          child: Text("Logout",
+                                            style: TextStyle(
+                                             fontSize: 23,
+                                             color: Colors.white
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
                                 ),
                               ),
                               
@@ -139,13 +158,22 @@ class OpenTable extends StatelessWidget {
                           Container(
                             padding: EdgeInsets.all(8),
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Expanded(
-                                  child: Text(group['name'],
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      color: Colors.cyan
-                                    ),
+                                IconButton(
+                                  icon: Icon(Icons.arrow_back_ios,
+                                    color: Colors.cyan,
+                                  ), 
+                                  onPressed: (){
+                                    TableCtrl.pageCtrl.previousPage(
+                                      duration: Duration(microseconds: 500),
+                                      curve: Curves.ease
+                                    );
+                                  }
+                                ),
+                                Text(group['name'],
+                                  style: TextStyle(
+                                    fontSize: 18
                                   ),
                                 ),
                                 IconButton(
@@ -930,6 +958,11 @@ class TableCtrl extends MyCtrl{
       ls[idx2].terlihat = null;
       lsGroup.refresh();
     });
+  }
+
+  static cobaLogout()async{
+    GetStorage().remove("auth");
+    Get.offNamed("/");
   }
 
   static ambilListOrderan(){

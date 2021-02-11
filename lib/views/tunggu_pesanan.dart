@@ -254,6 +254,8 @@ class TungguCtrl extends MyCtrl{
     await Future.delayed(Duration(seconds: 3));
     await getListmenu();
     await getListPesanan();
+
+    await Future.delayed(Duration(seconds: 3));
   }
 
   static thank()async{
