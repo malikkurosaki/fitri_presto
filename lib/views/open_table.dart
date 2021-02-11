@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
@@ -45,63 +46,85 @@ class OpenTable extends StatelessWidget {
                                 ),
                               ),
                               Container(
+                                padding: EdgeInsets.symmetric(vertical: 4),
                                 child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Text(GetStorage().read("auth")['user']['name'].toString(),
+                                    Icon(Icons.account_circle,
+                                      size: 20,
+                                    ),
+                                    Text("  ${GetStorage().read("auth")['user']['name']}",
                                       style: TextStyle(
-                                        color: Colors.white
+                                        
                                       ),
                                     ),
                                     Text(" @ Table ${GetStorage().read("meja")}",
                                       style: TextStyle(
-                                        color: Colors.white
                                       ),
                                     )
                                   ],
                                 )
                               ),
                               Flexible(
-                                child: Row(
-                                  children: [
-                                    Card(
-                                      child: Container(
-                                        padding: EdgeInsets.all(4),
-                                        child: Text("${TableCtrl.jam.value.hour} : ${TableCtrl.jam.value.minute}",
-                                          style: TextStyle(
-                                            fontSize: 24
-                                          ),
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(vertical: 4),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.access_time_outlined,
+                                        color: Colors.white,
+                                        size: 20,
+                                      ),
+                                      Text("  ${TableCtrl.jam.value.hour} : ${TableCtrl.jam.value.minute}",
+                                        style: TextStyle(
+                                          color: Colors.white,
                                         ),
                                       ),
-                                    ),
-                                    Card(
-                                      color: Colors.orange,
-                                      child: InkWell(
-                                        onTap: () => TableCtrl.cobaLogout(),
-                                        child: Container(
-                                          padding: EdgeInsets.all(4),
-                                          child: Text("Logout",
-                                            style: TextStyle(
-                                             fontSize: 23,
-                                             color: Colors.white
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                               
                             ],
                           ),
                         ),
-                        Image.network(TableCtrl.company?.value?.logo??"",
-                          height: 70,
-                          width: 70,
-                          errorBuilder: (context, error, stackTrace) => 
-                          Center(
-                            child: Text("loading .... "),
-                          ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Image.network(TableCtrl.company?.value?.logo??"",
+                              height: 70,
+                              width: 70,
+                              errorBuilder: (context, error, stackTrace) => 
+                              Center(
+                                child: Container(
+                                  color: Colors.cyan[400],
+                                  width: 70,
+                                  height: 70,
+                                ),
+                              ),
+                            ),
+                            Card(
+                              color: Colors.orange,
+                              child: InkWell(
+                                onTap: () => TableCtrl.cobaLogout(),
+                                child: Container(
+                                  padding: EdgeInsets.all(4),
+                                  child: Row(
+                                    children: [
+                                      Text("Logout",
+                                        style: TextStyle(
+                                          color: Colors.white
+                                        ),
+                                      ),
+                                      Icon(Icons.arrow_forward,
+                                        color: Colors.white,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
                         )
                       ],
                     ),
@@ -163,6 +186,7 @@ class OpenTable extends StatelessWidget {
                                 IconButton(
                                   icon: Icon(Icons.arrow_back_ios,
                                     color: Colors.cyan,
+                                    size: 16,
                                   ), 
                                   onPressed: (){
                                     TableCtrl.pageCtrl.previousPage(
@@ -178,7 +202,8 @@ class OpenTable extends StatelessWidget {
                                 ),
                                 IconButton(
                                   icon: Icon(Icons.arrow_forward_ios,
-                                    color: Colors.cyan
+                                    color: Colors.cyan,
+                                    size: 16,
                                   ), 
                                   onPressed: () => 
                                   TableCtrl.pageCtrl.nextPage(
@@ -211,8 +236,7 @@ class OpenTable extends StatelessWidget {
                                             onTap: () => Get.dialog(DetailsProduct(produk: produk,)),
                                             child: Container(
                                               decoration: BoxDecoration(
-                                                color: Colors.cyan,
-                                                border: Border.all(color: Colors.orange, width: 0.1)
+                                                border: Border.all(color: Colors.cyan, width: 0.2)
                                               ),
                                               margin: EdgeInsets.all(4),
                                               child: Image.network(produk?.foto??"",
@@ -227,7 +251,7 @@ class OpenTable extends StatelessWidget {
                                                   child: Center(
                                                     child: Text("no image",
                                                       style: TextStyle(
-                                                        color: Colors.orange[100]
+                                                        color: Colors.grey
                                                       ),
                                                     )
                                                   )
@@ -318,6 +342,10 @@ class OpenTable extends StatelessWidget {
                                             produk: produk,
                                             data: TableCtrl.lsGroup[TableCtrl.lsGroup.indexOf(group)]['data'],
                                           ),
+                                          enableDrag: true,
+                                          isScrollControlled: true,
+                                          enterBottomSheetDuration: Duration(milliseconds: 1),
+                                          exitBottomSheetDuration: Duration(milliseconds: 1)
                                         ),
                                         icon: Icon(Icons.plus_one,
                                           color: Colors.cyan
@@ -583,26 +611,28 @@ class ProsesOrder extends StatelessWidget {
                 alignment: Alignment.centerRight,
                 child: Card(
                   color: Colors.cyan,
-                  child: FlatButton(
-                    onPressed: () => TableCtrl.kirimOrderan(),
-                    child: Container(
-                      padding: EdgeInsets.only(right: 16, top: 4, left: 16, bottom: 4),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text("proccess",
-                            style: TextStyle(
-                              color: Colors.orange[100]
+                  child: Obx(() => 
+                    FlatButton(
+                      onPressed: TableCtrl.loadingKirim.value? null: () => TableCtrl.kirimOrderan(),
+                      child: Container(
+                        padding: EdgeInsets.only(right: 16, top: 4, left: 16, bottom: 4),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text("proccess",
+                              style: TextStyle(
+                                color: Colors.orange[100]
+                              ),
                             ),
-                          ),
-                          Icon(Icons.arrow_forward_ios,
-                            color: Colors.orange[100],
-                          )
-                        ],
+                            Icon(Icons.arrow_forward_ios,
+                              color: Colors.orange[100],
+                            )
+                          ],
+                        ),
                       ),
                     ),
-                  ),
+                  )
                 ),
               )
             ],
@@ -854,6 +884,7 @@ class TableCtrl extends MyCtrl{
   static final jam = DateTime.now().obs;
 
   static final company = ModelCompany().obs;
+  static final loadingKirim = false.obs;
 
   static final lsGroup = [
     {
@@ -987,6 +1018,7 @@ class TableCtrl extends MyCtrl{
   }
 
   static kirimOrderan()async{
+    loadingKirim.value = true;
     final listBill = lsorderan.map((element) => element['data']).toList().expand((element) => element).toList().map((e) => {
       "note": e.note,
       "product_id": e.kodePro,
@@ -1011,20 +1043,27 @@ class TableCtrl extends MyCtrl{
       "token": GetStorage().read('token')
     };
 
-    //print(jsonEncode(paket));
+    // final ls = lsorderan.map((e) => e['data'].map((x) => x.toJson()).toList()).toList().where((element) => element.length != 0).toList().expand((element) => element).toList(); 
 
     final res = await ApiController.kirimPaket(paket);
     if(res.data['status']){
+      
       Get.back();
       // print("berhasil ${res.data}");
-      await GetStorage().write("listbill", lsorderan);
-      await GetStorage().write("listmenu", lsMenu);
+      // final lsbill = lsorderan.map((e) => e['data'].map((x) => x.toJson()).toList()).toList().where((element) => element.length != 0).toList().expand((element) => element).toList();
+      // await GetStorage().write("listbill", lsorderan);
+      // await GetStorage().write("listmenu", lsMenu);
       await ApiController.hapusMeja2(GetStorage().read("host"), GetStorage().read("meja"));
       await GetStorage().remove("auth");
       Get.reset();
+
       Get.offNamed('/tunggu-pesanan');
-    }else{
+      await GetStorage().write("listbill", lsorderan);
+      await GetStorage().write("listmenu", lsMenu);
       
+      loadingKirim.value = false;
+    }else{
+      loadingKirim.value = false;
       Get.dialog(
         Center(
           child: Card(
@@ -1052,6 +1091,7 @@ class TableCtrl extends MyCtrl{
       await ApiController.hapusMeja2(GetStorage().read("host"), GetStorage().read("meja"));
       // print(res.data.toString());
     }
+    loadingKirim.value  = false;
   }
 
 }

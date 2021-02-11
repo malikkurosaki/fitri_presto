@@ -25,24 +25,13 @@ class TungguPesanan extends StatelessWidget {
           snapshot.connectionState != ConnectionState.done?
           Obx(() => 
             TungguCtrl.company.value == null?Text("loading"):
-            Image.network(TungguCtrl.company.value?.image??"",
-              key: UniqueKey(),
+            TungguCtrl.company.value.image == null? Center(
+              child: CircularProgressIndicator(),
+            ):
+            Image.network(TungguCtrl.company.value.image,
               height: double.infinity,
               width: double.infinity,
               fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) => 
-              Container(
-                height: double.infinity,
-                width: double.infinity,
-                color: Colors.cyan,
-                child: Center(
-                  child: Text("THANK YOU",
-                    style: TextStyle(
-                      color: Colors.white
-                    ),
-                  ),
-                ),
-              ),
             )
           ): Obx(() => 
             Stack(
@@ -53,7 +42,7 @@ class TungguPesanan extends StatelessWidget {
                       child: GridView.count(
                         crossAxisCount: 3,
                         children: [
-                          for(final MenuModel itm in TableCtrl.lsMenu)
+                          for(final MenuModel itm in TungguCtrl.lsmenu)
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(
@@ -62,22 +51,19 @@ class TungguPesanan extends StatelessWidget {
                               color: Colors.grey,
                             ),
                             child: GestureDetector(
-                              onTap: () => Get.dialog(
+                              onTap: () => Get.bottomSheet(
                                 DetailsGambar(model: itm,),
-                                transitionCurve: Curves.elasticIn, 
-                                transitionDuration: Duration(microseconds: 1)
+                                enableDrag: true,
+                                isScrollControlled: true,
+                                isDismissible: true,
+                                persistent: true,
+
                               ),
                               child: Image.network(itm.foto,
                                 key: UniqueKey(),
                                 height: double.infinity,
                                 width: double.infinity,
                                 fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) => 
-                                Container(
-                                  child: Center(
-                                    child: Text("no image"),
-                                  ),
-                                ),
                               ),
                             ),
                           )
@@ -89,7 +75,11 @@ class TungguPesanan extends StatelessWidget {
                 Container(
                   alignment: Alignment.bottomCenter,
                   child: InkWell(
-                    onTap: () => Get.dialog(Pesanan()) ,
+                    onTap: () => Get.bottomSheet(Pesanan(),
+                      isDismissible: true,
+                      enableDrag: true,
+                      isScrollControlled: true,
+                    ) ,
                     child: Card(
                       color: Colors.cyan,
                       child: Container(
@@ -126,37 +116,48 @@ class DetailsGambar extends StatelessWidget {
   const DetailsGambar({Key key, this.model}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Container(
+    return DraggableScrollableSheet(
+      builder: (context, scrollController) => 
+      Card(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             BackButton(),
             Flexible(
-              child: Image.network(model.foto,
-                fit: BoxFit.cover,
-                width: double.infinity,
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.all(8),
-              child: Text(model.namaPro,
-                style: TextStyle(
-                  fontSize: 18,
+              child: SingleChildScrollView(
+                controller: scrollController,
+                child: Column(
+                  children: [
+                    model.foto == null? Center(
+                      child: CircularProgressIndicator.adaptive(),
+                    ):
+                    Image.network(model.foto,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(8),
+                      child: Text(model.namaPro,
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(8),
+                      child: Text(model.ket,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey
+                        ),
+                      ),
+                    )
+                  ],
                 ),
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.all(8),
-              child: Text(model.ket,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey
-                ),
-              ),
+              )
             )
           ],
-        ),     
+        ),
       ),
     );
   }
@@ -261,14 +262,17 @@ class TungguCtrl extends MyCtrl{
   static thank()async{
     final cm = await GetStorage().read("company");
     company.value = await compute((_) => ModelCompany.fromJson(cm),"");
-    print(company.value.image);
+    // print(company.value.image);
   }
-
+  
   static getListmenu()async{
+    final listmenu = await GetStorage().read("listmenu");
+    Future.delayed(Duration(seconds: 2));
+
     try {
-      final lm = GetStorage().read("listmenu");
-      // print(TableCtrl.lsMenu);
+      lsmenu.assignAll(listmenu.map((e) => MenuModel.fromJson(e)));
     } catch (e) {
+      lsmenu.assignAll(listmenu);
       print(e.toString());
     }
   }

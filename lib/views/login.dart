@@ -87,7 +87,7 @@ class FormLogin extends StatelessWidget {
           Text("Login",
             style: TextStyle(
               fontSize: 62,
-              color: Colors.orange[100]
+              color: Colors.white
             ),
           ),
           Text("@ Table : ${LoginCtrl.mejaParam}",
@@ -114,7 +114,7 @@ class FormLogin extends StatelessWidget {
                           decoration: InputDecoration(
                             labelText: LoginCtrl.lsForm[i]['nama'],
                             labelStyle: TextStyle(
-                              color: Colors.orange[100]
+                              color: Colors.white
                             ),
                             prefixIcon: Icon(LoginCtrl.lsForm[i]['icon'],
                               color: Colors.orange[100],
@@ -143,13 +143,13 @@ class FormLogin extends StatelessWidget {
                                 Text("LOGIN",
                                   style: TextStyle(
                                     fontSize: 24,
-                                    color: Colors.orange[100],
+                                    color: Colors.white,
                                     fontWeight: FontWeight.w700
                                   ),
                                 ),
                                 Icon(
                                   Icons.arrow_forward_ios_outlined,
-                                  color: Colors.orange[100],
+                                  color: Colors.white,
                                 )
                               ],
                             )
