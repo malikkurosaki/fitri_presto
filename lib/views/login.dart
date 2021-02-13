@@ -27,7 +27,7 @@ class Login extends StatelessWidget {
               child: FutureBuilder(
                 future: LoginCtrl.init(),
                 builder: (context, snapshot) => snapshot.connectionState != ConnectionState.done?
-                SplashScreen(): FormLogin()
+                SplashScreen(): Text("apa kabar")// FormLogin()
               ),
             ),
           )
@@ -68,7 +68,6 @@ class FormLogin extends StatelessWidget {
     return Container(
       width: 400,
       padding: EdgeInsets.all(8),
-      key: UniqueKey(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
