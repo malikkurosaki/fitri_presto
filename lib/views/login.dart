@@ -1,4 +1,7 @@
 
+import 'dart:convert';
+import 'dart:html';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -69,19 +72,21 @@ class FormLogin extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            alignment: Alignment.center,
-            child: LoginCtrl.company.value.logo == null?
-            Container(
-              color: Colors.cyan[300],
-              height: 100,
-              width: 100,
-            ):
-            CircleAvatar(
-              backgroundColor: Colors.cyan[300],
-              radius: 60,
-              backgroundImage: NetworkImage(
-                LoginCtrl.company.value.logo,
+          Obx(
+            () => Container(
+              alignment: Alignment.center,
+              child: LoginCtrl?.company?.value?.logo == null?
+              Container(
+                color: Colors.cyan[300],
+                height: 100,
+                width: 100,
+              ):
+              CircleAvatar(
+                backgroundColor: Colors.cyan[300],
+                radius: 60,
+                backgroundImage: NetworkImage(
+                  LoginCtrl?.company?.value?.logo??"",
+                ),
               ),
             ),
           ),
@@ -131,6 +136,7 @@ class FormLogin extends StatelessWidget {
                       textInputAction: TextInputAction.next,
                     ),
                   ),
+                  //Text(Get.parameters['host']),
                   Obx( () => 
                     LoginCtrl.loading.value?CircularProgressIndicator(strokeWidth: 0.5,)
                     :InkWell(
@@ -199,10 +205,14 @@ class LoginCtrl extends MyCtrl{
   
 
   static init()async{
-
-    await Future.delayed(Duration(seconds: 2));
-    company.value = await ApiController.getDtaCompany(hostParam);
-    await GetStorage().write("company", company.value.toJson());
+    try {
+      await Future.delayed(Duration(seconds: 2));
+      company.value = await ApiController.getDtaCompany(hostParam);
+      await GetStorage().write("company", company.value.toJson());
+    } catch (e) {
+      Get.dialog(Text(e.toString()));
+    }
+    
   }
 
   static cobaLogin(GlobalKey<FormState> kunciState)async{

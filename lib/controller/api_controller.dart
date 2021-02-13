@@ -67,8 +67,6 @@ class ApiController {
    ModelCompany hasil;
     try {
       final res = await new Dio().get("$host/api/getCompanyProfile");
-      // final ModelCompany dataCompany = ModelCompany.fromJson(res.data['data']);
-      // hasil = dataCompany;
       hasil = await compute((_) => ModelCompany.fromJson(res.data['data']), "");
     } catch (e) {
       print(e.toString());

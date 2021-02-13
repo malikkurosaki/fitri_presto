@@ -110,30 +110,28 @@ class OpenTable extends StatelessWidget {
                           children: [
                             Expanded(
                               child: Container(
+                                padding: EdgeInsets.all(8),
                                 color: Colors.cyan[300],
-                                child: FlatButton(
-                                  onPressed: (){
+                                child: InkWell(
+                                  onTap: (){
                                     TableCtrl.animateTinggi.value = !TableCtrl.animateTinggi.value;
                                     TableCtrl.lsSearch.assignAll(TableCtrl.lsMenu);
                                     Get.dialog(MySearch());
                                   }, 
-                                  child: Container(
-                                    padding: EdgeInsets.all(4),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text("search ...",
-                                          style: TextStyle(
-                                            color: Colors.orange[50],
-                                            fontSize: 12
-                                          ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text("search ...",
+                                        style: TextStyle(
+                                          color: Colors.orange[50],
+                                          fontSize: 12
                                         ),
-                                        Icon(Icons.search,
-                                          color: Colors.cyan,
-                                          size: 20,
-                                        )
-                                      ],
-                                    ),
+                                      ),
+                                      Icon(Icons.search,
+                                        color: Colors.cyan,
+                                        size: 20,
+                                      )
+                                    ],
                                   )
                                 ),
                               ),
