@@ -15,15 +15,13 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.cyan,
       key: UniqueKey(),
       body: HideKeyboard(
         child: SafeArea(
-          child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            color: Colors.cyan,
-            alignment: Alignment.center,
+          child: Center(
             child: SingleChildScrollView(
+              physics: ScrollPhysics(),
               child: FutureBuilder(
                 future: LoginCtrl.init(),
                 builder: (context, snapshot) => snapshot.connectionState != ConnectionState.done?
@@ -70,7 +68,6 @@ class FormLogin extends StatelessWidget {
       padding: EdgeInsets.all(8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
             alignment: Alignment.center,
@@ -99,71 +96,69 @@ class FormLogin extends StatelessWidget {
               color: Colors.white
             ),
           ),
-          Flexible(
-            child: Container(
-              padding: EdgeInsets.all(16),
-              child: Form(
-                key: kunciState,
-                child: Column(
-                  children: [
-                    for(var i = 0; i < LoginCtrl.lsForm.length; i++)
-                    Container(
-                      padding: EdgeInsets.all(8),
-                      margin: EdgeInsets.only(bottom: 16),
-                      child: TextFormField(
-                        key: UniqueKey(),
-                        controller: LoginCtrl.lsTextCtrl[i],
-                        validator: (value) => value.isEmpty? "fill in all data completely": null,
-                        decoration: InputDecoration(
-                          labelText: LoginCtrl.lsForm[i]['nama'],
-                          labelStyle: TextStyle(
-                            color: Colors.orange[50]
-                          ),
-                          prefixIcon: Icon(LoginCtrl.lsForm[i]['icon'],
-                            color: Colors.white,
-                          ),
-                          focusedBorder: InputBorder.none,
-                          isDense: true,
-                          filled: true,
-                          fillColor: Colors.cyan[300],
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.cyan[300]
-                            )
-                          )
+          Container(
+            padding: EdgeInsets.all(16),
+            child: Form(
+              key: kunciState,
+              child: Column(
+                children: [
+                  for(var i = 0; i < LoginCtrl.lsForm.length; i++)
+                  Container(
+                    padding: EdgeInsets.all(8),
+                    margin: EdgeInsets.only(bottom: 16),
+                    child: TextFormField(
+                      key: UniqueKey(),
+                      controller: LoginCtrl.lsTextCtrl[i],
+                      validator: (value) => value.isEmpty? "fill in all data completely": null,
+                      decoration: InputDecoration(
+                        labelText: LoginCtrl.lsForm[i]['nama'],
+                        labelStyle: TextStyle(
+                          color: Colors.orange[50]
                         ),
-                        textInputAction: TextInputAction.next,
+                        prefixIcon: Icon(LoginCtrl.lsForm[i]['icon'],
+                          color: Colors.white,
+                        ),
+                        focusedBorder: InputBorder.none,
+                        isDense: true,
+                        filled: true,
+                        fillColor: Colors.cyan[300],
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.cyan[300]
+                          )
+                        )
                       ),
+                      textInputAction: TextInputAction.next,
                     ),
-                    Obx( () => 
-                      LoginCtrl.loading.value?CircularProgressIndicator(strokeWidth: 0.5,)
-                      :InkWell(
-                        key: UniqueKey(),
-                        onTap: () => LoginCtrl.cobaLogin(kunciState),
-                        onLongPress: () => ApiController.hapusMeja2(LoginCtrl.hostParam, LoginCtrl.mejaParam),
-                        child: Container(
-                          padding: EdgeInsets.all(8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text("LOGIN",
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  color: Colors.orange[100],
-                                  fontWeight: FontWeight.w700
-                                ),
-                              ),
-                              Icon(
-                                Icons.arrow_forward_ios_outlined,
+                  ),
+                  Obx( () => 
+                    LoginCtrl.loading.value?CircularProgressIndicator(strokeWidth: 0.5,)
+                    :InkWell(
+                      key: UniqueKey(),
+                      onTap: () => LoginCtrl.cobaLogin(kunciState),
+                      onLongPress: () => ApiController.hapusMeja2(LoginCtrl.hostParam, LoginCtrl.mejaParam),
+                      child: Container(
+                        padding: EdgeInsets.all(8),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text("LOGIN",
+                              style: TextStyle(
+                                fontSize: 24,
                                 color: Colors.orange[100],
-                              )
-                            ],
-                          )
-                        ),
-                      )
+                                fontWeight: FontWeight.w700
+                              ),
+                            ),
+                            Icon(
+                              Icons.arrow_forward_ios_outlined,
+                              color: Colors.orange[100],
+                            )
+                          ],
+                        )
+                      ),
                     )
-                  ],
-                ),
+                  )
+                ],
               ),
             ),
           ),
