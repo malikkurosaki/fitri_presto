@@ -66,9 +66,7 @@ class FormLogin extends StatelessWidget {
   Widget build(BuildContext context) {
     GlobalKey<FormState> kunciState = GlobalKey<FormState>();
     return Container(
-      constraints: BoxConstraints(
-        maxWidth: 400
-      ),
+      width: 400,
       padding: EdgeInsets.all(8),
       key: UniqueKey(),
       child: Column(
