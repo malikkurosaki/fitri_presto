@@ -31,7 +31,6 @@ class TungguPesanan extends StatelessWidget {
             Image.network(TungguCtrl.company.value.image,
               height: double.infinity,
               width: double.infinity,
-              fit: BoxFit.cover,
             )
           ): Obx(() => 
             Stack(
