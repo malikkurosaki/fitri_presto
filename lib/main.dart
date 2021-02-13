@@ -2,23 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:presto_qr/controller/company_controller_bak.dart';
-import 'package:presto_qr/controller/login_controller_bak.dart';
-import 'package:presto_qr/controller/lognya_controller_bak.dart';
-import 'package:presto_qr/controller/myhome_controller_bak.dart';
-import 'package:presto_qr/controller/natya_controller_bak.dart';
-import 'package:presto_qr/controller/socket_controller_bak.dart';
-import 'package:presto_qr/controller/splash_controller_bak.dart';
-import 'package:presto_qr/controller/user_controller_bak.dart';
-import 'package:presto_qr/views/change_log_bak.dart';
 import 'package:presto_qr/views/login.dart';
-import 'package:presto_qr/views/lognya_bak.dart';
-import 'package:presto_qr/views/my_home_bak.dart';
+import 'package:presto_qr/views/my_home.dart';
 import 'package:presto_qr/views/open_table.dart';
-import 'package:presto_qr/views/setting_bak.dart';
-import 'package:presto_qr/views/splash_bak.dart';
 import 'package:presto_qr/views/tunggu_pesanan.dart';
-import 'controller/list_menu_controller_bak.dart';
 
 main() async{
   await GetStorage.init();

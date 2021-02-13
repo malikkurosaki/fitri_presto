@@ -66,6 +66,9 @@ class FormLogin extends StatelessWidget {
   Widget build(BuildContext context) {
     GlobalKey<FormState> kunciState = GlobalKey<FormState>();
     return Container(
+      constraints: BoxConstraints(
+        maxWidth: 400
+      ),
       padding: EdgeInsets.all(8),
       key: UniqueKey(),
       child: Column(
@@ -78,16 +81,24 @@ class FormLogin extends StatelessWidget {
           // ),
           Container(
             alignment: Alignment.center,
-            child: Image.network(LoginCtrl?.company?.value?.logo??"",
-              width: 100,
+            child: LoginCtrl.company.value.logo == null?
+            Container(
+              color: Colors.cyan[300],
               height: 100,
-              fit: BoxFit.cover,
+              width: 100,
+            ):
+            CircleAvatar(
+              backgroundColor: Colors.cyan[300],
+              radius: 60,
+              backgroundImage: NetworkImage(
+                LoginCtrl.company.value.logo,
+              ),
             ),
           ),
           Text("Login",
             style: TextStyle(
-              fontSize: 62,
-              color: Colors.white
+              fontSize: 42,
+              color: Colors.orange[100]
             ),
           ),
           Text("@ Table : ${LoginCtrl.mejaParam}",
@@ -114,16 +125,20 @@ class FormLogin extends StatelessWidget {
                           decoration: InputDecoration(
                             labelText: LoginCtrl.lsForm[i]['nama'],
                             labelStyle: TextStyle(
-                              color: Colors.white
+                              color: Colors.orange[50]
                             ),
                             prefixIcon: Icon(LoginCtrl.lsForm[i]['icon'],
-                              color: Colors.orange[100],
+                              color: Colors.white,
                             ),
                             focusedBorder: InputBorder.none,
                             isDense: true,
                             filled: true,
-                            fillColor: Colors.cyan,
-                            enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.orange[100]))
+                            fillColor: Colors.cyan[300],
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.cyan[300]
+                              )
+                            )
                           ),
                           textInputAction: TextInputAction.next,
                         ),
@@ -135,7 +150,6 @@ class FormLogin extends StatelessWidget {
                           onTap: () => LoginCtrl.cobaLogin(kunciState),
                           onLongPress: () => ApiController.hapusMeja2(LoginCtrl.hostParam, LoginCtrl.mejaParam),
                           child: Container(
-                            width: double.infinity,
                             padding: EdgeInsets.all(8),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,
@@ -143,13 +157,13 @@ class FormLogin extends StatelessWidget {
                                 Text("LOGIN",
                                   style: TextStyle(
                                     fontSize: 24,
-                                    color: Colors.white,
+                                    color: Colors.orange[100],
                                     fontWeight: FontWeight.w700
                                   ),
                                 ),
                                 Icon(
                                   Icons.arrow_forward_ios_outlined,
-                                  color: Colors.white,
+                                  color: Colors.orange[100],
                                 )
                               ],
                             )

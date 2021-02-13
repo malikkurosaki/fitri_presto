@@ -15,14 +15,21 @@ class MyHome extends StatelessWidget {
   // final box = GetStorage();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Text("presto qr"),
-        ),
-      )
-      // box.hasData('auth')?OpenTable(): 
-      // box.hasData('pesanan')?MyHomeAdaPesanan():MyHomeGakAdaPesanan(),
+    return WillPopScope(
+      onWillPop: () async{
+        Get.reset();
+        return false;
+      },
+      child: Scaffold(
+        key: UniqueKey(),
+        body: SafeArea(
+          child: Center(
+            child: Text("presto qr"),
+          ),
+        )
+        // box.hasData('auth')?OpenTable(): 
+        // box.hasData('pesanan')?MyHomeAdaPesanan():MyHomeGakAdaPesanan(),
+      ),
     );
   }
 }

@@ -29,98 +29,132 @@ class OpenTable extends StatelessWidget {
                   color: Colors.cyan,
                   child: Container(
                     padding: EdgeInsets.all(8),
-                    child: Row(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                child: Text(TableCtrl.company?.value?.name?.toString()??"",
-                                  style: TextStyle(
-                                    color: Colors.orange[100],
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w700
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.symmetric(vertical: 4),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Icon(Icons.account_circle,
-                                      size: 20,
-                                    ),
-                                    Text("  ${GetStorage().read("auth")['user']['name']}",
-                                      style: TextStyle(
-                                        
-                                      ),
-                                    ),
-                                    Text(" @ Table ${GetStorage().read("meja")}",
-                                      style: TextStyle(
-                                      ),
-                                    )
-                                  ],
-                                )
-                              ),
-                              Flexible(
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(vertical: 4),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Icon(Icons.access_time_outlined,
-                                        color: Colors.white,
-                                        size: 20,
-                                      ),
-                                      Text("  ${TableCtrl.jam.value.hour} : ${TableCtrl.jam.value.minute}",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              
-                            ],
-                          ),
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        Row(
                           children: [
-                            Image.network(TableCtrl.company?.value?.logo??"",
-                              height: 70,
-                              width: 70,
-                              errorBuilder: (context, error, stackTrace) => 
-                              Center(
-                                child: Container(
-                                  color: Colors.cyan[400],
-                                  width: 70,
-                                  height: 70,
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    child: Text(TableCtrl.company?.value?.name?.toString()??"",
+                                      style: TextStyle(
+                                        color: Colors.orange[100],
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w700
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.symmetric(vertical: 4),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Icon(Icons.account_circle,
+                                          size: 20,
+                                          color: Colors.orange[100],
+                                        ),
+                                        Text("  ${GetStorage().read("auth")['user']['name']}",
+                                          style: TextStyle(
+                                            color: Colors.orange[100]
+                                          ),
+                                        ),
+                                        Text(" @ Table ${GetStorage().read("meja")}",
+                                          style: TextStyle(
+                                            color: Colors.orange[100]
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.symmetric(vertical: 4),
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.access_time_outlined,
+                                          color: Colors.cyan[100],
+                                          size: 20,
+                                        ),
+                                        Text("  ${TableCtrl.jam.value.hour} : ${TableCtrl.jam.value.minute}",
+                                          style: TextStyle(
+                                            color: Colors.cyan[100],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.all(8),
+                              child: Center(
+                                child: TableCtrl.company?.value?.logo == null?
+                                CircleAvatar(
+                                  radius: 40,
+                                  backgroundColor: Colors.grey,
+                                ):
+                                CircleAvatar(
+                                  radius: 40,
+                                  backgroundImage: NetworkImage(TableCtrl.company?.value?.logo),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                color: Colors.cyan[300],
+                                child: FlatButton(
+                                  onPressed: (){
+                                    TableCtrl.animateTinggi.value = !TableCtrl.animateTinggi.value;
+                                    TableCtrl.lsSearch.assignAll(TableCtrl.lsMenu);
+                                    Get.dialog(MySearch());
+                                  }, 
+                                  child: Container(
+                                    padding: EdgeInsets.all(4),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("search ...",
+                                          style: TextStyle(
+                                            color: Colors.orange[50],
+                                            fontSize: 12
+                                          ),
+                                        ),
+                                        Icon(Icons.search,
+                                          color: Colors.cyan,
+                                          size: 20,
+                                        )
+                                      ],
+                                    ),
+                                  )
                                 ),
                               ),
                             ),
-                            Card(
-                              color: Colors.orange,
-                              child: InkWell(
-                                onTap: () => TableCtrl.cobaLogout(),
-                                child: Container(
-                                  padding: EdgeInsets.all(4),
-                                  child: Row(
-                                    children: [
-                                      Text("Logout",
-                                        style: TextStyle(
-                                          color: Colors.white
-                                        ),
+                            FlatButton(
+                              onPressed: () => TableCtrl.cobaLogout(),
+                              child: Container(
+                                padding: EdgeInsets.all(4),
+                                child: Row(
+                                  children: [
+                                    Text("Logout",
+                                      style: TextStyle(
+                                        color: Colors.orange[100],
+                                        fontWeight: FontWeight.bold
                                       ),
-                                      Icon(Icons.arrow_forward,
-                                        color: Colors.white,
-                                      )
-                                    ],
-                                  ),
+                                    ),
+                                    Icon(Icons.arrow_forward_ios,
+                                      color: Colors.orange[100],
+                                      size: 20,
+                                    )
+                                  ],
                                 ),
                               ),
                             )
@@ -131,34 +165,6 @@ class OpenTable extends StatelessWidget {
                   ),
                 ),
               )
-            ),
-            Container(
-              padding: EdgeInsets.all(4),
-              child: FlatButton(
-                minWidth: double.infinity,
-                color: Colors.grey[200],
-                onPressed: (){
-                  TableCtrl.animateTinggi.value = !TableCtrl.animateTinggi.value;
-                  TableCtrl.lsSearch.assignAll(TableCtrl.lsMenu);
-                  Get.dialog(MySearch());
-                }, 
-                child: Container(
-                  padding: EdgeInsets.all(8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("search ...",
-                        style: TextStyle(
-                          color: Colors.grey
-                        ),
-                      ),
-                      Icon(Icons.search,
-                        color: Colors.cyan,
-                      )
-                    ],
-                  ),
-                )
-              ),
             ),
             Flexible(
               child: FutureBuilder(
@@ -179,7 +185,6 @@ class OpenTable extends StatelessWidget {
                       Column(
                         children: [
                           Container(
-                            padding: EdgeInsets.all(8),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -234,29 +239,15 @@ class OpenTable extends StatelessWidget {
                                         children: [
                                           InkWell(
                                             onTap: () => Get.dialog(DetailsProduct(produk: produk,)),
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                border: Border.all(color: Colors.cyan, width: 0.2)
-                                              ),
-                                              margin: EdgeInsets.all(4),
-                                              child: Image.network(produk?.foto??"",
-                                                key: UniqueKey(),
-                                                height: 70,
-                                                width: 70,
-                                                fit: BoxFit.cover,
-                                                errorBuilder: (context, error, stackTrace) => 
-                                                Container(
-                                                  height: 70,
-                                                  width: 70,
-                                                  child: Center(
-                                                    child: Text("no image",
-                                                      style: TextStyle(
-                                                        color: Colors.grey
-                                                      ),
-                                                    )
-                                                  )
-                                                ),
-                                              ),
+                                            child: produk.foto == null?
+                                            CircleAvatar(
+                                              radius: 40,
+                                              backgroundColor: Colors.grey,
+                                            ):
+                                            CircleAvatar(
+                                              backgroundColor: Colors.grey,
+                                              radius: 40,
+                                              backgroundImage: NetworkImage(produk.foto,),
                                             ),
                                           ),
                                           Expanded(
@@ -268,22 +259,24 @@ class OpenTable extends StatelessWidget {
                                                 children: [
                                                   Text(produk.namaPro.toLowerCase(),
                                                     style: TextStyle(
-                                                      fontWeight: FontWeight.bold,
-                                                      color: Colors.grey[700]
+                                                      fontWeight: FontWeight.w100,
+                                                      fontSize: 18
                                                     ),
                                                     overflow: TextOverflow.ellipsis,
                                                   ),
                                                   Text(Pecahan.rupiah(value: int.parse(produk.hargaPro), withRp: true),
                                                     style: TextStyle(
                                                       fontSize: 18,
-                                                      color: Colors.orange
+                                                      color: Colors.orange,
+                                                      fontWeight: FontWeight.values[1]
                                                     ),
                                                   ),
                                                   Text(produk.ket.toLowerCase(),
                                                   overflow: TextOverflow.ellipsis,
                                                     style: TextStyle(
                                                       fontSize: 12,
-                                                      color: Colors.grey
+                                                      color: Colors.grey,
+                                                      fontWeight: FontWeight.w100
                                                     ),
                                                   ),
                                                   produk.qty == null?SizedBox.shrink():
@@ -426,7 +419,8 @@ class OpenTable extends StatelessWidget {
 
 }
 
-
+/// details product
+/// ================
 class DetailsProduct extends StatelessWidget {
   final MenuModel produk;
 
@@ -441,11 +435,11 @@ class DetailsProduct extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              color: Colors.cyan,
               padding: EdgeInsets.all(4),
               child: Row(
                 children: [
                   BackButton(),
+                  Text("Details Product")
                 ],
               ),
             ),
@@ -475,13 +469,18 @@ class DetailsProduct extends StatelessWidget {
                     padding: EdgeInsets.all(8),
                     child: Text(produk.namaPro,
                       style: TextStyle(
-                        fontSize: 24
+                        fontSize: 24,
+                        fontWeight: FontWeight.w100
                       ),
                     ),
                   ),
                   Container(
                     padding: EdgeInsets.all(8),
-                    child: Text(produk.ket),
+                    child: Text(produk.ket,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w100
+                      ),
+                    ),
                   )
                 ],
               ),
@@ -505,20 +504,11 @@ class ProsesOrder extends StatelessWidget {
         Card(
           child: Column(
             children: [
-              Container(
-                color: Colors.cyan,
-                padding: EdgeInsets.all(4),
-                child: Row(
-                  children: [
-                    BackButton(),
-                    Text("my shopping cart",
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.orange[100]
-                      ),
-                    ),
-                  ],
-                ),
+              Row(
+                children: [
+                  BackButton(),
+                  Text("my shopping cart",),
+                ],
               ),
               Flexible(
                 child: ListView(
@@ -537,7 +527,7 @@ class ProsesOrder extends StatelessWidget {
                             children: [
                               Text(odr['name'],
                               style: TextStyle(
-                                fontSize: 18
+                                fontSize: 18,
                               ),
                               ),
                               Container(
@@ -566,7 +556,8 @@ class ProsesOrder extends StatelessWidget {
                                                 children: [
                                                   Text(itm.namaPro.toLowerCase(),
                                                     style: TextStyle(
-                                                      fontWeight: FontWeight.bold
+                                                      fontWeight: FontWeight.w100,
+                                                      fontSize: 18
                                                     ),
                                                   ),
                                                   Text(Pecahan.rupiah(value: int.parse(itm.hargaPro), withRp: true)),
@@ -659,29 +650,23 @@ class TambahOrder extends StatelessWidget {
             children: [
               Container(
                 padding: EdgeInsets.all(4),
-                color: Colors.cyan,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     BackButton(
-                      color: Colors.orange[100],
                       onPressed: () {
                         TableCtrl.qty.value = 1;
                         TableCtrl.note.value = "";
                         Get.back();
                       },
                     ),
-                    Container(
-                      padding: EdgeInsets.all(8),
-                      child: Text("add order",
-                        style: TextStyle(
-                          fontSize: 24,
-                          color: Colors.orange[100]
-                        ),
+                    Expanded(
+                      child: Container(
+                        child: Text("add order",),
                       ),
                     ),
                     FlatButton(
-                      color: Colors.orange[100],
+                      color: Colors.cyan,
                       onPressed: (){
                         data[data.indexOf(produk)].note = TableCtrl.note.value;
                         data[data.indexOf(produk)].qty = TableCtrl.qty.value;
@@ -696,7 +681,7 @@ class TambahOrder extends StatelessWidget {
                       child: Text("OK",
                         style: TextStyle(
                           fontSize: 18,
-                          color: Colors.cyan[900]
+                          color: Colors.orange[100]
                         ),
                       )
                     )
@@ -713,10 +698,11 @@ class TambahOrder extends StatelessWidget {
                         onChanged: (value) => TableCtrl.note.value = value,
                         decoration: InputDecoration(
                           isDense: true,
+                          labelText: "note",
                           prefixIcon: Icon(Icons.edit,
                             color: Colors.cyan,
                           ),
-                          hintText: produk.note == null?"add some note": produk.note,
+                          hintText: produk.note == null?"eg: more salt": produk.note,
                           border: InputBorder.none,
                           fillColor: Colors.grey[200],
                           filled: true,
@@ -788,50 +774,25 @@ class MySearch extends StatelessWidget {
                     controller: scrollController,
                     children: [
                       for(final cari in TableCtrl.lsSearch)
-                      ListTile(
-                        leading: Container(
-                          padding: EdgeInsets.all(1),
-                          margin: EdgeInsets.all(2),
-                          color: Colors.grey[100],
-                          child: Image.network(cari?.foto??"",
-                            height: 50,
-                            width: 50,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) => 
-                            Container(
-                              height: 50,
-                              width: 50,
-                              child: Center(
-                                child: Text("no image"),
-                              ),
+                      Container(
+                        padding: EdgeInsets.all(4),
+                        child: ListTile(
+                          leading: cari?.foto == null?
+                          CircleAvatar(
+                            radius: 24,
+                            backgroundColor: Colors.grey,
+                          ):
+                          CircleAvatar(
+                            radius: 24,
+                            backgroundImage: NetworkImage(cari?.foto),
+                          ),
+                          title: Text(cari.namaPro.toLowerCase(),
+                            style: TextStyle(
+                              fontWeight: FontWeight.w100
                             ),
                           ),
+                          onTap: () => TableCtrl.dimana(cari),
                         ),
-                        title: Text(cari.namaPro.toLowerCase()),
-                        onTap: () => TableCtrl.dimana(cari),
-                        // onTap: () async{
-                        //   final idx = TableCtrl.lsGroup.map((element) => element['name'].toString().toLowerCase()).toList().indexOf(cari.groupp.toLowerCase());
-                        //   final List<MenuModel> ls = TableCtrl.lsGroup[idx]['data'];
-                        //   final idx2 = ls.indexOf(cari);
-                        //   TableCtrl.pageCtrl.jumpToPage(idx);
-                        //   await Future.delayed(Duration(milliseconds: 500));
-                        //   final ScrollController  scrl = TableCtrl.lsGroup[idx]['lsCon'];
-                          
-                        //   ls[idx2].terlihat = true;
-                        //   TableCtrl.lsGroup.refresh();
-
-                        //   // scrl.jumpTo((100 * idx2).toDouble());
-                        //   scrl.animateTo(100 * idx2.toDouble(),
-                        //     duration: Duration(milliseconds: 500),
-                        //     curve: Curves.ease
-                        //   );
-                        //   Get.back();
-
-                        //   Future.delayed(Duration(seconds: 2),(){
-                        //     ls[idx2].terlihat = null;
-                        //     TableCtrl.lsGroup.refresh();
-                        //   });
-                        // },
                       )
                     ],
                   )
