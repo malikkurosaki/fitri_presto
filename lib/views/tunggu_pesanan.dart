@@ -116,6 +116,8 @@ class DetailsGambar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
+      maxChildSize: 1,
+      initialChildSize: 1,
       builder: (context, scrollController) => 
       Card(
         child: Column(
@@ -126,6 +128,7 @@ class DetailsGambar extends StatelessWidget {
               child: SingleChildScrollView(
                 controller: scrollController,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     model.foto == null? Center(
                       child: CircularProgressIndicator.adaptive(),
@@ -139,6 +142,15 @@ class DetailsGambar extends StatelessWidget {
                       child: Text(model.namaPro,
                         style: TextStyle(
                           fontSize: 18,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(8),
+                      child: Text(Pecahan.rupiah(value: int.parse(model.hargaPro), withRp: true),
+                        style: TextStyle(
+                          fontSize: 24,
+                          color: Colors.orange
                         ),
                       ),
                     ),
