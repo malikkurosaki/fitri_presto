@@ -9,6 +9,7 @@ import 'package:presto_qr/views/tunggu_pesanan.dart';
 
 main() async{
   await GetStorage.init();
+  Get.put(MyCtrl());
   runApp(
     Center(
       child: Container(
@@ -20,7 +21,7 @@ main() async{
           shadowColor: Colors.grey,
           child: GetMaterialApp(
             key: UniqueKey(),
-            initialBinding: BindingPertama(),
+            // initialBinding: BindingPertama(),
             title: 'presto qr',
             enableLog: true,
             debugShowCheckedModeBanner: false,

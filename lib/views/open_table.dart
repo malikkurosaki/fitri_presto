@@ -42,7 +42,7 @@ class OpenTable extends StatelessWidget {
                                   Container(
                                     child: Text(TableCtrl.company?.value?.name?.toString()??"",
                                       style: TextStyle(
-                                        color: Colors.orange[100],
+                                        color: Colors.white,
                                         fontSize: 24,
                                         fontWeight: FontWeight.w700
                                       ),
@@ -55,16 +55,16 @@ class OpenTable extends StatelessWidget {
                                       children: [
                                         Icon(Icons.account_circle,
                                           size: 20,
-                                          color: Colors.orange[100],
+                                          color: Colors.white,
                                         ),
                                         Text("  ${GetStorage().read("auth")['user']['name']}",
                                           style: TextStyle(
-                                            color: Colors.orange[100]
+                                            color: Colors.white
                                           ),
                                         ),
                                         Text(" @ Table ${GetStorage().read("meja")}",
                                           style: TextStyle(
-                                            color: Colors.orange[100]
+                                            color: Colors.white
                                           ),
                                         )
                                       ],
@@ -305,12 +305,13 @@ class OpenTable extends StatelessWidget {
                                                           ),
                                                           Container(
                                                             decoration: BoxDecoration(
-                                                              border: Border.all(width: 0.3, color: Colors.grey)
+                                                              border: Border.all(width: 0.3, color: Colors.grey),
+                                                              color: Colors.cyan,
                                                             ),
                                                             padding: EdgeInsets.only(bottom: 4,left: 16, top: 4, right: 16),
                                                             child: Text("QTY : ${produk.qty}",
                                                               style: TextStyle(
-                                                                color: Colors.cyan
+                                                                color: Colors.white
                                                               ),
                                                             ),
                                                           )
@@ -376,7 +377,7 @@ class OpenTable extends StatelessWidget {
                                     backgroundColor: Colors.cyan,
                                     child: Text(TableCtrl.totalOrder.toString(),
                                       style: TextStyle(
-                                        color: Colors.orange[100]
+                                        color: Colors.white
                                       ),
                                     ),
                                   ),
@@ -456,7 +457,7 @@ class DetailsProduct extends StatelessWidget {
                         child: Center(
                           child: Text("No Image",
                             style: TextStyle(
-                              color: Colors.orange[100]
+                              color: Colors.white
                             ),
                           ),
                         ),
@@ -536,6 +537,7 @@ class ProsesOrder extends StatelessWidget {
                                     for(MenuModel itm in odr['data'])
                                     Container(
                                       padding: EdgeInsets.only(bottom: 8),
+                                      margin: EdgeInsets.only(bottom: 8),
                                       child: Row(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
@@ -565,11 +567,12 @@ class ProsesOrder extends StatelessWidget {
                                             ),
                                           ),
                                           Container(
-                                            child: OutlineButton(
+                                            child: FlatButton(
+                                              color: Colors.cyan,
                                               onPressed: () => TableCtrl.dimana(itm),
                                               child: Text("edit",
                                               style: TextStyle(
-                                                color: Colors.cyan
+                                                color: Colors.white
                                               ),
                                               ),
                                             ),
@@ -590,8 +593,13 @@ class ProsesOrder extends StatelessWidget {
                       ],
                     ),
                     Container(
+                      padding: EdgeInsets.all(8),
                       alignment: Alignment.bottomRight,
-                      child: Text("Total Extimation : ${Pecahan.rupiah(value: TableCtrl.lsorderan.map((e) => e['total']).toList().reduce((value, element) => value + element), withRp: true)}")
+                      child: Text("Total Extimation : ${Pecahan.rupiah(value: TableCtrl.lsorderan.map((e) => e['total']).toList().reduce((value, element) => value + element), withRp: true)}",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold
+                        ),
+                      )
                     ),
                   ],
                 ),
@@ -611,11 +619,11 @@ class ProsesOrder extends StatelessWidget {
                           children: [
                             Text("proccess",
                               style: TextStyle(
-                                color: Colors.orange[100]
+                                color: Colors.white
                               ),
                             ),
                             Icon(Icons.arrow_forward_ios,
-                              color: Colors.orange[100],
+                              color: Colors.white,
                             )
                           ],
                         ),
@@ -679,7 +687,7 @@ class TambahOrder extends StatelessWidget {
                       child: Text("OK",
                         style: TextStyle(
                           fontSize: 18,
-                          color: Colors.orange[100]
+                          color: Colors.white
                         ),
                       )
                     )
@@ -726,7 +734,7 @@ class TambahOrder extends StatelessWidget {
                               Text(TableCtrl.qty.value.toString(),
                                 style: TextStyle(
                                   fontSize: 18,
-                                  color: Colors.orange[100]
+                                  color: Colors.white
                                 ),
                               )
                             ),
