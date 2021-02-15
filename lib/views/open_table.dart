@@ -951,6 +951,17 @@ class TableCtrl extends MyCtrl{
   }
 
   static cobaLogout()async{
+
+    // cosba hapus meja dulu sebelum logout
+    try {
+      await ApiController.hapusMeja2(GetStorage().read('host'), GetStorage().read("meja"));
+    } catch (e) {
+      Get.snackbar("info", e.toString(),
+        backgroundColor: Colors.white
+      );
+    }
+
+    // hapus data di local storage
     GetStorage().remove("auth");
     Get.offNamed("/");
   }
