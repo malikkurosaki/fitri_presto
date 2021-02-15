@@ -1,15 +1,7 @@
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:presto_qr/component/garis_putus.dart';
-import 'package:presto_qr/controller/api_controller.dart';
-import 'package:presto_qr/controller/list_menu_controller_bak.dart';
-import 'package:presto_qr/main.dart';
-import 'package:presto_qr/views/book_menu_bak.dart';
-import 'package:presto_qr/views/open_table.dart';
 
 class MyHome extends StatelessWidget {
   // final box = GetStorage();
@@ -21,10 +13,37 @@ class MyHome extends StatelessWidget {
         return false;
       },
       child: Scaffold(
+        backgroundColor: Colors.cyan,
         key: UniqueKey(),
         body: SafeArea(
-          child: Center(
-            child: Text("presto qr"),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 300,
+                padding: EdgeInsets.all(8),
+                child: Text("scan the barcode on the table, to start ordering",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                )
+              ),
+              Center(
+                child: Container(
+                  height: 300,
+                  width: 300,
+                  color: Colors.orange[100],
+                  padding: EdgeInsets.all(8),
+                  child: Image.asset('assets/images/table_scan.png',
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+            ],
           ),
         )
         // box.hasData('auth')?OpenTable(): 
